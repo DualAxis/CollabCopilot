@@ -231,7 +231,7 @@ export const RADIO_QUESTIONS: RadioQuestionConfig[] = [
       },
     ],
     prev: "s-q3",
-    next: "s-processing",
+    next: "s-q5",
   },
   {
     id: "s-q5",

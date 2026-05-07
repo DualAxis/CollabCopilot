@@ -11,6 +11,7 @@ import { type AssessmentResults, MOCK_RESULTS } from "./lib/results";
 import LandingScreen from "./components/screens/LandingScreen";
 import ProfileScreen from "./components/screens/ProfileScreen";
 import RadioQuestionScreen from "./components/screens/RadioQuestionScreen";
+import ContextScreen from "./components/screens/ContextScreen";
 import ProcessingScreen from "./components/screens/ProcessingScreen";
 import ResultsScreen from "./components/screens/ResultsScreen";
 
@@ -53,6 +54,14 @@ export default function Home() {
           setState={setAssessment}
           onContinue={() => setScreen(radioConfig.next)}
           onBack={() => setScreen(radioConfig.prev)}
+        />
+      )}
+      {screen === "s-context" && (
+        <ContextScreen
+          state={assessment}
+          setState={setAssessment}
+          onAnalyse={() => setScreen("s-processing")}
+          onBack={() => setScreen("s-q5")}
         />
       )}
       {screen === "s-processing" && (
