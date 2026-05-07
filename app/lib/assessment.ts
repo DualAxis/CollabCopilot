@@ -231,36 +231,6 @@ export const RADIO_QUESTIONS: RadioQuestionConfig[] = [
       },
     ],
     prev: "s-q3",
-    next: "s-q5",
-  },
-  {
-    id: "s-q5",
-    step: 7,
-    field: "q5",
-    eyebrow: "Assessment · Commercial Terms",
-    title: "Has the company expressed any specific commercial requirements?",
-    sub: "Some requests from industry partners carry compliance implications that need to be flagged before you respond.",
-    options: [
-      {
-        label: "They're requesting exclusivity",
-        desc: "e.g. an exclusive license for a set number of years — before any terms are formally agreed",
-        warning: "⚠ Exclusivity terms belong in Stage 3, not Day 0 — CollabPilot will explain",
-        preselected: true,
-      },
-      {
-        label: "They've requested proprietary technical documentation",
-        desc: "Detailed specs, source code, datasets, or lab results shared before a Confidential Disclosure Agreement is in place",
-      },
-      {
-        label: "They've set a tight deadline for my response",
-        desc: "Pressure to reply quickly or risk losing the deal — creating urgency before terms are clear",
-      },
-      {
-        label: "No specific terms have been discussed yet",
-        desc: "The conversation is still exploratory — no formal commercial requests made",
-      },
-    ],
-    prev: "s-q4",
-    next: "s-context",
+    next: "s-processing",
   },
 ];
