@@ -57,6 +57,32 @@ export default function ResultsScreen({ state, results, onRestart }: Props) {
 
   const displayName = state.profile.name || "Dr. Paulina Chen";
 
+  const dealTypeChip = state.q1 || "IP Licensing";
+  const ipStatusChip = state.q2 || "Patent application filed";
+
+  const publicationChip = (() => {
+    switch (state.q3) {
+      case "Published":
+        return "Paper published in IEEE Transactions on Robotics";
+      case "Not yet submitted":
+        return "Paper not yet submitted";
+      case "Conference presentation only":
+        return "Conference presentation only";
+      case "Under journal review":
+      default:
+        return "Paper under review at IEEE Transactions on Robotics";
+    }
+  })();
+
+  const ttoActive = state.q4 === "Actively involved";
+  const ttoChipText =
+    state.q4 === "Actively involved"
+      ? "TTO actively involved"
+      : state.q4 === "Aware, but not yet formally engaged"
+      ? "TTO informally aware"
+      : "TTO not yet briefed";
+  const ttoChipColor = ttoActive ? "var(--teal)" : "var(--terra)";
+
   return (
     <div
       id="s-results"
@@ -111,23 +137,21 @@ export default function ResultsScreen({ state, results, onRestart }: Props) {
                   </span>
                 </div>
                 <div className="res-hdr-meta">
-                  <span className="res-meta-txt">IP Licensing</span>
+                  <span className="res-meta-txt">{dealTypeChip}</span>
                   <span className="res-meta-sep">·</span>
                   <span className="res-meta-txt">
                     Warsaw University of Technology
                   </span>
                   <span className="res-meta-sep">·</span>
-                  <span className="res-meta-txt">Patent application filed</span>
+                  <span className="res-meta-txt">{ipStatusChip}</span>
                   <span className="res-meta-sep">·</span>
-                  <span className="res-meta-txt">
-                    Paper under review at IEEE Transactions on Robotics
-                  </span>
+                  <span className="res-meta-txt">{publicationChip}</span>
                   <span className="res-meta-sep">·</span>
                   <span
                     className="res-meta-txt"
-                    style={{ color: "var(--terra)" }}
+                    style={{ color: ttoChipColor }}
                   >
-                    TTO not yet briefed
+                    {ttoChipText}
                   </span>
                 </div>
               </div>
