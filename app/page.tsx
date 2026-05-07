@@ -1,113 +1,68 @@
 "use client";
 
-export default function LandingPage() {
+import { useState } from "react";
+import {
+  type ScreenId,
+  type AssessmentState,
+  INITIAL_ASSESSMENT,
+  RADIO_QUESTIONS,
+} from "./lib/assessment";
+import LandingScreen from "./components/screens/LandingScreen";
+import ProfileScreen from "./components/screens/ProfileScreen";
+import RadioQuestionScreen from "./components/screens/RadioQuestionScreen";
+import ContextScreen from "./components/screens/ContextScreen";
+import ProcessingScreen from "./components/screens/ProcessingScreen";
+import ResultsScreen from "./components/screens/ResultsScreen";
+
+export default function Home() {
+  const [screen, setScreen] = useState<ScreenId>("s-landing");
+  const [assessment, setAssessment] = useState<AssessmentState>(INITIAL_ASSESSMENT);
+
+  const radioConfig = RADIO_QUESTIONS.find((q) => q.id === screen);
+
   return (
-    <div id="s-landing" className="screen active">
-      <div className="land-bg"></div>
-      <div className="land-grid"></div>
-
-      <nav className="top-nav dark" style={{ position: "relative", zIndex: 2 }}>
-        <div
-          className="nav-logo"
-          onClick={() => console.log("TODO: navigate home (goHome)")}
-          style={{ cursor: "pointer" }}
-        >
-          <div className="logo-dot"></div>
-          <span className="logo-text">CollabPilot</span>
-        </div>
-        <div className="nav-actions">
-          <button
-            onClick={() => console.log("TODO: navigate to sign in (goSignIn)")}
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "6px",
-              background: "transparent",
-              color: "rgba(255,255,255,0.75)",
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: "13.5px",
-              fontWeight: 500,
-              padding: "8px 18px",
-              borderRadius: "100px",
-              border: "1.5px solid rgba(255,255,255,0.25)",
-              cursor: "pointer",
-              transition: "all .2s",
-            }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.borderColor = "rgba(255,255,255,0.55)";
-              e.currentTarget.style.color = "#fff";
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.borderColor = "rgba(255,255,255,0.25)";
-              e.currentTarget.style.color = "rgba(255,255,255,0.75)";
-            }}
-          >
-            Sign in
-          </button>
-          <button
-            className="btn-primary"
-            onClick={() => console.log("TODO: navigate to s-context")}
-            style={{ padding: "8px 18px", fontSize: "13px" }}
-          >
-            Take the Assessment
-          </button>
-        </div>
-      </nav>
-
-      <div className="land-inner">
-        <div className="land-eye">Starts where matchmaking platforms stop</div>
-        <h1 className="land-h1">
-          A company just emailed you<br />about your research.<br />
-          <em>What now?</em>
-        </h1>
-        <p className="land-sub">
-          Three parties. One deal.{" "}
-          <strong>
-            Your deal is secured, tailored to you, and credible to your partner.
-          </strong>{" "}
-          CollabPilot navigates the post-match complexity no platform currently
-          addresses.
-        </p>
-
-        <div className="prompts">
-          <div className="prompt">
-            <div className="prompt-ic">📩</div>
-            <div className="prompt-txt">
-              &ldquo;A biotech company reached out about licensing my CRISPR
-              diagnostics platform. What should I do first?&rdquo;
-            </div>
-          </div>
-          <div className="prompt">
-            <div className="prompt-ic">⚖️</div>
-            <div className="prompt-txt">
-              &ldquo;My paper is under review and a company wants to discuss
-              commercialisation. Is that even allowed?&rdquo;
-            </div>
-          </div>
-          <div className="prompt">
-            <div className="prompt-ic">🏛️</div>
-            <div className="prompt-txt">
-              &ldquo;I don&rsquo;t know if I need to involve my Technology
-              Transfer Office before talking to industry.&rdquo;
-            </div>
-          </div>
-        </div>
-
-        <div className="land-cta">
-          <button
-            className="btn-primary"
-            onClick={() => console.log("TODO: navigate to s-context")}
-            style={{ fontSize: "15px", padding: "14px 32px" }}
-          >
-            Take the Free Assessment →
-          </button>
-        </div>
-
-        <div className="land-foot" style={{ marginTop: "22px" }}>
-          Trusted by researchers navigating IP licensing · Sponsored research ·
-          Joint research
-        </div>
-      </div>
-    </div>
+    <>
+      {screen === "s-landing" && (
+        <LandingScreen onStartAssessment={() => setScreen("s-profile")} />
+      )}
+      {screen === "s-profile" && (
+        <ProfileScreen
+          state={assessment}
+          setState={setAssessment}
+          onContinue={() => setScreen("s-q0")}
+          onBack={() => setScreen("s-landing")}
+        />
+      )}
+      {radioConfig && (
+        <RadioQuestionScreen
+          key={radioConfig.id}
+          config={radioConfig}
+          state={assessment}
+          setState={setAssessment}
+          onContinue={() => setScreen(radioConfig.next)}
+          onBack={() => setScreen(radioConfig.prev)}
+        />
+      )}
+      {screen === "s-context" && (
+        <ContextScreen
+          state={assessment}
+          setState={setAssessment}
+          onAnalyse={() => setScreen("s-processing")}
+          onBack={() => setScreen("s-q5")}
+        />
+      )}
+      {screen === "s-processing" && (
+        <ProcessingScreen onComplete={() => setScreen("s-results")} />
+      )}
+      {screen === "s-results" && (
+        <ResultsScreen
+          state={assessment}
+          onRestart={() => {
+            setAssessment(INITIAL_ASSESSMENT);
+            setScreen("s-landing");
+          }}
+        />
+      )}
+    </>
   );
 }
