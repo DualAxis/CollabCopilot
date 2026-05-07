@@ -32,9 +32,9 @@ export type AssessmentState = {
 
 export const INITIAL_ASSESSMENT: AssessmentState = {
   profile: {
-    name: "Dr. Paulina Chen",
-    institution: "Warsaw University of Technology",
-    email: "p.chen@pw.edu.pl",
+    name: "",
+    institution: "",
+    email: "",
     area: [],
     role: "researcher",
   },

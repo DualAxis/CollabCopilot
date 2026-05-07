@@ -102,7 +102,7 @@ export default function ProfileScreen({
               id="prof-name"
               className="prof-input"
               type="text"
-              placeholder="Dr. Paulina Chen"
+              placeholder="e.g. Dr. Jane Smith"
               value={profile.name}
               onChange={(e) => setName(e.target.value)}
             />
@@ -131,7 +131,7 @@ export default function ProfileScreen({
               id="prof-inst-email"
               className="prof-input"
               type="email"
-              placeholder="p.chen@pw.edu.pl"
+              placeholder="e.g. j.smith@university.edu"
               value={profile.email}
               onChange={(e) => setEmail(e.target.value)}
             />
