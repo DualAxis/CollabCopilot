@@ -77,7 +77,10 @@ export default function Home() {
   return (
     <>
       {screen === "s-landing" && (
-        <LandingScreen onStartAssessment={() => setScreen("s-profile")} />
+        <LandingScreen
+          onStartAssessment={() => setScreen("s-profile")}
+          onSignIn={() => goToLogin("signin")}
+        />
       )}
       {screen === "s-profile" && (
         <ProfileScreen

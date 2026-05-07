@@ -2,9 +2,10 @@
 
 type Props = {
   onStartAssessment: () => void;
+  onSignIn: () => void;
 };
 
-export default function LandingScreen({ onStartAssessment }: Props) {
+export default function LandingScreen({ onStartAssessment, onSignIn }: Props) {
   return (
     <div id="s-landing" className="screen active">
       <div className="land-bg"></div>
@@ -21,7 +22,8 @@ export default function LandingScreen({ onStartAssessment }: Props) {
         </div>
         <div className="nav-actions">
           <button
-            onClick={() => console.log("TODO: navigate to sign in (goSignIn)")}
+            type="button"
+            onClick={onSignIn}
             style={{
               display: "inline-flex",
               alignItems: "center",
