@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import type { AssessmentState } from "../../lib/assessment";
-import { MOCK_RESULTS } from "../../lib/results";
+import type { AssessmentResults } from "../../lib/results";
 
 type Props = {
   state: AssessmentState;
+  results: AssessmentResults;
   onRestart: () => void;
 };
 
@@ -40,7 +41,7 @@ const AXIS_TICKS = ["Wk 1", "Wk 4", "Wk 7", "Wk 13", "Wk 17", "Wk 20", "Wk 26+"]
 
 const stub = (label: string) => () => console.log(`TODO M6: ${label}`);
 
-export default function ResultsScreen({ state, onRestart }: Props) {
+export default function ResultsScreen({ state, results, onRestart }: Props) {
   const [openWhy, setOpenWhy] = useState<Set<number>>(new Set());
 
   const toggleWhy = (i: number) =>
@@ -229,7 +230,7 @@ export default function ResultsScreen({ state, onRestart }: Props) {
               </div>
               <div
                 className="gantt-summary-txt"
-                dangerouslySetInnerHTML={{ __html: MOCK_RESULTS.summary }}
+                dangerouslySetInnerHTML={{ __html: results.summary }}
               ></div>
             </div>
           </div>
@@ -261,7 +262,7 @@ export default function ResultsScreen({ state, onRestart }: Props) {
               </div>
             </div>
             <div className="module-body" style={{ display: "block" }}>
-              {MOCK_RESULTS.complianceAlerts.map((alert, i) => {
+              {results.complianceAlerts.map((alert, i) => {
                 const isOpen = openWhy.has(i);
                 return (
                   <div key={i} className="alert-item">
@@ -328,7 +329,7 @@ export default function ResultsScreen({ state, onRestart }: Props) {
               </div>
             </div>
             <div className="module-body" style={{ display: "block" }}>
-              {MOCK_RESULTS.safeActions.map((action, i) => (
+              {results.safeActions.map((action, i) => (
                 <div key={i} className="safe-item">
                   <div className="safe-dot">✓</div>
                   <div>
@@ -380,7 +381,7 @@ export default function ResultsScreen({ state, onRestart }: Props) {
                 This week · Get your TTO in the loop
               </div>
 
-              {MOCK_RESULTS.nextSteps.map((item, i) => {
+              {results.nextSteps.map((item, i) => {
                 if (item.state === "done") {
                   return (
                     <div key={i} className="cl-item done">

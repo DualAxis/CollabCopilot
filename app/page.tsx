@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import {
   type ScreenId,
   type AssessmentState,
   INITIAL_ASSESSMENT,
   RADIO_QUESTIONS,
 } from "./lib/assessment";
+import { type AssessmentResults, MOCK_RESULTS } from "./lib/results";
 import LandingScreen from "./components/screens/LandingScreen";
 import ProfileScreen from "./components/screens/ProfileScreen";
 import RadioQuestionScreen from "./components/screens/RadioQuestionScreen";
@@ -17,8 +18,20 @@ import ResultsScreen from "./components/screens/ResultsScreen";
 export default function Home() {
   const [screen, setScreen] = useState<ScreenId>("s-landing");
   const [assessment, setAssessment] = useState<AssessmentState>(INITIAL_ASSESSMENT);
+  const [results, setResults] = useState<AssessmentResults | null>(null);
 
   const radioConfig = RADIO_QUESTIONS.find((q) => q.id === screen);
+
+  const handleAnalysisComplete = useCallback((r: AssessmentResults) => {
+    setResults(r);
+    setScreen("s-results");
+  }, []);
+
+  const handleRestart = () => {
+    setAssessment(INITIAL_ASSESSMENT);
+    setResults(null);
+    setScreen("s-landing");
+  };
 
   return (
     <>
@@ -52,15 +65,16 @@ export default function Home() {
         />
       )}
       {screen === "s-processing" && (
-        <ProcessingScreen onComplete={() => setScreen("s-results")} />
+        <ProcessingScreen
+          state={assessment}
+          onComplete={handleAnalysisComplete}
+        />
       )}
       {screen === "s-results" && (
         <ResultsScreen
           state={assessment}
-          onRestart={() => {
-            setAssessment(INITIAL_ASSESSMENT);
-            setScreen("s-landing");
-          }}
+          results={results ?? MOCK_RESULTS}
+          onRestart={handleRestart}
         />
       )}
     </>
