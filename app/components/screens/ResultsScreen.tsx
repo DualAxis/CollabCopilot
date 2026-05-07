@@ -8,6 +8,8 @@ type Props = {
   state: AssessmentState;
   results: AssessmentResults;
   onRestart: () => void;
+  onCreateAccount: () => void;
+  onSignIn: () => void;
 };
 
 type RoadmapStage =
@@ -52,9 +54,15 @@ function dealSummaryBullets(state: AssessmentState): string[] {
   ];
 }
 
-const stub = (label: string) => () => console.log(`TODO M6: ${label}`);
+const stub = (label: string) => () => console.log(`TODO: ${label}`);
 
-export default function ResultsScreen({ state, results, onRestart }: Props) {
+export default function ResultsScreen({
+  state,
+  results,
+  onRestart,
+  onCreateAccount,
+  onSignIn,
+}: Props) {
   const [openWhy, setOpenWhy] = useState<Set<number>>(new Set());
 
   const toggleWhy = (i: number) =>
@@ -123,7 +131,7 @@ export default function ResultsScreen({ state, results, onRestart }: Props) {
           </button>
           <button
             className="btn-primary"
-            onClick={stub("login")}
+            onClick={onCreateAccount}
             style={{ fontSize: "13px", padding: "8px 16px" }}
           >
             Create account →
@@ -387,12 +395,12 @@ export default function ResultsScreen({ state, results, onRestart }: Props) {
                 deal summary
               </div>
             </div>
-            <button className="sb-unlock-btn" onClick={stub("login")}>
+            <button className="sb-unlock-btn" onClick={onCreateAccount}>
               Create account to unlock →
             </button>
             <div className="sb-unlock-signin">
               Have an account?{" "}
-              <span onClick={stub("signin")}>Sign in</span>
+              <span onClick={onSignIn}>Sign in</span>
             </div>
           </div>
 

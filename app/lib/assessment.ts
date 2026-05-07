@@ -9,7 +9,10 @@ export type ScreenId =
   | "s-q5"
   | "s-context"
   | "s-processing"
-  | "s-results";
+  | "s-results"
+  | "s-login"
+  | "s-account-created"
+  | "s-dashboard-placeholder";
 
 export type Role = "researcher" | "business" | "tto";
 
