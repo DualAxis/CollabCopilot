@@ -183,12 +183,22 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--navy);co
 .ctx-bullets li{transition:border-color .18s,background .18s,color .18s}
 .ctx-bullets li:hover{border-color:var(--teal);background:var(--teal-faint);color:var(--text-dark)}
 .ctx-bullets li:hover .ctx-bullet-dot{background:var(--teal);border-color:var(--teal);color:#fff}
-.assess-body{flex:1;display:flex;flex-direction:column;max-width:660px;width:100%;margin:0 auto;padding:36px 24px;overflow-y:auto}
-.a-prog{display:flex;align-items:center;gap:5px;margin-bottom:36px;flex-shrink:0}
-.a-step{height:3px;flex:1;border-radius:100px;background:var(--warm-grey);transition:background .4s}
+/* min-width:0 + align-self:stretch so this flex child can use full row width; avoids
+   clipped or collapsed progress (a-prog) on long screens like step 8 / s-context */
+.assess-body{
+  flex:1;display:flex;flex-direction:column;align-items:stretch;
+  max-width:660px;width:100%;min-width:0;align-self:stretch;
+  margin:0 auto;padding:36px 24px;overflow-y:auto;overflow-x:hidden;
+}
+.a-prog{
+  display:flex;align-items:center;gap:5px;margin-bottom:36px;flex-shrink:0;
+  width:100%;min-width:0;
+}
+/* min-width:0 lets flex:1 segments share space instead of overflowing the row */
+.a-step{height:3px;flex:1;min-width:0;border-radius:100px;background:var(--warm-grey);transition:background .4s}
 .a-step.done{background:var(--teal)}
 .a-step.cur{background:linear-gradient(90deg,var(--teal),rgba(14,107,115,.35))}
-.a-lbl{font-family:'DM Mono',monospace;font-size:11px;color:var(--text-light);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;margin-left:5px}
+.a-lbl{font-family:'DM Mono',monospace;font-size:11px;color:var(--text-light);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;margin-left:5px;flex-shrink:0}
 .a-eye{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);font-weight:500;margin-bottom:9px}
 .a-h{font-family:'DM Serif Display',serif;font-size:26px;font-weight:400;line-height:1.25;color:var(--navy);margin-bottom:5px}
 .a-sub{font-size:13px;color:var(--text-light);line-height:1.6;margin-bottom:24px}
