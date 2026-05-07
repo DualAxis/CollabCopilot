@@ -35,7 +35,7 @@ export const INITIAL_ASSESSMENT: AssessmentState = {
     name: "Dr. Paulina Chen",
     institution: "Warsaw University of Technology",
     email: "p.chen@pw.edu.pl",
-    area: ["Robotics & Automation"],
+    area: [],
     role: "researcher",
   },
   q0: "",

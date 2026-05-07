@@ -50,12 +50,10 @@ export default function ProfileScreen({
   const setEmail = (email: string) =>
     setState((s) => ({ ...s, profile: { ...s.profile, email } }));
 
-  const toggleArea = (area: string) =>
+  const pickArea = (area: string) =>
     setState((s) => {
-      const has = s.profile.area.includes(area);
-      const nextArea = has
-        ? s.profile.area.filter((a) => a !== area)
-        : [...s.profile.area, area];
+      const alreadySelected = s.profile.area.includes(area);
+      const nextArea = alreadySelected ? [] : [area];
       return { ...s, profile: { ...s.profile, area: nextArea } };
     });
 
@@ -159,7 +157,7 @@ export default function ProfileScreen({
                   <div
                     key={area}
                     className={`area-chip${sel ? " sel" : ""}`}
-                    onClick={() => toggleArea(area)}
+                    onClick={() => pickArea(area)}
                   >
                     {area}
                   </div>
