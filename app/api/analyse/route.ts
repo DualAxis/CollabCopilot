@@ -4,6 +4,7 @@ import { anthropic } from "@ai-sdk/anthropic";
 import { AssessmentResultsSchema } from "../../lib/schema";
 import { SYSTEM_PROMPT, buildUserPrompt } from "../../lib/prompts";
 import type { AssessmentState } from "../../lib/assessment";
+import { saveAssessment } from "../../lib/db";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -51,7 +52,16 @@ export async function POST(req: Request) {
       `[/api/analyse] ok in ${elapsedMs}ms · area=${body.state.profile.area.join("|")} · stage=${body.state.q0}`
     );
 
-    return NextResponse.json({ results: object });
+    let assessmentId: string | null = null;
+    try {
+      assessmentId = await saveAssessment(body.state, object);
+      console.log(`[/api/analyse] saved id=${assessmentId}`);
+    } catch (dbErr) {
+      const dbMsg = dbErr instanceof Error ? dbErr.message : String(dbErr);
+      console.error(`[/api/analyse] save failed (continuing): ${dbMsg}`);
+    }
+
+    return NextResponse.json({ results: object, assessmentId });
   } catch (err) {
     const elapsedMs = Date.now() - startedAt;
     const message = err instanceof Error ? err.message : String(err);
