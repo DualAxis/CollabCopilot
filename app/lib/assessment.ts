@@ -16,6 +16,7 @@ export type Role = "researcher" | "business" | "tto";
 export type AssessmentState = {
   profile: {
     name: string;
+    institution: string;
     email: string;
     area: string[];
     role: Role | null;
@@ -32,6 +33,7 @@ export type AssessmentState = {
 export const INITIAL_ASSESSMENT: AssessmentState = {
   profile: {
     name: "Dr. Paulina Chen",
+    institution: "Warsaw University of Technology",
     email: "p.chen@pw.edu.pl",
     area: ["Robotics & Automation"],
     role: "researcher",

@@ -87,6 +87,7 @@ export function buildUserPrompt(state: AssessmentState): string {
   lines.push("");
   lines.push("# Profile");
   lines.push(`- Name: ${profile.name || "(unspecified)"}`);
+  lines.push(`- Institution: ${profile.institution || "(unspecified)"}`);
   lines.push(`- Email: ${profile.email || "(unspecified)"}`);
   lines.push(
     `- Research area(s): ${profile.area.length ? profile.area.join(", ") : "(unspecified)"}`

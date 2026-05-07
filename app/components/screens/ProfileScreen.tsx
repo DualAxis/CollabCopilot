@@ -10,7 +10,7 @@ type Props = {
   onBack: () => void;
 };
 
-const TOTAL_STEPS = 8;
+const TOTAL_STEPS = 6;
 
 const ROLES: { id: Role; ic: string; name: string; desc: string }[] = [
   {
@@ -43,6 +43,9 @@ export default function ProfileScreen({
 
   const setName = (name: string) =>
     setState((s) => ({ ...s, profile: { ...s.profile, name } }));
+
+  const setInstitution = (institution: string) =>
+    setState((s) => ({ ...s, profile: { ...s.profile, institution } }));
 
   const setEmail = (email: string) =>
     setState((s) => ({ ...s, profile: { ...s.profile, email } }));
@@ -104,6 +107,20 @@ export default function ProfileScreen({
               placeholder="Dr. Paulina Chen"
               value={profile.name}
               onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+
+          <div className="prof-field">
+            <label className="prof-label" htmlFor="prof-institution">
+              Institution or company name
+            </label>
+            <input
+              id="prof-institution"
+              className="prof-input"
+              type="text"
+              placeholder="e.g. Warsaw University of Technology"
+              value={profile.institution}
+              onChange={(e) => setInstitution(e.target.value)}
             />
           </div>
 

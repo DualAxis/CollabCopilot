@@ -69,6 +69,8 @@ export default function ResultsScreen({ state, results, onRestart }: Props) {
     });
 
   const displayName = state.profile.name || "Dr. Paulina Chen";
+  const displayInstitution =
+    state.profile.institution || "Warsaw University of Technology";
 
   const dealTypeChip = state.q1 || "IP Licensing";
   const ipStatusChip = state.q2 || "Patent application filed";
@@ -152,9 +154,7 @@ export default function ResultsScreen({ state, results, onRestart }: Props) {
                 <div className="res-hdr-meta">
                   <span className="res-meta-txt">{dealTypeChip}</span>
                   <span className="res-meta-sep">·</span>
-                  <span className="res-meta-txt">
-                    Warsaw University of Technology
-                  </span>
+                  <span className="res-meta-txt">{displayInstitution}</span>
                   <span className="res-meta-sep">·</span>
                   <span className="res-meta-txt">{ipStatusChip}</span>
                   <span className="res-meta-sep">·</span>
