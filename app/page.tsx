@@ -1,65 +1,113 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+export default function LandingPage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div id="s-landing" className="screen active">
+      <div className="land-bg"></div>
+      <div className="land-grid"></div>
+
+      <nav className="top-nav dark" style={{ position: "relative", zIndex: 2 }}>
+        <div
+          className="nav-logo"
+          onClick={() => console.log("TODO: navigate home (goHome)")}
+          style={{ cursor: "pointer" }}
+        >
+          <div className="logo-dot"></div>
+          <span className="logo-text">CollabPilot</span>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+        <div className="nav-actions">
+          <button
+            onClick={() => console.log("TODO: navigate to sign in (goSignIn)")}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              background: "transparent",
+              color: "rgba(255,255,255,0.75)",
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: "13.5px",
+              fontWeight: 500,
+              padding: "8px 18px",
+              borderRadius: "100px",
+              border: "1.5px solid rgba(255,255,255,0.25)",
+              cursor: "pointer",
+              transition: "all .2s",
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.borderColor = "rgba(255,255,255,0.55)";
+              e.currentTarget.style.color = "#fff";
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.borderColor = "rgba(255,255,255,0.25)";
+              e.currentTarget.style.color = "rgba(255,255,255,0.75)";
+            }}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            Sign in
+          </button>
+          <button
+            className="btn-primary"
+            onClick={() => console.log("TODO: navigate to s-context")}
+            style={{ padding: "8px 18px", fontSize: "13px" }}
           >
-            Documentation
-          </a>
+            Take the Assessment
+          </button>
         </div>
-      </main>
+      </nav>
+
+      <div className="land-inner">
+        <div className="land-eye">Starts where matchmaking platforms stop</div>
+        <h1 className="land-h1">
+          A company just emailed you<br />about your research.<br />
+          <em>What now?</em>
+        </h1>
+        <p className="land-sub">
+          Three parties. One deal.{" "}
+          <strong>
+            Your deal is secured, tailored to you, and credible to your partner.
+          </strong>{" "}
+          CollabPilot navigates the post-match complexity no platform currently
+          addresses.
+        </p>
+
+        <div className="prompts">
+          <div className="prompt">
+            <div className="prompt-ic">📩</div>
+            <div className="prompt-txt">
+              &ldquo;A biotech company reached out about licensing my CRISPR
+              diagnostics platform. What should I do first?&rdquo;
+            </div>
+          </div>
+          <div className="prompt">
+            <div className="prompt-ic">⚖️</div>
+            <div className="prompt-txt">
+              &ldquo;My paper is under review and a company wants to discuss
+              commercialisation. Is that even allowed?&rdquo;
+            </div>
+          </div>
+          <div className="prompt">
+            <div className="prompt-ic">🏛️</div>
+            <div className="prompt-txt">
+              &ldquo;I don&rsquo;t know if I need to involve my Technology
+              Transfer Office before talking to industry.&rdquo;
+            </div>
+          </div>
+        </div>
+
+        <div className="land-cta">
+          <button
+            className="btn-primary"
+            onClick={() => console.log("TODO: navigate to s-context")}
+            style={{ fontSize: "15px", padding: "14px 32px" }}
+          >
+            Take the Free Assessment →
+          </button>
+        </div>
+
+        <div className="land-foot" style={{ marginTop: "22px" }}>
+          Trusted by researchers navigating IP licensing · Sponsored research ·
+          Joint research
+        </div>
+      </div>
     </div>
   );
 }
