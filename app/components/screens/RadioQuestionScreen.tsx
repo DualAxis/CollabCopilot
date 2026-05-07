@@ -14,7 +14,7 @@ type Props = {
   onBack: () => void;
 };
 
-const TOTAL_STEPS = 8;
+const TOTAL_STEPS = 6;
 
 function findInitialIdx(config: RadioQuestionConfig, state: AssessmentState): number {
   const stored = state[config.field];

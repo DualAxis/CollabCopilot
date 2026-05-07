@@ -25,19 +25,32 @@ type RoadmapStage =
       active: false;
       left: number;
       width: number;
-      label: string;
     };
 
 const ROADMAP_STAGES: RoadmapStage[] = [
   { num: "01", name: "Compliance & Disclosure", active: true, width: 15, dur: "2–4 wks", owner: "RESEARCHER" },
-  { num: "02", name: "NDA & CDA", active: false, left: 15, width: 12, label: "~3 wks · TTO" },
-  { num: "03", name: "Term Sheet", active: false, left: 27, width: 23, label: "3–6 wks · TTO + Business" },
-  { num: "04", name: "Due Diligence", active: false, left: 50, width: 15, label: "~4 wks · TTO" },
-  { num: "05", name: "License Agreement", active: false, left: 65, width: 12, label: "2–3 wks · All 3" },
-  { num: "06", name: "Execution", active: false, left: 77, width: 23, label: "Ongoing · All 3" },
+  { num: "02", name: "NDA & CDA", active: false, left: 15, width: 12 },
+  { num: "03", name: "Term Sheet", active: false, left: 27, width: 23 },
+  { num: "04", name: "Due Diligence", active: false, left: 50, width: 15 },
+  { num: "05", name: "License Agreement", active: false, left: 65, width: 12 },
+  { num: "06", name: "Execution", active: false, left: 77, width: 23 },
 ];
 
 const AXIS_TICKS = ["Wk 1", "Wk 4", "Wk 7", "Wk 13", "Wk 17", "Wk 20", "Wk 26+"];
+
+function dealSummaryBullets(state: AssessmentState): string[] {
+  const dealType = state.q1 || "IP Licensing";
+  const ttoBullet =
+    state.q4 === "Actively involved"
+      ? "TTO is leading this deal"
+      : "TTO must be briefed before any further communication";
+  return [
+    `${dealType} — Nexar Robotics interested in commercial use`,
+    "Estimated timeline: 4–6 months to signed agreement",
+    "Currently at Stage 1 — 2 compliance actions required before responding",
+    ttoBullet,
+  ];
+}
 
 const stub = (label: string) => () => console.log(`TODO M6: ${label}`);
 
@@ -168,7 +181,7 @@ export default function ResultsScreen({ state, results, onRestart }: Props) {
                 >
                   map
                 </span>
-                Your personalised deal roadmap
+                Your deal roadmap
               </div>
               <span className="gantt-unlock-note">
                 Stage 1 unlocked · Stages 2–6 require an account
@@ -212,50 +225,30 @@ export default function ResultsScreen({ state, results, onRestart }: Props) {
                       <span className="gantt-bar-owner">{stage.owner}</span>
                     </div>
                   ) : (
-                    <>
-                      <div
-                        className="gantt-bar-locked"
-                        style={{
-                          left: `${stage.left}%`,
-                          width: `${stage.width}%`,
-                        }}
-                      ></div>
-                      <div
-                        className="gantt-bar-locked-label"
-                        style={{ left: `${stage.left + 1}%` }}
-                      >
-                        {stage.label}
-                      </div>
-                    </>
+                    <div
+                      className="gantt-bar-locked"
+                      style={{
+                        left: `${stage.left}%`,
+                        width: `${stage.width}%`,
+                      }}
+                    ></div>
                   )}
                 </div>
               </div>
             ))}
-
-            <div className="gantt-unlock-bar">
-              <span className="gantt-unlock-txt">
-                Stages 2–6 locked — create an account, 14-day trial, no credit
-                card
-              </span>
-              <button
-                className="gantt-unlock-btn"
-                onClick={stub("login")}
-              >
-                Create account to unlock →
-              </button>
-            </div>
 
             <div className="gantt-summary">
               <div className="gantt-summary-lbl">
                 <span className="ms" style={{ fontSize: "12px" }}>
                   auto_awesome
                 </span>
-                AI-generated deal summary
+                Deal summary
               </div>
-              <div
-                className="gantt-summary-txt"
-                dangerouslySetInnerHTML={{ __html: results.summary }}
-              ></div>
+              <ul className="gantt-summary-list">
+                {dealSummaryBullets(state).map((b, i) => (
+                  <li key={i}>{b}</li>
+                ))}
+              </ul>
             </div>
           </div>
 
@@ -365,101 +358,6 @@ export default function ResultsScreen({ state, results, onRestart }: Props) {
             </div>
           </div>
 
-          {/* ── Module 3 — Next steps checklist ── */}
-          <div className="module">
-            <div className="module-head" style={{ cursor: "default" }}>
-              <div className="module-head-left">
-                <div className="module-icon check">
-                  <span className="ms" style={{ fontSize: "14px" }}>
-                    checklist
-                  </span>
-                </div>
-                <div>
-                  <div className="module-title">Next steps checklist</div>
-                  <div className="module-summary">
-                    Your Stage 1 action list — 1 done, 3 to go
-                  </div>
-                </div>
-              </div>
-              <div className="module-head-right">
-                <span className="module-badge check">Stage 1</span>
-                <span
-                  className="module-chevron ms"
-                  style={{ fontSize: "18px" }}
-                >
-                  expand_less
-                </span>
-              </div>
-            </div>
-            <div className="module-body" style={{ display: "block" }}>
-              <div
-                style={{
-                  fontFamily: "'DM Mono', monospace",
-                  fontSize: "11px",
-                  color: "var(--text-light)",
-                  letterSpacing: "0.06em",
-                  textTransform: "uppercase",
-                  marginBottom: "10px",
-                }}
-              >
-                This week · Get your TTO in the loop
-              </div>
-
-              {results.nextSteps.map((item, i) => {
-                if (item.state === "done") {
-                  return (
-                    <div key={i} className="cl-item done">
-                      <div className="cl-checkbox done-c">✓</div>
-                      <div className="cl-txt done-t">{item.label}</div>
-                    </div>
-                  );
-                }
-                if (item.state === "active") {
-                  return (
-                    <div key={i} className="cl-item active">
-                      <div className="cl-checkbox active-c"></div>
-                      <div>
-                        <div className="cl-txt">{item.label}</div>
-                        {item.badge && (
-                          <div className="cl-badge">{item.badge}</div>
-                        )}
-                      </div>
-                    </div>
-                  );
-                }
-                if (item.state === "locked") {
-                  return (
-                    <div key={i} className="cl-item locked">
-                      <div className="cl-locked-ic">🔒</div>
-                      <div className="cl-txt locked-t">{item.label}</div>
-                    </div>
-                  );
-                }
-                return (
-                  <div key={i} className="cl-item">
-                    <div className="cl-checkbox"></div>
-                    <div className="cl-txt">{item.label}</div>
-                  </div>
-                );
-              })}
-
-              <div className="ai-action-card">
-                <div className="ai-action-left">
-                  <span className="ai-action-star">✦</span>
-                  <span className="ai-action-txt">
-                    CollabPilot drafted a holding reply to Nexar — polite, no
-                    technical data, buys you 5 days.
-                  </span>
-                </div>
-                <button
-                  className="ai-action-btn"
-                  onClick={stub("review draft")}
-                >
-                  Review draft
-                </button>
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* ── Sidebar ── */}
