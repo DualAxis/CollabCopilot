@@ -45,6 +45,7 @@ export async function POST(req: Request) {
       system: SYSTEM_PROMPT,
       prompt: buildUserPrompt(body.state),
       temperature: 0.4,
+      maxRetries: 1,
     });
 
     const elapsedMs = Date.now() - startedAt;
@@ -66,6 +67,20 @@ export async function POST(req: Request) {
     const elapsedMs = Date.now() - startedAt;
     const message = err instanceof Error ? err.message : String(err);
     console.error(`[/api/analyse] failed in ${elapsedMs}ms: ${message}`);
+
+    const isRateLimit = /rate.?limit|429|exceed.*tokens.*per minute/i.test(
+      message
+    );
+    if (isRateLimit) {
+      return NextResponse.json(
+        {
+          error:
+            "Anthropic rate limit reached. Please wait ~60 seconds and try again.",
+          code: "rate_limit",
+        },
+        { status: 429 }
+      );
+    }
     return NextResponse.json(
       { error: "AI analysis failed. Please try again." },
       { status: 500 }

@@ -29,7 +29,15 @@ export default function ProcessingScreen({ state, onComplete }: Props) {
           body: JSON.stringify({ state }),
         });
         if (!res.ok) {
-          const data = await res.json().catch(() => ({}));
+          const data = await res
+            .json()
+            .catch(() => ({} as { error?: string; code?: string }));
+          if (res.status === 429 || data?.code === "rate_limit") {
+            throw new Error(
+              data?.error ||
+                "Anthropic rate limit reached. Please wait ~60 seconds and try again."
+            );
+          }
           throw new Error(data?.error || `Request failed (${res.status})`);
         }
         const data = (await res.json()) as { results: AssessmentResults };
