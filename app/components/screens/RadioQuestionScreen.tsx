@@ -83,8 +83,11 @@ export default function RadioQuestionScreen({
         <div className="opts">
           {config.options.map((opt, i) => {
             const isSel = selectedIdx === i;
-            const baseCls = opt.warning ? "opt warn-sel" : "opt";
-            const cls = isSel ? `${baseCls} sel` : baseCls;
+            const cls = isSel
+              ? opt.warning
+                ? "opt warn-sel sel"
+                : "opt sel"
+              : "opt";
             const radioStyle =
               opt.warning && isSel
                 ? { borderColor: "var(--teal)", background: "var(--teal)" }
