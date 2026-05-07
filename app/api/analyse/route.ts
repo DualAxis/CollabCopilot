@@ -7,7 +7,7 @@ import type { AssessmentState } from "../../lib/assessment";
 import { saveAssessment } from "../../lib/db";
 
 export const runtime = "nodejs";
-export const maxDuration = 30;
+export const maxDuration = 60;
 
 type RequestBody = {
   state: AssessmentState;
