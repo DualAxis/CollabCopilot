@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { AssessmentState } from "../../lib/assessment";
+import { deriveCurrentStageFromState } from "../../lib/assessment";
 import type { AssessmentResults } from "../../lib/results";
 import AILabel from "../ui/AILabel";
 
@@ -134,6 +135,12 @@ export default function ResultsScreen({
         return "Paper under review at IEEE Transactions on Robotics";
     }
   })();
+
+  // The Gantt timeline + deal-summary bullet are driven by a deterministic
+  // q0-based derivation rather than results.currentStage. This guarantees the
+  // active stage box matches the user's q0 answer even when the API falls
+  // back to MOCK_RESULTS or the model picks a different stage.
+  const currentStage = deriveCurrentStageFromState(state);
 
   const ttoActive = state.q4 === "Actively involved";
   const ttoChipText =
@@ -273,7 +280,7 @@ export default function ResultsScreen({
               ))}
             </div>
 
-            {buildRoadmapStages(results.currentStage).map((stage) => (
+            {buildRoadmapStages(currentStage).map((stage) => (
               <div key={stage.num} className="gantt-stage-row">
                 <div className="gantt-stage-lbl">
                   <span
@@ -330,7 +337,7 @@ export default function ResultsScreen({
             <div className="gantt-summary">
               <AILabel context="Deal summary" className="gantt-summary-lbl" />
               <ul className="gantt-summary-list">
-                {dealSummaryBullets(state, results.currentStage).map((b, i) => (
+                {dealSummaryBullets(state, currentStage).map((b, i) => (
                   <li key={i}>{b}</li>
                 ))}
               </ul>

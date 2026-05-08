@@ -83,6 +83,38 @@ export type RadioQuestionConfig = {
   primaryLabel?: string;
 };
 
+/**
+ * Deterministic mapping from q0 (process stage) to the 6-stage deal roadmap
+ * used on the results page. Mirrors the prompt rules in app/lib/prompts.ts so
+ * the Gantt timeline reflects the user's q0 answer even when:
+ *  - the API fell back to MOCK_RESULTS (currentStage = 1 by default), or
+ *  - Claude returned a stage that disagrees with q0.
+ *
+ * Hard cap: q3 = "Under journal review" caps the stage at 2.
+ */
+export function deriveCurrentStageFromState(state: AssessmentState): number {
+  let stage: number;
+  switch (state.q0) {
+    case "First contact received":
+      stage = 1;
+      break;
+    case "In discussion":
+      stage = 2;
+      break;
+    case "Drafting terms":
+      stage = 3;
+      break;
+    case "Already signed":
+      stage = 6;
+      break;
+    default:
+      // "Something else" or empty
+      stage = 1;
+  }
+  if (state.q3 === "Under journal review" && stage > 2) stage = 2;
+  return stage;
+}
+
 export const AREA_OPTIONS: string[] = [
   "Robotics & Automation",
   "Life Sciences",
