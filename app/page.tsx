@@ -232,6 +232,7 @@ export default function Home() {
           userInstitution={userInstitution}
           userEmail={assessment.profile.email || "p.chen@pw.edu.pl"}
           userArea={assessment.profile.area[0] || "Robotics & Automation"}
+          userRole={assessment.profile.role}
         />
       )}
       {screen === "s-knowledge-library" && (

@@ -1,12 +1,15 @@
 "use client";
 
 import WorkspaceShell from "../layout/WorkspaceShell";
+import type { Role } from "../../lib/assessment";
 
 type Props = {
   userName?: string;
   userInstitution?: string;
   userEmail?: string;
   userArea?: string;
+  /** Role chosen on Step 1 of the assessment; drives the role line + plan name. */
+  userRole?: Role | null;
   onSignOut: () => void;
   onLogoClick: () => void;
   onNavDeals: () => void;
@@ -23,16 +26,34 @@ function initials(name: string): string {
     .toUpperCase();
 }
 
+const ROLE_HEADER: Record<Role, string> = {
+  researcher: "Researcher / Academic",
+  business: "Business Partner",
+  tto: "Technology Transfer Officer",
+};
+
+const ROLE_PLAN_NAME: Record<Role, string> = {
+  researcher: "Researcher Individual",
+  business: "Business Partner Individual",
+  tto: "Technology Transfer Office Individual",
+};
+
 export default function ProfileUserScreen({
   userName = "Dr. Paulina Chen",
   userInstitution = "Warsaw University of Technology",
   userEmail = "p.chen@pw.edu.pl",
   userArea = "Robotics & Automation",
+  userRole = null,
   onSignOut,
   onLogoClick,
   onNavDeals,
   onOpenProfile,
 }: Props) {
+  const roleHeader = userRole ? ROLE_HEADER[userRole] : null;
+  const planName = userRole
+    ? ROLE_PLAN_NAME[userRole]
+    : "Individual (free trial)";
+
   return (
     <WorkspaceShell
       mode={{ kind: "profile" }}
@@ -83,11 +104,11 @@ export default function ProfileUserScreen({
             >
               {userName}
             </h2>
-            {/* demo content */}
-            <div style={{ fontSize: 13, color: "var(--text-light)" }}>
-              Assistant Professor &middot; Faculty of Power and Aeronautical
-              Engineering
-            </div>
+            {roleHeader && (
+              <div style={{ fontSize: 13, color: "var(--text-light)" }}>
+                {roleHeader}
+              </div>
+            )}
           </div>
         </div>
 
@@ -101,25 +122,14 @@ export default function ProfileUserScreen({
           <div className="profile-field">
             <div className="profile-field-label">Institution</div>
             <div className="profile-field-value">{userInstitution}</div>
-            {/* demo content */}
-            <div className="profile-field-sub">
-              Faculty of Power and Aeronautical Engineering &middot; Robotics
-              Department
-            </div>
           </div>
           <div className="profile-field">
             <div className="profile-field-label">Research area</div>
             <div className="profile-field-value">{userArea}</div>
-            {/* demo content */}
-            <div className="profile-field-sub">
-              Collaborative robots &middot; Adaptive collision-avoidance
-              &middot; Sensor fusion
-            </div>
           </div>
         </div>
 
         {/* Licence */}
-        {/* demo content */}
         <div className="profile-section">
           <div className="profile-section-title">Licence</div>
           <div className="profile-field">
@@ -132,7 +142,7 @@ export default function ProfileUserScreen({
                 marginTop: 4,
               }}
             >
-              <div className="profile-field-value">Researcher Individual</div>
+              <div className="profile-field-value">{planName}</div>
               <span className="profile-badge">&bull; Active</span>
             </div>
             <div className="profile-field-sub">
