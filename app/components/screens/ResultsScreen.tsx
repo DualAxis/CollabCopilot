@@ -119,6 +119,8 @@ export default function ResultsScreen({
   onSignIn,
 }: Props) {
   const [openWhy, setOpenWhy] = useState<Set<number>>(new Set());
+  const [complianceExpanded, setComplianceExpanded] = useState(true);
+  const [safeActionsExpanded, setSafeActionsExpanded] = useState(true);
 
   const toggleWhy = (i: number) =>
     setOpenWhy((prev) => {
@@ -165,6 +167,21 @@ export default function ResultsScreen({
   // active stage box matches the user's q0 answer even when the API falls
   // back to MOCK_RESULTS or the model picks a different stage.
   const currentStage = deriveCurrentStageFromState(state);
+
+  const alertCount = results.complianceAlerts.length;
+  const safeCount = results.safeActions.length;
+  const urgentBadge =
+    alertCount === 0
+      ? "None"
+      : alertCount === 1
+        ? "1 urgent"
+        : `${alertCount} urgent`;
+  const safeBadge =
+    safeCount === 0
+      ? "0 actions"
+      : safeCount === 1
+        ? "1 action"
+        : `${safeCount} actions`;
 
   const ttoActive = state.q4 === "Actively involved";
   const ttoChipText =
@@ -370,7 +387,20 @@ export default function ResultsScreen({
 
           {/* ── Module 1 — Compliance alerts ── */}
           <div className="module">
-            <div className="module-head" style={{ cursor: "default" }}>
+            <div
+              className="module-head"
+              role="button"
+              tabIndex={0}
+              aria-expanded={complianceExpanded}
+              onClick={() => setComplianceExpanded((v) => !v)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setComplianceExpanded((v) => !v);
+                }
+              }}
+              style={{ cursor: "pointer" }}
+            >
               <div className="module-head-left">
                 <div className="module-icon urgent">
                   <span className="ms" style={{ fontSize: "14px" }}>
@@ -401,15 +431,17 @@ export default function ResultsScreen({
                 </div>
               </div>
               <div className="module-head-right">
-                <span className="module-badge urgent">2 urgent</span>
+                <span className="module-badge urgent">{urgentBadge}</span>
                 <span
                   className="module-chevron ms"
                   style={{ fontSize: "18px" }}
+                  aria-hidden
                 >
-                  expand_less
+                  {complianceExpanded ? "expand_less" : "expand_more"}
                 </span>
               </div>
             </div>
+            {complianceExpanded && (
             <div className="module-body" style={{ display: "block" }}>
               <div style={{ marginBottom: "14px" }}>
                 <AILabel context="Compliance analysis" />
@@ -455,11 +487,25 @@ export default function ResultsScreen({
                 );
               })}
             </div>
+            )}
           </div>
 
           {/* ── Module 2 — Safe actions today ── */}
           <div className="module">
-            <div className="module-head" style={{ cursor: "default" }}>
+            <div
+              className="module-head"
+              role="button"
+              tabIndex={0}
+              aria-expanded={safeActionsExpanded}
+              onClick={() => setSafeActionsExpanded((v) => !v)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setSafeActionsExpanded((v) => !v);
+                }
+              }}
+              style={{ cursor: "pointer" }}
+            >
               <div className="module-head-left">
                 <div className="module-icon safe">
                   <span className="ms" style={{ fontSize: "14px" }}>
@@ -490,15 +536,17 @@ export default function ResultsScreen({
                 </div>
               </div>
               <div className="module-head-right">
-                <span className="module-badge safe">2 actions</span>
+                <span className="module-badge safe">{safeBadge}</span>
                 <span
                   className="module-chevron ms"
                   style={{ fontSize: "18px" }}
+                  aria-hidden
                 >
-                  expand_less
+                  {safeActionsExpanded ? "expand_less" : "expand_more"}
                 </span>
               </div>
             </div>
+            {safeActionsExpanded && (
             <div className="module-body" style={{ display: "block" }}>
               <div style={{ marginBottom: "14px" }}>
                 <AILabel context="Suggested actions" />
@@ -513,6 +561,7 @@ export default function ResultsScreen({
                 </div>
               ))}
             </div>
+            )}
           </div>
 
         </div>
