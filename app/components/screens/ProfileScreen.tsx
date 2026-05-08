@@ -187,7 +187,7 @@ export default function ProfileScreen({
               id="prof-partner"
               className="prof-input"
               type="text"
-              placeholder="e.g. Nexar Robotics"
+              placeholder="Nexar Robotics"
               value={profile.partner}
               onChange={(e) => setPartner(e.target.value)}
             />
