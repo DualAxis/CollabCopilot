@@ -204,27 +204,34 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--navy);co
 .prof-input::placeholder{color:#b0aca6}
 .prof-input-hint{font-size:12px;color:var(--text-light);margin-top:5px;line-height:1.45}
 .role-cards{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+/* CP-SELECT-STATE: DS-compliant selection feedback (Compass Layer 2)
+   Spec: border-color + background · 200ms ease · hover = teal hint · selected = full teal + teal-faint
+   Applied to: .opt, .role-card, .dt-card, .area-chip */
 .role-card{
-  display:flex;align-items:flex-start;gap:13px;padding:14px 16px;
-  border-radius:12px;border:1.5px solid var(--border);background:var(--white);
-  cursor:pointer;transition:border-color .2s,background .2s;
+  display:flex;align-items:flex-start;gap:13px;
+  padding:15px 17px;background:var(--white);
+  border:1.5px solid var(--border);border-radius:12px;cursor:pointer;
+  transition:border-color 200ms ease,background 200ms ease,transform 150ms ease;
+  margin-bottom:8px;
 }
-.role-card:hover{border-color:var(--teal);background:var(--teal-faint)}
+.role-card:hover{border-color:rgba(14,107,115,.38);background:rgba(14,107,115,.02);transform:translateY(-1px)}
 .role-card.sel{border-color:var(--teal);background:var(--teal-faint)}
+.role-card.sel:hover{transform:none}
 .role-ic{font-size:22px;line-height:1;flex-shrink:0;margin-top:1px}
 .role-name{font-size:14px;font-weight:600;color:var(--text-dark);margin-bottom:2px}
 .role-desc{font-size:13px;color:var(--text-light);line-height:1.45}
 
 /* ── AREA CHIPS ── */
+/* CP-SELECT-STATE: see demo5 §CP-SELECT-STATE */
 .area-chip{
-  display:inline-flex;align-items:center;
-  padding:7px 14px;border-radius:100px;
-  font-size:13px;font-weight:500;color:var(--text-mid);
-  border:1.5px solid var(--border);background:var(--white);
-  cursor:pointer;transition:border-color .2s,background .2s,color .2s;
+  display:inline-flex;align-items:center;padding:7px 14px;
+  background:var(--white);border:1.5px solid var(--border);
+  border-radius:100px;font-size:13px;cursor:pointer;
+  transition:border-color 200ms ease,background 200ms ease,color 200ms ease;
+  color:var(--text-mid);
 }
-.area-chip:hover{border-color:var(--teal);color:var(--teal)}
-.area-chip.sel{border-color:var(--teal);background:var(--teal-faint);color:var(--teal)}
+.area-chip:hover{border-color:rgba(14,107,115,.38);color:var(--teal)}
+.area-chip.sel{border-color:var(--teal);background:var(--teal-faint);color:var(--teal);font-weight:500}
 
 /* ── TAPPABLE SUGGESTION BULLETS ── */
 .ctx-bullets li{transition:border-color .18s,background .18s,color .18s}
@@ -252,10 +259,17 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--navy);co
 .a-textarea{width:100%;min-height:110px;background:var(--white);border:1.5px solid var(--border);border-radius:10px;padding:13px 15px;font-family:'DM Sans',sans-serif;font-size:13.5px;color:var(--text-dark);line-height:1.6;resize:vertical;transition:border-color .2s,box-shadow .2s;margin-bottom:22px}
 .a-textarea:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(14,107,115,.09)}
 .opts{display:flex;flex-direction:column;gap:7px;margin-bottom:26px}
-.opt{display:flex;align-items:flex-start;gap:13px;background:var(--white);border:1.5px solid var(--border);border-radius:10px;padding:13px 15px;cursor:pointer;transition:all .2s}
-.opt:hover{border-color:rgba(14,107,115,.28);box-shadow:0 2px 8px rgba(0,0,0,.04)}
-.opt.sel{border-color:var(--teal);background:rgba(14,107,115,.035);box-shadow:0 0 0 3px rgba(14,107,115,.07)}
-.opt.warn-sel{border-color:var(--teal);background:rgba(14,107,115,.035);box-shadow:0 0 0 3px rgba(14,107,115,.07)}
+/* CP-SELECT-STATE: see demo5 §CP-SELECT-STATE */
+.opt{
+  display:flex;align-items:flex-start;gap:13px;
+  padding:15px 17px;background:var(--white);
+  border:1.5px solid var(--border);border-radius:12px;cursor:pointer;
+  transition:border-color 200ms ease,background 200ms ease,transform 150ms ease;
+  margin-bottom:8px;
+}
+.opt:hover{border-color:rgba(14,107,115,.38);background:rgba(14,107,115,.02);transform:translateY(-1px)}
+.opt.sel,.opt.warn-sel{border-color:var(--teal);background:var(--teal-faint)}
+.opt.sel:hover,.opt.warn-sel:hover{transform:none}
 .radio{width:17px;height:17px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;margin-top:2px;transition:all .2s;display:flex;align-items:center;justify-content:center}
 .opt.sel .radio{border-color:var(--teal);background:var(--teal)}
 .opt.warn-sel .radio{border-color:var(--teal);background:var(--teal)}
@@ -422,9 +436,17 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--navy);co
 .fsec{margin-bottom:20px}
 .fsec-lbl{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-light);margin-bottom:9px}
 .dt-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
-.dt-card{display:flex;flex-direction:column;align-items:center;gap:5px;padding:13px 9px;background:var(--white);border:1.5px solid var(--border);border-radius:10px;cursor:pointer;transition:all .2s;text-align:center}
-.dt-card:hover{border-color:rgba(14,107,115,.28)}
-.dt-card.sel{border-color:var(--teal);background:rgba(14,107,115,.035)}
+/* CP-SELECT-STATE: see demo5 §CP-SELECT-STATE */
+.dt-card{
+  display:flex;flex-direction:column;align-items:center;gap:5px;
+  padding:13px 9px;background:var(--white);
+  border:1.5px solid var(--border);border-radius:10px;cursor:pointer;
+  transition:border-color 200ms ease,background 200ms ease,transform 150ms ease;
+  text-align:center;
+}
+.dt-card:hover{border-color:rgba(14,107,115,.38);transform:translateY(-1px)}
+.dt-card.sel{border-color:var(--teal);background:var(--teal-faint)}
+.dt-card.sel:hover{transform:none}
 .dt-ic{font-size:19px}
 .dt-lbl{font-size:11px;font-weight:600;color:var(--navy)}
 .dt-sub{font-size:11px;color:var(--text-light)}
