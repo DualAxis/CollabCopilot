@@ -122,7 +122,7 @@ export default function LandingScreen({
         <div className="v8-hero-inner">
           {/* demo content */}
           <div className="v8-eye">
-            University &middot; Industry &middot; Research commercialisation
+            University · Industry · Research commercialisation
           </div>
           <h1 className="v8-h1">
             Navigate your research deal
@@ -185,8 +185,8 @@ export default function LandingScreen({
       <div className="v8-foot">
         {/* demo content */}
         <div className="v8-foot-txt">
-          Trusted across IP licensing &middot; Sponsored research &middot;
-          Joint research &middot; Fee-for-service
+          Trusted across IP licensing · Sponsored research · Joint research ·
+          Fee-for-service
         </div>
       </div>
     </div>

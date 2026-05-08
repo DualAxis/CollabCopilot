@@ -1,0 +1,284 @@
+/* V8 landing — separate entry so PostCSS/Tailwind cannot drop or reorder these rules
+   after the main globals bundle. Depends on :root tokens from globals.css. */
+
+#s-landing.screen {
+  display: block !important;
+  background: #0f1f3d;
+  overflow-x: hidden;
+  overflow-y: auto;
+  min-height: 100%;
+  height: 100%;
+}
+
+#s-landing .land-bg,
+#s-landing .land-grid {
+  display: none;
+}
+
+/* Hero */
+.v8-hero {
+  background: #0f1f3d;
+  padding: 80px 48px 88px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.v8-hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+      rgba(255, 255, 255, 0.022) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
+  background-size: 52px 52px;
+  pointer-events: none;
+}
+.v8-hero-glow {
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 700px;
+  height: 360px;
+  background: radial-gradient(
+    ellipse,
+    rgba(14, 107, 115, 0.2) 0%,
+    transparent 65%
+  );
+  pointer-events: none;
+}
+.v8-hero-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 640px;
+  margin: 0 auto;
+}
+.v8-eye {
+  font-family: "DM Mono", monospace;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+  margin-bottom: 24px;
+}
+.v8-h1 {
+  font-family: "DM Serif Display", serif;
+  font-size: 48px;
+  line-height: 1.07;
+  font-weight: 400;
+  color: #fff;
+  letter-spacing: -0.45px;
+  margin-bottom: 18px;
+}
+.v8-h1 em {
+  font-style: italic;
+  color: var(--amber-light);
+}
+.v8-sub {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.42);
+  margin-bottom: 40px;
+  line-height: 1.6;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.v8-cta {
+  display: inline-block;
+  padding: 16px 44px;
+  border-radius: 100px;
+  background: var(--teal);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 8px 28px rgba(14, 107, 115, 0.42);
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  letter-spacing: 0.01em;
+}
+.v8-cta:hover {
+  background: var(--teal-light);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(14, 107, 115, 0.48);
+}
+
+/* Benefits */
+.v8-benefits {
+  background: var(--off-white);
+  padding: 64px 48px;
+}
+.v8-sec-eye {
+  font-family: "DM Mono", monospace;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--teal);
+  text-align: center;
+  margin-bottom: 10px;
+}
+.v8-sec-h {
+  font-family: "DM Serif Display", serif;
+  font-size: 30px;
+  color: var(--navy);
+  font-weight: 400;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.v8-sec-sub {
+  font-size: 14px;
+  color: var(--text-light);
+  text-align: center;
+  margin-bottom: 40px;
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.7;
+}
+.v8-benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.v8-bcard {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px 22px;
+  transition: box-shadow 0.2s;
+}
+.v8-bcard:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+}
+.v8-bcard-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: var(--teal-faint);
+  border: 1px solid rgba(14, 107, 115, 0.16);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+.v8-bcard-icon .ms {
+  font-size: 18px;
+  color: var(--teal);
+}
+.v8-bcard-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+.v8-bcard-desc {
+  font-size: 13px;
+  color: var(--text-light);
+  line-height: 1.65;
+}
+
+/* How it works */
+.v8-hiw {
+  background: var(--white);
+  padding: 64px 48px;
+  border-top: 1px solid var(--border);
+}
+.v8-steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  max-width: 900px;
+  margin: 40px auto 0;
+  position: relative;
+}
+.v8-steps::before {
+  content: "";
+  position: absolute;
+  top: 20px;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: var(--warm-grey);
+  z-index: 0;
+}
+.v8-step {
+  text-align: center;
+  padding: 0 20px;
+  position: relative;
+  z-index: 1;
+}
+.v8-step-num {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--navy);
+  color: #fff;
+  font-family: "DM Mono", monospace;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+.v8-step-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 8px;
+}
+.v8-step-desc {
+  font-size: 12.5px;
+  color: var(--text-light);
+  line-height: 1.65;
+}
+
+/* Footer strip */
+.v8-foot {
+  background: var(--navy);
+  padding: 20px 48px;
+  text-align: center;
+}
+.v8-foot-txt {
+  font-family: "DM Mono", monospace;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.2);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+/* Logo on dark nav (V8) */
+.top-nav.dark .sidebar-brand-name {
+  color: rgba(255, 255, 255, 0.85);
+}
+.top-nav.dark .sidebar-brand-sub {
+  color: var(--teal);
+}
+.top-nav.dark .logo-dot {
+  background: var(--teal);
+}
+
+.v8-hero,
+.v8-benefits,
+.v8-hiw,
+.v8-foot {
+  flex-shrink: 0;
+  width: 100%;
+}
+
+.v8-hero {
+  min-height: calc(100vh - 54px);
+}
+.v8-hero-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 54px - 168px);
+}

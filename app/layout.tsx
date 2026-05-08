@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "./landing-v8.css";
 
 export const metadata: Metadata = {
   title: "CollabPilot — Demo · IDEASHACK 2026",
