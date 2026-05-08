@@ -51,7 +51,7 @@ export const INITIAL_ASSESSMENT: AssessmentState = {
     institution: "",
     email: "",
     area: [],
-    partner: "Nexar Robotics",
+    partner: "",
     role: null,
   },
   q0: "",
