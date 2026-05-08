@@ -21,6 +21,7 @@ import DashboardScreen from "./components/screens/DashboardScreen";
 import DealBriefScreen from "./components/screens/DealBriefScreen";
 import RoadmapScreen from "./components/screens/RoadmapScreen";
 import ProfileUserScreen from "./components/screens/ProfileUserScreen";
+import KnowledgeLibraryScreen from "./components/screens/KnowledgeLibraryScreen";
 
 type LoginMode = "create" | "signin";
 
@@ -69,6 +70,8 @@ export default function Home() {
   const goToRoadmap = () => setScreen("s-roadmap");
   const goHome = () => setScreen("s-landing");
   const goToProfile = () => setScreen("s-profile-user");
+  const goToKnowledge = () => setScreen("s-knowledge-library");
+  const goToKnowledgeDeal = () => setScreen("s-knowledge-library-deal");
   const onSignOut = () => setScreen("s-landing");
   const userInstitution =
     assessment.profile.institution || "Warsaw University of Technology";
@@ -138,6 +141,7 @@ export default function Home() {
           onLogoClick={goHome}
           onOpenProfile={goToProfile}
           onNavDeals={goToDealsList}
+          onNavKnowledge={goToKnowledge}
           userName={assessment.profile.name || "Demo user"}
           userInstitution={userInstitution}
         />
@@ -149,6 +153,7 @@ export default function Home() {
           onLogoClick={goHome}
           onOpenProfile={goToProfile}
           onNavDeals={goToDealsList}
+          onNavKnowledge={goToKnowledge}
           userName={assessment.profile.name || "Demo user"}
           userInstitution={userInstitution}
         />
@@ -161,6 +166,7 @@ export default function Home() {
           onLogoClick={goHome}
           onOpenProfile={goToProfile}
           onNavRoadmap={goToRoadmap}
+          onNavKnowledge={goToKnowledgeDeal}
           userName={assessment.profile.name || "Demo user"}
           userInstitution={userInstitution}
         />
@@ -172,6 +178,7 @@ export default function Home() {
           onLogoClick={goHome}
           onOpenProfile={goToProfile}
           onNavDealBrief={goToDeals}
+          onNavKnowledge={goToKnowledgeDeal}
           userName={assessment.profile.name || "Demo user"}
           userInstitution={userInstitution}
         />
@@ -186,6 +193,28 @@ export default function Home() {
           userInstitution={userInstitution}
           userEmail={assessment.profile.email || "p.chen@pw.edu.pl"}
           userArea={assessment.profile.area[0] || "Robotics & Automation"}
+        />
+      )}
+      {screen === "s-knowledge-library" && (
+        <KnowledgeLibraryScreen
+          mode="global"
+          onLogoClick={goHome}
+          onOpenProfile={goToProfile}
+          onNavDeals={goToDealsList}
+          userName={assessment.profile.name || "Demo user"}
+          userInstitution={userInstitution}
+        />
+      )}
+      {screen === "s-knowledge-library-deal" && (
+        <KnowledgeLibraryScreen
+          mode="deal"
+          onLogoClick={goHome}
+          onOpenProfile={goToProfile}
+          onNavDeals={goToDealsList}
+          onNavDealBrief={goToDeals}
+          onNavRoadmap={goToRoadmap}
+          userName={assessment.profile.name || "Demo user"}
+          userInstitution={userInstitution}
         />
       )}
     </>

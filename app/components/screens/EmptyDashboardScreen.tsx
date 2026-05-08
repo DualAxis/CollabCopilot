@@ -7,6 +7,7 @@ type Props = {
   onLogoClick: () => void;
   onOpenProfile: () => void;
   onNavDeals?: () => void;
+  onNavKnowledge?: () => void;
   userName?: string;
   userInstitution?: string;
 };
@@ -16,6 +17,7 @@ export default function EmptyDashboardScreen({
   onLogoClick,
   onOpenProfile,
   onNavDeals,
+  onNavKnowledge,
   userName,
   userInstitution,
 }: Props) {
@@ -25,6 +27,7 @@ export default function EmptyDashboardScreen({
       onLogoClick={onLogoClick}
       onOpenProfile={onOpenProfile}
       onNavDeals={onNavDeals}
+      onNavKnowledge={onNavKnowledge}
       userName={userName}
       userInstitution={userInstitution}
     >

@@ -16,6 +16,8 @@ export type ScreenId =
   | "s-dashboard"
   | "s-deal-brief"
   | "s-roadmap"
+  | "s-knowledge-library"
+  | "s-knowledge-library-deal"
   | "s-profile-user";
 
 // Role ids follow collabpilot_demo4.html. Tech Notes v2 §2.2 uses "industry"
