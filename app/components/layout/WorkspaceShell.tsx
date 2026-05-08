@@ -10,6 +10,7 @@ type Props = {
   userName?: string;
   userRole?: string;
   onSignOut: () => void;
+  onNavDeals?: () => void;
 };
 
 function initials(name: string): string {
@@ -28,6 +29,7 @@ export default function WorkspaceShell({
   userName = "Demo user",
   userRole = "Researcher",
   onSignOut,
+  onNavDeals,
 }: Props) {
   return (
     <div className="screen workspace active">
@@ -39,12 +41,24 @@ export default function WorkspaceShell({
           </div>
           <nav className="sidebar-nav">
             <div className="nav-sec">Workspace</div>
-            <div className={`nav-item${active === "deals" ? " active" : ""}`}>
+            <button
+              type="button"
+              className={`nav-item${active === "deals" ? " active" : ""}`}
+              onClick={onNavDeals}
+              style={{
+                border: "none",
+                background: "transparent",
+                width: "auto",
+                textAlign: "left",
+                font: "inherit",
+                cursor: onNavDeals ? "pointer" : "default",
+              }}
+            >
               <span className="nav-icon">
                 <span className="ms">work</span>
               </span>
               My Deals
-            </div>
+            </button>
             <div
               className={`nav-item${active === "roadmap" ? " active" : ""}`}
             >

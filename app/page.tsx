@@ -15,7 +15,8 @@ import ProcessingScreen from "./components/screens/ProcessingScreen";
 import ResultsScreen from "./components/screens/ResultsScreen";
 import LoginScreen from "./components/screens/LoginScreen";
 import AccountCreatedScreen from "./components/screens/AccountCreatedScreen";
-import DashboardPlaceholderScreen from "./components/screens/DashboardPlaceholderScreen";
+import EmptyDashboardScreen from "./components/screens/EmptyDashboardScreen";
+import DashboardScreen from "./components/screens/DashboardScreen";
 
 type LoginMode = "create" | "signin";
 
@@ -24,6 +25,7 @@ export default function Home() {
   const [assessment, setAssessment] = useState<AssessmentState>(INITIAL_ASSESSMENT);
   const [results, setResults] = useState<AssessmentResults | null>(null);
   const [loginMode, setLoginMode] = useState<LoginMode>("create");
+  const [cameFromAssessment, setCameFromAssessment] = useState<boolean>(false);
 
   const radioConfig = RADIO_QUESTIONS.find((q) => q.id === screen);
 
@@ -38,17 +40,27 @@ export default function Home() {
     setScreen("s-landing");
   };
 
-  const goToLogin = (mode: LoginMode) => {
+  const goToLogin = (mode: LoginMode, fromAssessment: boolean) => {
     setLoginMode(mode);
+    setCameFromAssessment(fromAssessment);
     setScreen("s-login");
   };
+
+  const goAfterSignup = () => {
+    setScreen(cameFromAssessment ? "s-dashboard" : "s-empty-dashboard");
+  };
+
+  // Demo: always 1 deal exists -> s-dashboard.
+  // TODO(production): const { count } = await supabase.from('deals').select('id',{count:'exact',head:true}).eq('owner_id', userId);
+  // if (count === 0) -> s-empty-dashboard; if (count === 1) -> s-deal-brief; if (count > 1) -> s-dashboard.
+  const goToDeals = () => setScreen("s-dashboard");
 
   return (
     <>
       {screen === "s-landing" && (
         <LandingScreen
           onStartAssessment={() => setScreen("s-profile")}
-          onSignIn={() => goToLogin("signin")}
+          onSignIn={() => goToLogin("signin", false)}
         />
       )}
       {screen === "s-profile" && (
@@ -80,8 +92,8 @@ export default function Home() {
           state={assessment}
           results={results ?? MOCK_RESULTS}
           onRestart={handleRestart}
-          onCreateAccount={() => goToLogin("create")}
-          onSignIn={() => goToLogin("signin")}
+          onCreateAccount={() => goToLogin("create", true)}
+          onSignIn={() => goToLogin("signin", true)}
         />
       )}
       {screen === "s-login" && (
@@ -91,19 +103,30 @@ export default function Home() {
           initialMode={loginMode}
           onContinue={(mode) => {
             if (mode === "create") setScreen("s-account-created");
-            else setScreen("s-dashboard-placeholder");
+            else goAfterSignup();
           }}
         />
       )}
       {screen === "s-account-created" && (
         <AccountCreatedScreen
           state={assessment}
-          onGoToDashboard={() => setScreen("s-dashboard-placeholder")}
+          onGoToDashboard={goAfterSignup}
         />
       )}
-      {screen === "s-dashboard-placeholder" && (
-        <DashboardPlaceholderScreen
+      {screen === "s-empty-dashboard" && (
+        <EmptyDashboardScreen
+          onStartDeal={() => setScreen("s-profile")}
           onSignOut={() => setScreen("s-landing")}
+          onNavDeals={goToDeals}
+          userName={assessment.profile.name || "Demo user"}
+        />
+      )}
+      {screen === "s-dashboard" && (
+        <DashboardScreen
+          onNewDeal={() => setScreen("s-profile")}
+          onSignOut={() => setScreen("s-landing")}
+          onNavDeals={goToDeals}
+          userName={assessment.profile.name || "Demo user"}
         />
       )}
     </>
