@@ -1,12 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import type { AssessmentState } from "../../lib/assessment";
+import {
+  type AssessmentState,
+  deriveCurrentStageFromState,
+  roadmapStageTitle,
+} from "../../lib/assessment";
 
 type Props = {
   state: AssessmentState;
+  onContinue: (
+    mode: "create" | "signin",
+    loginProfile?: { name: string; email: string }
+  ) => void;
   onBack: () => void;
-  onContinue: (mode: "create" | "signin") => void;
   initialMode?: "create" | "signin";
 };
 
@@ -23,6 +30,10 @@ export default function LoginScreen({
   const [email, setEmail] = useState<string>(state.profile.email);
 
   const isCreate = mode === "create";
+
+  const currentStage = deriveCurrentStageFromState(state);
+  const stageTitle = roadmapStageTitle(currentStage);
+  const partner = state.profile.partner.trim() || "your partner";
 
   const switchMode = (next: Mode) => {
     if (next === mode) return;
@@ -56,7 +67,11 @@ export default function LoginScreen({
           className="login-card"
           onSubmit={(e) => {
             e.preventDefault();
-            onContinue(mode);
+            const emailTrim = email.trim();
+            const nameTrim = isCreate
+              ? name.trim()
+              : state.profile.name.trim() || name.trim();
+            onContinue(mode, { name: nameTrim, email: emailTrim });
           }}
         >
           <div
@@ -76,16 +91,16 @@ export default function LoginScreen({
           <div className="unlock-box">
             <div className="ul-eye">What you unlock</div>
             <div className="ul-item">
-              <span className="ul-ic">✓</span>Stage 1 compliance checklist — 5
-              action items, AI pre-filled
+              <span className="ul-ic">✓</span>
+              {`Stage ${currentStage} (${stageTitle}) checklist — 5 action items, AI pre-filled`}
             </div>
             <div className="ul-item">
               <span className="ul-ic">✓</span>Full 6-stage deal roadmap with
               timeline estimates
             </div>
             <div className="ul-item">
-              <span className="ul-ic">✓</span>AI-drafted holding reply to your
-              partner
+              <span className="ul-ic">✓</span>AI-drafted holding reply to{" "}
+              {partner}
             </div>
           </div>
 

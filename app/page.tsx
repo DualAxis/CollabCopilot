@@ -134,7 +134,17 @@ export default function Home() {
           state={assessment}
           onBack={() => setScreen("s-landing")}
           initialMode={loginMode}
-          onContinue={(mode) => {
+          onContinue={(mode, loginProfile) => {
+            if (loginProfile) {
+              setAssessment((prev) => ({
+                ...prev,
+                profile: {
+                  ...prev.profile,
+                  name: loginProfile.name || prev.profile.name,
+                  email: loginProfile.email || prev.profile.email,
+                },
+              }));
+            }
             if (mode === "create") setScreen("s-account-created");
             else goAfterSignup();
           }}

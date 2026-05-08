@@ -1,14 +1,26 @@
 "use client";
 
 import type { AssessmentState } from "../../lib/assessment";
+import {
+  deriveCurrentStageFromState,
+  roadmapStageTitle,
+} from "../../lib/assessment";
 
 type Props = {
   state: AssessmentState;
   onGoToDashboard: () => void;
 };
 
-export default function AccountCreatedScreen({ state, onGoToDashboard }: Props) {
-  const displayName = state.profile.name || "there";
+export default function AccountCreatedScreen({
+  state,
+  onGoToDashboard,
+}: Props) {
+  const displayName = state.profile.name.trim() || "there";
+  const institution = state.profile.institution.trim();
+  const partner = state.profile.partner.trim() || "your partner";
+  const dealType = state.q1.trim() || "your deal type";
+  const currentStage = deriveCurrentStageFromState(state);
+  const stageTitle = roadmapStageTitle(currentStage);
 
   return (
     <div
@@ -69,12 +81,33 @@ export default function AccountCreatedScreen({ state, onGoToDashboard }: Props) 
             fontSize: "14px",
             color: "var(--text-mid)",
             lineHeight: 1.6,
-            marginBottom: "28px",
+            marginBottom: "12px",
             animation: "fadeUp .4s .2s both",
           }}
         >
-          Welcome to CollabPilot, <strong>{displayName}</strong>. Your account is
-          active and ready.
+          Welcome to CollabPilot, <strong>{displayName}</strong>. Your account
+          is active and ready.
+        </p>
+        <p
+          style={{
+            fontSize: "13px",
+            color: "var(--text-light)",
+            lineHeight: 1.55,
+            marginBottom: "28px",
+            animation: "fadeUp .4s .25s both",
+          }}
+        >
+          Your assessment with <strong>{partner}</strong> maps to{" "}
+          <strong>
+            Stage {currentStage} — {stageTitle}
+          </strong>
+          {institution ? (
+            <>
+              {" "}
+              at <strong>{institution}</strong>
+            </>
+          ) : null}{" "}
+          ({dealType}).
         </p>
         <div
           style={{
@@ -110,8 +143,8 @@ export default function AccountCreatedScreen({ state, onGoToDashboard }: Props) 
                 color: "var(--text-mid)",
               }}
             >
-              <span style={{ color: "var(--teal)" }}>✓</span>Stage 1 compliance
-              checklist for any deal
+              <span style={{ color: "var(--teal)" }}>✓</span>
+              {`Stage ${currentStage} (${stageTitle}) checklist for your deal with ${partner}`}
             </div>
             <div
               style={{

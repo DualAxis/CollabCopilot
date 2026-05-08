@@ -115,6 +115,21 @@ export function deriveCurrentStageFromState(state: AssessmentState): number {
   return stage;
 }
 
+/** Short titles for roadmap stages 1–6 (UI copy). */
+const ROADMAP_STAGE_TITLE: Record<number, string> = {
+  1: "Compliance & Disclosure",
+  2: "NDA & CDA",
+  3: "Term Sheet",
+  4: "Due Diligence",
+  5: "License Agreement",
+  6: "Execution",
+};
+
+export function roadmapStageTitle(stage: number): string {
+  const s = Math.min(6, Math.max(1, Math.round(stage)));
+  return ROADMAP_STAGE_TITLE[s] ?? ROADMAP_STAGE_TITLE[1];
+}
+
 export const AREA_OPTIONS: string[] = [
   "Robotics & Automation",
   "Life Sciences",
