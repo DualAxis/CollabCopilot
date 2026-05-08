@@ -3,18 +3,73 @@
 type Props = {
   onStartAssessment: () => void;
   onSignIn: () => void;
+  onLogoClick: () => void;
 };
 
-export default function LandingScreen({ onStartAssessment, onSignIn }: Props) {
+type Benefit = {
+  icon: string;
+  title: string;
+  desc: string;
+};
+
+type Step = {
+  num: string;
+  title: string;
+  desc: string;
+};
+
+const BENEFITS: Benefit[] = [
+  {
+    icon: "verified_user",
+    title: "Compliance from day one",
+    desc: "Before anyone discusses terms, know exactly what can and cannot be shared — protecting IP, publication rights, and institutional policy from the very first email.",
+  },
+  {
+    icon: "route",
+    title: "A roadmap everyone can see",
+    desc: "A personalised 6-stage deal roadmap — shared across researcher, TTO, and business partner in real time. Every party knows where the deal stands and what comes next.",
+  },
+  {
+    icon: "folder_open",
+    title: "Documents, checklists, one workspace",
+    desc: "All deal materials organised by stage. AI-drafted emails, compliance checklists, document templates — no email threads, no version confusion.",
+  },
+];
+
+const STEPS: Step[] = [
+  {
+    num: "1",
+    title: "AI Assessment",
+    desc: "Answer 6 adaptive questions about the deal, IP status, and situation. Takes under 2 minutes.",
+  },
+  {
+    num: "2",
+    title: "Instant Results",
+    desc: "Compliance flags, safe actions for today, and a preview of the personalised 6-stage deal roadmap.",
+  },
+  {
+    num: "3",
+    title: "Your Workspace",
+    desc: "Documents, checklists, and AI guidance organised by stage — everything the deal needs in one place.",
+  },
+  {
+    num: "4",
+    title: "Navigate Together",
+    desc: "Researcher, TTO, and business partner on one live roadmap — progress visible to all, in real time.",
+  },
+];
+
+export default function LandingScreen({
+  onStartAssessment,
+  onSignIn,
+  onLogoClick,
+}: Props) {
   return (
     <div id="s-landing" className="screen active">
-      <div className="land-bg"></div>
-      <div className="land-grid"></div>
-
       <nav className="top-nav dark" style={{ position: "relative", zIndex: 2 }}>
         <div
           className="nav-logo"
-          onClick={() => console.log("TODO: navigate home (goHome)")}
+          onClick={onLogoClick}
           style={{ cursor: "pointer" }}
         >
           <div className="logo-dot"></div>
@@ -60,58 +115,78 @@ export default function LandingScreen({ onStartAssessment, onSignIn }: Props) {
         </div>
       </nav>
 
-      <div className="land-inner">
-        <div className="land-eye">Starts where matchmaking platforms stop</div>
-        <h1 className="land-h1">
-          A company just emailed you<br />about your research.<br />
-          <em>What now?</em>
-        </h1>
-        <p className="land-sub">
-          Three parties. One deal.{" "}
-          <strong>
-            Your deal is secured, tailored to you, and credible to your partner.
-          </strong>{" "}
-          CollabPilot navigates the post-match complexity no platform currently
-          addresses.
-        </p>
-
-        <div className="prompts">
-          <div className="prompt">
-            <div className="prompt-ic">📩</div>
-            <div className="prompt-txt">
-              &ldquo;A company reached out about licensing my robotics
-              algorithm. They want exclusivity. What should I do first?&rdquo;
-            </div>
+      {/* HERO */}
+      <div className="v8-hero">
+        <div className="v8-hero-grid"></div>
+        <div className="v8-hero-glow"></div>
+        <div className="v8-hero-inner">
+          {/* demo content */}
+          <div className="v8-eye">
+            University &middot; Industry &middot; Research commercialisation
           </div>
-          <div className="prompt">
-            <div className="prompt-ic">⚖️</div>
-            <div className="prompt-txt">
-              &ldquo;My paper is under review and a company wants to discuss
-              commercialisation. Is that even allowed?&rdquo;
-            </div>
-          </div>
-          <div className="prompt">
-            <div className="prompt-ic">🏛️</div>
-            <div className="prompt-txt">
-              &ldquo;I don&rsquo;t know if I need to involve my Technology
-              Transfer Office before talking to industry.&rdquo;
-            </div>
-          </div>
-        </div>
-
-        <div className="land-cta">
-          <button
-            className="btn-primary"
-            onClick={onStartAssessment}
-            style={{ fontSize: "15px", padding: "14px 32px" }}
-          >
+          <h1 className="v8-h1">
+            Navigate your research deal
+            <br />
+            from first email to <em>signed agreement.</em>
+          </h1>
+          <p className="v8-sub">
+            Three parties. One shared workspace. AI-guided every step of the
+            way.
+          </p>
+          <button className="v8-cta" onClick={onStartAssessment}>
             Take the Free Assessment →
           </button>
         </div>
+      </div>
 
-        <div className="land-foot" style={{ marginTop: "22px" }}>
-          Trusted by researchers navigating IP licensing · Sponsored research ·
-          Joint research
+      {/* BENEFITS */}
+      <div className="v8-benefits">
+        {/* demo content */}
+        <div className="v8-sec-eye">Built for the deal</div>
+        <div className="v8-sec-h">What is CollabPilot for?</div>
+        <div className="v8-sec-sub">
+          Getting from a commercial inquiry to a signed agreement takes months
+          — navigating IP compliance, TTO coordination, and business partner
+          trust at the same time. CollabPilot makes that journey structured,
+          transparent, and shared across all three parties.
+        </div>
+        <div className="v8-benefits-grid">
+          {BENEFITS.map((b) => (
+            <div className="v8-bcard" key={b.title}>
+              <div className="v8-bcard-icon">
+                <span className="ms">{b.icon}</span>
+              </div>
+              <div className="v8-bcard-title">{b.title}</div>
+              <div className="v8-bcard-desc">{b.desc}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* HOW IT WORKS */}
+      <div className="v8-hiw">
+        {/* demo content */}
+        <div className="v8-sec-eye">How it works</div>
+        <div className="v8-sec-h" style={{ textAlign: "center" }}>
+          From assessment to roadmap in minutes
+        </div>
+        <div className="v8-steps">
+          {STEPS.map((s) => (
+            <div className="v8-step" key={s.num}>
+              <div className="v8-step-num">{s.num}</div>
+              <div className="v8-step-title">{s.title}</div>
+              <div className="v8-step-desc">{s.desc}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* FOOTER STRIP */}
+      <div className="v8-foot">
+        {/* demo content */}
+        <div className="v8-foot-txt">
+          Trusted across IP licensing &middot; Sponsored research &middot;
+          Joint research &middot; Fee-for-service
         </div>
       </div>
     </div>

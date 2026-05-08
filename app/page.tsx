@@ -79,6 +79,7 @@ export default function Home() {
         <LandingScreen
           onStartAssessment={() => setScreen("s-profile")}
           onSignIn={() => goToLogin("signin", false)}
+          onLogoClick={goHome}
         />
       )}
       {screen === "s-profile" && (
