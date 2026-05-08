@@ -67,6 +67,7 @@ export default function ProfileScreen({
     profile.name.trim() &&
       profile.institution.trim() &&
       profile.email.trim() &&
+      profile.area.length > 0 &&
       profile.partner.trim() &&
       profile.role
   );
