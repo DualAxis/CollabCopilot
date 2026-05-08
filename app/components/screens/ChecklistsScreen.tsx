@@ -199,72 +199,110 @@ export default function ChecklistsScreen({
               </div>
             </div>
 
-            {/* 2. Active (two-column grid) */}
-            <div
-              className="cl-item active"
-              style={{
-                borderTop: "1px solid var(--off-white)",
-                borderBottom: "1px solid var(--off-white)",
-              }}
-            >
+            {/* 2. Active (two-column grid) -> collapses to simple Done row when ticked */}
+            {isDone ? (
               <div
+                className="cl-item done"
                 style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr",
-                  gap: 0,
-                  width: "100%",
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: 12,
+                  padding: "14px 18px",
+                  background: "var(--white)",
+                  borderTop: "1px solid var(--off-white)",
+                  borderBottom: "1px solid var(--off-white)",
+                }}
+              >
+                <div
+                  className="cl-checkbox done-c"
+                  onClick={() => setActiveStatus("active")}
+                  role="button"
+                  tabIndex={0}
+                  title="Toggle status"
+                  style={{ marginTop: 1, flexShrink: 0, cursor: "pointer" }}
+                >
+                  {"\u2713"}
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div className="cl-txt done-t">
+                    Forward {dealBrief.display.shellDealName} email to your TTO
+                  </div>
+                  <div
+                    style={{
+                      fontSize: 12,
+                      color: "var(--text-light)",
+                      marginTop: 2,
+                    }}
+                  >
+                    {"Completed \u00b7 Forwarding email sent to your TTO"}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div
+                className="cl-item active"
+                style={{
+                  borderTop: "1px solid var(--off-white)",
+                  borderBottom: "1px solid var(--off-white)",
                 }}
               >
                 <div
                   style={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                    gap: 12,
-                    padding: "16px 18px",
-                    borderRight: "1px solid rgba(14,107,115,.15)",
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr",
+                    gap: 0,
+                    width: "100%",
                   }}
                 >
                   <div
-                    className={`cl-checkbox active-c${isDone ? " done-c" : ""}`}
-                    onClick={toggleActive}
-                    title="Toggle status"
-                    style={{ marginTop: 2, flexShrink: 0 }}
+                    style={{
+                      display: "flex",
+                      alignItems: "flex-start",
+                      gap: 12,
+                      padding: "16px 18px",
+                      borderRight: "1px solid rgba(14,107,115,.15)",
+                    }}
                   >
-                    {isDone ? "\u2713" : ""}
-                  </div>
-                  <div>
-                    <div className={`cl-txt${isDone ? " done-t" : ""}`}>
-                      Forward {dealBrief.display.shellDealName} email to your
-                      TTO
+                    <div
+                      className="cl-checkbox active-c"
+                      onClick={toggleActive}
+                      role="button"
+                      tabIndex={0}
+                      title="Toggle status"
+                      style={{ marginTop: 2, flexShrink: 0 }}
+                    ></div>
+                    <div>
+                      <div className="cl-txt">
+                        Forward {dealBrief.display.shellDealName} email to your
+                        TTO
+                      </div>
+                      <div className="cl-badge" style={{ marginTop: 4 }}>
+                        {"\u2192 Next action"}
+                      </div>
+                      <div style={statusPillStyle}>Active</div>
                     </div>
-                    <div className="cl-badge" style={{ marginTop: 4 }}>
-                      {"\u2192 Next action"}
+                  </div>
+                  <div style={{ padding: "16px 18px" }}>
+                    <div className="cl-ai-label">
+                      <span className="ms" style={{ fontSize: 12 }}>
+                        auto_awesome
+                      </span>
+                      CollabPilot suggestion
                     </div>
-                    <div style={statusPillStyle}>
-                      {isDone ? "Done" : "Active"}
+                    <div className="cl-ai-body">
+                      {`A forwarding email to your Technology Transfer Office (${dealBrief.who.institution}) has been drafted \u2014 includes your deal context from the assessment.`}
                     </div>
+                    <button
+                      className="btn-secondary"
+                      onClick={() => setReviewOpen(true)}
+                      style={{ fontSize: 13, padding: "8px 18px" }}
+                    >
+                      Review draft
+                    </button>
                   </div>
-                </div>
-                <div style={{ padding: "16px 18px" }}>
-                  <div className="cl-ai-label">
-                    <span className="ms" style={{ fontSize: 12 }}>
-                      auto_awesome
-                    </span>
-                    CollabPilot suggestion
-                  </div>
-                  <div className="cl-ai-body">
-                    {`A forwarding email to your Technology Transfer Office (${dealBrief.who.institution}) has been drafted \u2014 includes your deal context from the assessment.`}
-                  </div>
-                  <button
-                    className="btn-secondary"
-                    onClick={() => setReviewOpen(true)}
-                    style={{ fontSize: 13, padding: "8px 18px" }}
-                  >
-                    Review draft
-                  </button>
                 </div>
               </div>
-            </div>
+            )}
 
             {/* 3. Upcoming -> becomes active when step 2 is done */}
             <div
