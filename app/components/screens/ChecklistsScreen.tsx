@@ -202,6 +202,7 @@ export default function ChecklistsScreen({
             {/* 2. Active (two-column grid) -> collapses to simple Done row when ticked */}
             {isDone ? (
               <div
+                key="step2-done"
                 className="cl-item done"
                 style={{
                   display: "flex",
@@ -211,6 +212,7 @@ export default function ChecklistsScreen({
                   background: "var(--white)",
                   borderTop: "1px solid var(--off-white)",
                   borderBottom: "1px solid var(--off-white)",
+                  flexDirection: "row",
                 }}
               >
                 <div
@@ -240,6 +242,7 @@ export default function ChecklistsScreen({
               </div>
             ) : (
               <div
+                key="step2-active"
                 className="cl-item active"
                 style={{
                   borderTop: "1px solid var(--off-white)",
