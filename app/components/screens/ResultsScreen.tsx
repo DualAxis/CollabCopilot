@@ -62,6 +62,27 @@ const STAGE_NAMES: Record<number, string> = {
   6: "Stage 6 (Execution)",
 };
 
+/** Lower-case descriptor used inline (e.g. "Stage 3 term sheet checklist"). */
+const STAGE_DESCRIPTORS: Record<number, string> = {
+  1: "compliance",
+  2: "NDA & CDA",
+  3: "term sheet",
+  4: "due diligence",
+  5: "license agreement",
+  6: "execution",
+};
+
+function unlockNote(stage: number): string {
+  const s = Math.min(6, Math.max(1, Math.round(stage)));
+  if (s >= 6) return "Stages 1\u20136 unlocked";
+  const left = s === 1 ? "Stage 1 unlocked" : `Stages 1\u2013${s} unlocked`;
+  const right =
+    s + 1 === 6
+      ? "Stage 6 requires an account"
+      : `Stages ${s + 1}\u20136 require an account`;
+  return `${left} \u00b7 ${right}`;
+}
+
 function dealSummaryBullets(
   state: AssessmentState,
   currentStage: number
@@ -232,7 +253,7 @@ export default function ResultsScreen({
               </span>
               <div>
                 <div className="res-dl-txt">
-                  Download your Stage 1 assessment report
+                  Download your Stage {currentStage} assessment report
                 </div>
                 <div className="res-dl-note">
                   ⚠ This report will not be available after you leave this page
@@ -268,7 +289,7 @@ export default function ResultsScreen({
                 Your deal roadmap
               </div>
               <span className="gantt-unlock-note">
-                Stage 1 unlocked · Stages 2–6 require an account
+                {unlockNote(currentStage)}
               </span>
             </div>
 
@@ -499,13 +520,15 @@ export default function ResultsScreen({
             <div className="sb-unlock-chip">✦ Your next step</div>
             <div className="sb-unlock-h">Your roadmap is ready</div>
             <div className="sb-unlock-sub">
-              Create your account to unlock your Stage 1 checklist, full
-              roadmap, and AI-drafted reply. 14-day trial — no credit card.
+              Create your account to unlock your Stage {currentStage}{" "}
+              checklist, full roadmap, and AI-drafted reply. 14-day trial
+              {"\u2014"} no credit card.
             </div>
             <div className="sb-unlock-list">
               <div className="sb-unlock-item">
-                <span className="sb-unlock-check">✓</span>Stage 1 compliance
-                checklist (5 items)
+                <span className="sb-unlock-check">✓</span>Stage {currentStage}{" "}
+                {STAGE_DESCRIPTORS[currentStage] ?? "compliance"} checklist (5
+                items)
               </div>
               <div className="sb-unlock-item">
                 <span className="sb-unlock-check">✓</span>Full 6-stage roadmap
