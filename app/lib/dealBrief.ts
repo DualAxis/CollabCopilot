@@ -1,4 +1,8 @@
-import type { AssessmentState } from "./assessment";
+import {
+  type AssessmentState,
+  deriveCurrentStageFromState,
+} from "./assessment";
+import type { AssessmentResults } from "./results";
 
 export type PartyAccessStatus =
   | "Owner"
@@ -45,7 +49,22 @@ export type DealLogEntry = {
   state: "done" | "pending";
 };
 
+/** Header / shell copy derived from the latest assessment run. */
+export type DealBriefDisplay = {
+  stageNumber: number;
+  shellDealName: string;
+  shellDealSubLabel: string;
+  titleLine1: string;
+  titleLine2: string;
+  badgeDealType: string;
+  badgeStageLine: string;
+  logDateLabel: string;
+  /** Subtitle under H1 on checklists / documents / similar deal-scoped pages */
+  inDealScreenSubtitle: string;
+};
+
 export type DealBrief = {
+  display: DealBriefDisplay;
   who: WhoBlock;
   what: WhatBlock;
   goals: GoalsBlock;
@@ -54,7 +73,22 @@ export type DealBrief = {
   log: DealLogEntry[];
 };
 
-const FALLBACK_PUBLICATION = "Under review \u00B7 IEEE Transactions on Robotics";
+const STAGE_TITLES: Record<number, string> = {
+  1: "Compliance & Disclosure",
+  2: "NDA & CDA",
+  3: "Term Sheet",
+  4: "Due Diligence",
+  5: "License Agreement",
+  6: "Execution",
+};
+
+function formatLogDate(d: Date): string {
+  return d.toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+}
 
 function resolveDealType(q1: string): string {
   if (!q1) return "IP Licensing \u2014 Exclusive";
@@ -63,38 +97,114 @@ function resolveDealType(q1: string): string {
 }
 
 function resolvePublication(q3: string): string {
-  if (!q3) return FALLBACK_PUBLICATION;
-  if (q3 === "Under journal review") return FALLBACK_PUBLICATION;
+  if (!q3) return "Not specified in assessment";
   return q3;
 }
 
-export function buildInitialDealBrief(state: AssessmentState): DealBrief {
-  const name = state.profile.name.trim();
-  const institution = state.profile.institution.trim();
-  const area = state.profile.area[0];
+function buildDisplay(
+  partner: string,
+  institution: string,
+  areaLabel: string,
+  dealTag: string,
+  dealType: string,
+  stage: number,
+  stageTitle: string
+): DealBriefDisplay {
+  const titleLine2 = `${areaLabel} \u00B7 ${dealTag}`;
+  const shellDealSubLabel = `${dealTag} \u00B7 Stage ${stage}`;
+  const inDealScreenSubtitle = `Stage ${stage} \u2014 ${stageTitle} \u00B7 ${partner} deal`;
 
   return {
+    stageNumber: stage,
+    shellDealName: partner,
+    shellDealSubLabel,
+    titleLine1: `${partner} \u2014`,
+    titleLine2,
+    badgeDealType: dealType,
+    badgeStageLine: `Stage ${stage} \u00B7 ${stageTitle}`,
+    logDateLabel: formatLogDate(new Date()),
+    inDealScreenSubtitle,
+  };
+}
+
+export function buildInitialDealBrief(
+  state: AssessmentState,
+  results?: AssessmentResults | null
+): DealBrief {
+  const partner = state.profile.partner.trim() || "Business partner";
+  const name = state.profile.name.trim();
+  const institution = state.profile.institution.trim();
+  const email = state.profile.email.trim();
+  const area = state.profile.area[0]?.trim();
+  const areaLabel = area || "Research collaboration";
+
+  const researcher = name || "Researcher";
+  const instDisplay = institution || "Your institution";
+  const dealType = resolveDealType(state.q1);
+  const stage = deriveCurrentStageFromState(state);
+  const stageTitle = STAGE_TITLES[stage] ?? STAGE_TITLES[1];
+  const rawDealTag = state.q1 || "Commercial deal";
+  const display = buildDisplay(
+    partner,
+    instDisplay,
+    areaLabel,
+    rawDealTag,
+    dealType,
+    stage,
+    stageTitle
+  );
+
+  const alertCount = results?.complianceAlerts.length ?? 0;
+  const alertPhrase =
+    alertCount === 0
+      ? "No compliance flags from the latest analysis"
+      : alertCount === 1
+        ? "1 compliance risk flagged in the latest analysis"
+        : `${alertCount} compliance risks flagged in the latest analysis`;
+
+  const ttoOfficer = `Technology Transfer Office \u2014 ${instDisplay}`;
+
+  const goalsResearcher = `Advance a ${state.q1 || "commercial collaboration"} with ${partner} while protecting ${instDisplay} IP, publication obligations, and internal approvals.`;
+  const goalsBusiness = `Progress the opportunity with ${instDisplay} under the assessed deal structure and timeline.`;
+
+  const aiWhatItIs = `${dealType} between ${instDisplay} and ${partner} (${areaLabel}).`;
+  const aiWhatsDone = `Assessment completed \u00B7 ${alertPhrase} \u00B7 Account created \u00B7 Deal initialised`;
+  const aiWhatsNext =
+    alertCount > 0
+      ? `Align with your TTO \u00B7 Confirm what can be shared with ${partner} \u00B7 Document publication and IP status before next outreach`
+      : `Confirm roles with your TTO \u00B7 Agree what can be shared with ${partner} \u00B7 Set next milestone dates`;
+
+  const pub = state.q3;
+  const aiRisk =
+    pub === "Under journal review"
+      ? `Publication timing may limit what you can share before agreements are in place \u00B7 coordinate with ${instDisplay} TTO and ${partner}`
+      : `Track IP disclosure and publication obligations as discussions with ${partner} move forward`;
+
+  const aiTimeline = `Current roadmap position: Stage ${stage} (${stageTitle}) \u00B7 adjust timeline with your TTO and ${partner}`;
+
+  const emailVerified = email ? `${email} verified` : "Researcher email on file";
+
+  return {
+    display,
     who: {
-      researcher: name || "Dr. Paulina Chen",
+      researcher,
       researcherStatus: "Owner",
-      institution: institution || "Warsaw University of Technology",
-      businessPartner: "Nexar Robotics \u00B7 Marek Nowak, BD Lead",
+      institution: instDisplay,
+      businessPartner: partner,
       businessStatus: "Not yet invited",
-      ttoOfficer: "Katarzyna W. \u2014 WUT TTO",
+      ttoOfficer,
       ttoStatus: "Joined",
     },
     what: {
-      dealType: resolveDealType(state.q1),
-      researchArea: area || "Robotics & Automation",
-      ipStatus: state.q2 || "Patent application filed",
+      dealType,
+      researchArea: areaLabel,
+      ipStatus: state.q2 || "Not specified in assessment",
       publicationStatus: resolvePublication(state.q3),
     },
     goals: {
-      researcher:
-        "Commercialise IP while protecting publication rights and patent scope",
-      business:
-        "Secure exclusive licence to integrate the algorithm into their cobot product line",
-      timeline: "Signed agreement within 4\u20136 months",
+      researcher: goalsResearcher,
+      business: goalsBusiness,
+      timeline: "Signed agreement within 4\u20136 months (indicative)",
     },
     signoffs: {
       researcher: "Confirmed",
@@ -102,51 +212,36 @@ export function buildInitialDealBrief(state: AssessmentState): DealBrief {
       business: "Invitation pending",
     },
     aiSummary: [
-      {
-        category: "What it is",
-        text: "Exclusive IP licensing deal for a cobot collision-avoidance algorithm between WUT and Nexar Robotics",
-      },
-      {
-        category: "What\u2019s done",
-        text: "Assessment completed \u00B7 2 compliance risks identified \u00B7 Account created \u00B7 Deal initialised",
-      },
-      {
-        category: "What\u2019s next",
-        text: "Brief TTO \u00B7 Initiate CDA with Nexar \u00B7 Confirm publication embargo with IEEE",
-      },
-      {
-        category: "Current risk",
-        text: "TTO not yet briefed \u00B7 Paper under review creates CDA urgency before any data is shared",
-      },
-      {
-        category: "Timeline",
-        text: "Stage 1 estimated 2\u20134 weeks \u00B7 Full deal 4\u20136 months to signed agreement",
-      },
+      { category: "What it is", text: aiWhatItIs },
+      { category: "What\u2019s done", text: aiWhatsDone },
+      { category: "What\u2019s next", text: aiWhatsNext },
+      { category: "Current risk", text: aiRisk },
+      { category: "Timeline", text: aiTimeline },
     ],
     log: [
       {
         event: "Assessment completed",
-        meta: "May 7, 2026 \u00B7 AI analysis run \u00B7 2 urgent compliance flags identified",
+        meta: `${display.logDateLabel} \u00B7 AI analysis run \u00B7 ${alertPhrase}`,
         state: "done",
       },
       {
         event: "Account created",
-        meta: "May 7, 2026 \u00B7 Researcher tier \u00B7 WUT institutional email verified",
+        meta: `${display.logDateLabel} \u00B7 Researcher tier \u00B7 ${emailVerified}`,
         state: "done",
       },
       {
-        event: "Nexar Robotics identified as prospective partner",
-        meta: "May 7, 2026 \u00B7 Entered during assessment \u00B7 Invitation pending",
+        event: `${partner} identified as prospective partner`,
+        meta: `${display.logDateLabel} \u00B7 Entered during assessment \u00B7 Invitation pending`,
         state: "done",
       },
       {
-        event: "TTO officer invited",
-        meta: "Pending \u00B7 Katarzyna W. \u2014 invitation not yet sent",
+        event: "TTO alignment",
+        meta: `Pending \u00B7 Confirm assigned TTO contact at ${instDisplay}`,
         state: "pending",
       },
       {
         event: "CDA initiated",
-        meta: "Pending \u00B7 Required before any technical data is shared",
+        meta: `Pending \u00B7 Required before any non-public technical data is shared with ${partner}`,
         state: "pending",
       },
     ],

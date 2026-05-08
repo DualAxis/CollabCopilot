@@ -1,18 +1,38 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import WorkspaceShell from "../layout/WorkspaceShell";
 import EmailDraftModal from "../modals/EmailDraftModal";
+import type { DealBrief } from "../../lib/dealBrief";
 
-const FORWARDING_EMAIL = {
-  title: "Forwarding email to TTO \u2014 draft",
-  to: "katarzyna.w@pw.edu.pl",
-  subject:
-    "FWD: Nexar Robotics inquiry \u2014 IP licensing of cobot algorithm",
-  body: "Hi Katarzyna,\n\nI wanted to bring this to your attention. I've received an inquiry from Nexar Robotics (Marek Nowak, BD Lead) regarding licensing of my adaptive cobot collision-avoidance algorithm.\n\nForwarding the original email for your review. Two compliance flags have been identified:\n\n1. My paper is currently under review at IEEE Transactions on Robotics \u2014 a CDA must be in place before any technical data is shared.\n2. The IP belongs to WUT and requires your involvement before any further discussion.\n\nCould we schedule a briefing call this week?\n\nBest regards,\nDr. Paulina Chen\nFaculty of Power and Aeronautical Engineering, WUT",
-};
+function buildForwardingDraft(dealBrief: DealBrief) {
+  const partner = dealBrief.display.shellDealName;
+  const name = dealBrief.who.researcher;
+  const inst = dealBrief.who.institution;
+  const pub = dealBrief.what.publicationStatus;
+  return {
+    title: "Forwarding email to TTO \u2014 draft",
+    to: "",
+    subject: `FWD: ${partner} \u2014 commercial inquiry`,
+    body: `Hi,
+
+I wanted to bring this to your attention. I've received an inquiry from ${partner} as part of a potential ${dealBrief.what.dealType}.
+
+Context from my assessment:
+\u2022 IP status: ${dealBrief.what.ipStatus}
+\u2022 Publication: ${pub}
+\u2022 Institution: ${inst}
+
+I have not shared non-public technical data. Could we schedule a short alignment call this week?
+
+Best regards,
+${name}
+${inst}`,
+  };
+}
 
 type Props = {
+  dealBrief: DealBrief;
   onLogoClick: () => void;
   onOpenProfile: () => void;
   onNavDeals: () => void;
@@ -25,6 +45,7 @@ type Props = {
 };
 
 export default function ChecklistsScreen({
+  dealBrief,
   onLogoClick,
   onOpenProfile,
   onNavDeals,
@@ -37,6 +58,10 @@ export default function ChecklistsScreen({
 }: Props) {
   const [activeStatus, setActiveStatus] = useState<"active" | "done">("active");
   const [reviewOpen, setReviewOpen] = useState(false);
+  const forwardingDraft = useMemo(
+    () => buildForwardingDraft(dealBrief),
+    [dealBrief]
+  );
   const isDone = activeStatus === "done";
   const toggleActive = () => setActiveStatus("done");
 
@@ -67,8 +92,8 @@ export default function ChecklistsScreen({
       mode={{
         kind: "inDeal",
         active: "checklists",
-        dealName: "Nexar Robotics",
-        dealSubLabel: "IP Licensing \u00b7 Stage 1",
+        dealName: dealBrief.display.shellDealName,
+        dealSubLabel: dealBrief.display.shellDealSubLabel,
       }}
       onLogoClick={onLogoClick}
       onOpenProfile={onOpenProfile}
@@ -83,7 +108,7 @@ export default function ChecklistsScreen({
       <div className="doc-inner">
         <div className="brief-crumb" style={{ marginBottom: 20 }}>
           <span onClick={onNavDealBrief} style={{ cursor: "pointer" }}>
-            Nexar Robotics
+            {dealBrief.display.shellDealName}
           </span>
           <span className="brief-crumb-sep">{"\u203a"}</span>
           <span style={{ color: "var(--text-dark)" }}>Checklists</span>
@@ -108,14 +133,14 @@ export default function ChecklistsScreen({
               lineHeight: 1.55,
             }}
           >
-            {"Stage 1 \u2014 Compliance & Disclosure \u00b7 Nexar Robotics deal"}
+            {dealBrief.display.inDealScreenSubtitle}
           </p>
         </div>
 
         <div className="doc-section">
           <div className="doc-section-head">
             <span className="doc-sec-label">
-              {"Stage 1 \u00b7 Get your TTO in the loop"}
+              {`${dealBrief.display.badgeStageLine} \u00B7 Get your TTO in the loop`}
             </span>
             <span style={{ fontSize: 12.5, color: "var(--text-light)" }}>
               {"1 done \u00b7 1 active \u00b7 3 upcoming"}
@@ -198,7 +223,8 @@ export default function ChecklistsScreen({
                   </div>
                   <div>
                     <div className={`cl-txt${isDone ? " done-t" : ""}`}>
-                      Forward Nexar Robotics email to your TTO
+                      Forward {dealBrief.display.shellDealName} email to your
+                      TTO
                     </div>
                     <div className="cl-badge" style={{ marginTop: 4 }}>
                       {"\u2192 Next action"}
@@ -216,9 +242,7 @@ export default function ChecklistsScreen({
                     CollabPilot suggestion
                   </div>
                   <div className="cl-ai-body">
-                    {
-                      "A forwarding email to Katarzyna W. (WUT TTO) has been drafted \u2014 includes your deal context and the 2 compliance flags."
-                    }
+                    {`A forwarding email to your Technology Transfer Office (${dealBrief.who.institution}) has been drafted \u2014 includes your deal context from the assessment.`}
                   </div>
                   <button
                     className="btn-secondary"
@@ -312,7 +336,7 @@ export default function ChecklistsScreen({
               </span>
               <div style={{ flex: 1 }}>
                 <div className="cl-txt locked-t">
-                  Initiate CDA with Nexar Robotics via TTO
+                  Initiate CDA with {dealBrief.display.shellDealName} via TTO
                 </div>
                 <div
                   style={{
@@ -331,10 +355,10 @@ export default function ChecklistsScreen({
       <EmailDraftModal
         open={reviewOpen}
         onClose={() => setReviewOpen(false)}
-        title={FORWARDING_EMAIL.title}
-        initialTo={FORWARDING_EMAIL.to}
-        initialSubject={FORWARDING_EMAIL.subject}
-        initialBody={FORWARDING_EMAIL.body}
+        title={forwardingDraft.title}
+        initialTo={forwardingDraft.to}
+        initialSubject={forwardingDraft.subject}
+        initialBody={forwardingDraft.body}
         primaryLabel={"Send \u2192"}
         footerNote="CollabPilot suggestion \u00b7 Editable"
         onPrimary={() => {

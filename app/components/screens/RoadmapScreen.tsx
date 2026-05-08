@@ -125,7 +125,7 @@ export default function RoadmapScreen({
   userName,
   userInstitution,
 }: Props) {
-  const { who, signoffs } = dealBrief;
+  const { who, signoffs, display } = dealBrief;
   const business = splitBusinessPartner(who.businessPartner);
   const tto = splitTtoOfficer(who.ttoOfficer);
 
@@ -134,8 +134,8 @@ export default function RoadmapScreen({
       mode={{
         kind: "inDeal",
         active: "roadmap",
-        dealName: "Nexar Robotics",
-        dealSubLabel: "IP Licensing \u00b7 Stage 1",
+        dealName: display.shellDealName,
+        dealSubLabel: display.shellDealSubLabel,
       }}
       onLogoClick={onLogoClick}
       onOpenProfile={onOpenProfile}
@@ -152,7 +152,7 @@ export default function RoadmapScreen({
         <div className="brief-crumb" style={{ marginBottom: 16 }}>
           <span onClick={onBackToDealsList}>My Deals</span>
           <span className="brief-crumb-sep">&rsaquo;</span>
-          <span>Nexar Robotics</span>
+          <span>{display.shellDealName}</span>
           <span className="brief-crumb-sep">&rsaquo;</span>
           <span style={{ color: "var(--text-dark)" }}>Roadmap</span>
         </div>
@@ -167,12 +167,8 @@ export default function RoadmapScreen({
               marginBottom: 12,
             }}
           >
-            <span className="brief-badge type">
-              IP Licensing &middot; Exclusive
-            </span>
-            <span className="brief-badge stage">
-              Stage 1 &middot; Compliance &amp; Disclosure
-            </span>
+            <span className="brief-badge type">{display.badgeDealType}</span>
+            <span className="brief-badge stage">{display.badgeStageLine}</span>
             <span className="brief-badge status">&bull; Active</span>
           </div>
           <h2 className="rm-h">Shared Deal Roadmap</h2>
@@ -203,7 +199,8 @@ export default function RoadmapScreen({
           <strong style={{ color: "var(--text-dark)", fontWeight: 500 }}>
             {who.researcher}
           </strong>{" "}
-          &middot; Researcher &middot; {who.institution} &middot; May 7, 2026
+          &middot; Researcher &middot; {who.institution} &middot;{" "}
+          {display.logDateLabel}
         </div>
 
         {/* Parties & Access */}
@@ -470,13 +467,13 @@ export default function RoadmapScreen({
                       schedule
                     </span>
                   </span>
-                  Initiate Confidential Disclosure Agreement with Nexar
-                  Robotics (managed by Technology Transfer Office)
+                  Initiate Confidential Disclosure Agreement with{" "}
+                  {business.name} (managed by Technology Transfer Office)
                 </div>
                 <div className="si-step">
                   <span className="step-dot"></span>
-                  Confirm publication embargo with IEEE Transactions on
-                  Robotics editor
+                  Confirm publication obligations before sharing unpublished
+                  findings ({dealBrief.what.publicationStatus})
                 </div>
                 <div className="si-step">
                   <span className="step-dot"></span>
@@ -584,7 +581,10 @@ export default function RoadmapScreen({
                 >
                   business
                 </span>
-                {business.name} &mdash; {business.role}
+                {business.name}
+                {business.role
+                  ? ` \u2014 ${business.role}`
+                  : " \u2014 Business partner"}
               </div>
               <div className={signoffClass(signoffs.business)}>
                 {signoffs.business}
@@ -594,8 +594,8 @@ export default function RoadmapScreen({
           <div className="cb-note">
             The deal becomes{" "}
             <strong style={{ color: "var(--navy)" }}>LIVE</strong> once all
-            three parties have confirmed. Currently waiting on TTO review and
-            Nexar Robotics acceptance.
+            three parties have confirmed. Currently waiting on TTO review and{" "}
+            {business.name} acceptance.
           </div>
         </div>
       </div>

@@ -38,7 +38,7 @@ export default function Home() {
   const [loginMode, setLoginMode] = useState<LoginMode>("create");
   const [cameFromAssessment, setCameFromAssessment] = useState<boolean>(false);
   const [dealBrief, setDealBrief] = useState<DealBrief>(() =>
-    buildInitialDealBrief(INITIAL_ASSESSMENT)
+    buildInitialDealBrief(INITIAL_ASSESSMENT, null)
   );
 
   const radioConfig = RADIO_QUESTIONS.find((q) => q.id === screen);
@@ -46,7 +46,7 @@ export default function Home() {
   const handleAnalysisComplete = useCallback(
     (r: AssessmentResults) => {
       setResults(r);
-      setDealBrief(buildInitialDealBrief(assessment));
+      setDealBrief(buildInitialDealBrief(assessment, r));
       setScreen("s-results");
     },
     [assessment]
@@ -55,7 +55,7 @@ export default function Home() {
   const handleRestart = () => {
     setAssessment(INITIAL_ASSESSMENT);
     setResults(null);
-    setDealBrief(buildInitialDealBrief(INITIAL_ASSESSMENT));
+    setDealBrief(buildInitialDealBrief(INITIAL_ASSESSMENT, null));
     setScreen("s-landing");
   };
 
@@ -237,6 +237,7 @@ export default function Home() {
       {screen === "s-knowledge-library-deal" && (
         <KnowledgeLibraryScreen
           mode="deal"
+          dealBrief={dealBrief}
           onLogoClick={goHome}
           onOpenProfile={goToProfile}
           onNavDeals={goToDealsList}
@@ -250,6 +251,7 @@ export default function Home() {
       )}
       {screen === "s-documents" && (
         <DocumentsScreen
+          dealBrief={dealBrief}
           onLogoClick={goHome}
           onOpenProfile={goToProfile}
           onNavDeals={goToDealsList}
@@ -263,6 +265,7 @@ export default function Home() {
       )}
       {screen === "s-checklists" && (
         <ChecklistsScreen
+          dealBrief={dealBrief}
           onLogoClick={goHome}
           onOpenProfile={goToProfile}
           onNavDeals={goToDealsList}

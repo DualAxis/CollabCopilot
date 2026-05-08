@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import WorkspaceShell from "../layout/WorkspaceShell";
 import EmailDraftModal from "../modals/EmailDraftModal";
 import {
   EMAIL_TEMPLATES,
   type EmailTemplateKey,
 } from "../../lib/emailTemplates";
+import type { DealBrief } from "../../lib/dealBrief";
 
 type ActiveDoc = {
   status: "done" | "inprog";
@@ -26,62 +27,119 @@ type Template = {
   templateKey?: EmailTemplateKey;
 };
 
-const ACTIVE_DOCS: ActiveDoc[] = [
-  {
-    status: "done",
-    icon: "description",
-    iconColor: "var(--sage)",
-    name: "IP Disclosure Form",
-    meta: "Submitted to WUT TTO \u00b7 May 7, 2026 \u00b7 Required for Stage 1",
-    badge: "Submitted",
-    cta: "View",
-  },
-  {
-    status: "inprog",
-    icon: "edit_note",
-    iconColor: "var(--amber-text)",
-    name: "Confidential Disclosure Agreement \u2014 Draft",
-    meta: "Initiated with Nexar Robotics \u00b7 Awaiting TTO review \u00b7 Updated May 7, 2026",
-    badge: "In progress",
-    cta: "Continue \u2192",
-  },
-];
+function activeDocsForDeal(b: DealBrief): ActiveDoc[] {
+  const partner = b.display.shellDealName;
+  const inst = b.who.institution;
+  const date = b.display.logDateLabel;
+  const st = b.display.stageNumber;
+  return [
+    {
+      status: "done",
+      icon: "description",
+      iconColor: "var(--sage)",
+      name: "IP Disclosure Form",
+      meta: `Submitted to ${inst} TTO \u00b7 ${date} \u00b7 Required for Stage ${st}`,
+      badge: "Submitted",
+      cta: "View",
+    },
+    {
+      status: "inprog",
+      icon: "edit_note",
+      iconColor: "var(--amber-text)",
+      name: "Confidential Disclosure Agreement \u2014 Draft",
+      meta: `Initiated with ${partner} \u00b7 Awaiting TTO review \u00b7 Updated ${date}`,
+      badge: "In progress",
+      cta: "Continue \u2192",
+    },
+  ];
+}
 
-const TEMPLATES: Template[] = [
-  {
-    locked: false,
-    name: "TTO Briefing Template",
-    meta: "Stage 1 \u00b7 Pre-filled with your deal context \u00b7 Ready to send",
-    templateKey: "tto-briefing",
-  },
-  {
-    locked: false,
-    name: "Non-Confidential Research Summary",
-    meta: "Stage 1 \u00b7 Safe to share before CDA \u00b7 AI-drafted from your profile",
-    /* Document-template branch deferred to M22 */
-  },
-  {
-    locked: false,
-    name: "Holding Reply to Nexar Robotics",
-    meta: "Stage 1 \u00b7 AI-drafted \u00b7 Polite, no technical data, buys 5 days",
-    templateKey: "holding-reply",
-  },
-  { locked: true, stage: "Stage 2", name: "NDA Template", meta: "Stage 2" },
-  {
-    locked: true,
-    stage: "Stage 3",
-    name: "Term Sheet Template",
-    meta: "Stage 3",
-  },
-  {
-    locked: true,
-    stage: "Stage 5",
-    name: "License Agreement Template",
-    meta: "Stage 5",
-  },
-];
+function templatesForDeal(b: DealBrief): Template[] {
+  const st = b.display.stageNumber;
+  return [
+    {
+      locked: false,
+      name: "TTO Briefing Template",
+      meta: `Stage ${st} \u00b7 Pre-filled with your deal context \u00b7 Ready to send`,
+      templateKey: "tto-briefing",
+    },
+    {
+      locked: false,
+      name: "Non-Confidential Research Summary",
+      meta: `Stage ${st} \u00b7 Safe to share before CDA \u00b7 AI-drafted from your profile`,
+      /* Document-template branch deferred to M22 */
+    },
+    {
+      locked: false,
+      name: `Holding Reply to ${b.display.shellDealName}`,
+      meta: `Stage ${st} \u00b7 AI-drafted \u00b7 Polite, no technical data, buys 5 days`,
+      templateKey: "holding-reply",
+    },
+    { locked: true, stage: "Stage 2", name: "NDA Template", meta: "Stage 2" },
+    {
+      locked: true,
+      stage: "Stage 3",
+      name: "Term Sheet Template",
+      meta: "Stage 3",
+    },
+    {
+      locked: true,
+      stage: "Stage 5",
+      name: "License Agreement Template",
+      meta: "Stage 5",
+    },
+  ];
+}
+
+function personaEmailDraft(
+  key: EmailTemplateKey,
+  dealBrief: DealBrief
+): { to: string; subject: string; body: string; title: string; primaryLabel: string; footerNote: string } {
+  const partner = dealBrief.display.shellDealName;
+  const name = dealBrief.who.researcher;
+  const inst = dealBrief.who.institution;
+  const base = EMAIL_TEMPLATES[key];
+  if (key === "tto-briefing") {
+    return {
+      ...base,
+      to: "",
+      subject: `TTO Briefing \u2014 ${partner} inquiry`,
+      body: `Hi,
+
+I'd like to brief you on a commercial inquiry I've received from ${partner} regarding a potential ${dealBrief.what.dealType}.
+
+Assessment context:
+\u2022 IP status: ${dealBrief.what.ipStatus}
+\u2022 Publication: ${dealBrief.what.publicationStatus}
+\u2022 Research area: ${dealBrief.what.researchArea}
+
+I have not shared non-public technical details. Could we schedule a call this week?
+
+Best regards,
+${name}
+${inst}`,
+    };
+  }
+  if (key === "holding-reply") {
+    return {
+      ...base,
+      to: "",
+      title: `Holding Reply to ${partner}`,
+      subject: `Re: collaboration inquiry \u2014 ${partner}`,
+      body: `Hello,
+
+Thank you for your interest in working with ${inst}. I'm coordinating with our Technology Transfer Office on appropriate next steps and will follow up shortly.
+
+Best regards,
+${name}
+${inst}`,
+    };
+  }
+  return base;
+}
 
 type Props = {
+  dealBrief: DealBrief;
   onLogoClick: () => void;
   onOpenProfile: () => void;
   onNavDeals: () => void;
@@ -94,6 +152,7 @@ type Props = {
 };
 
 export default function DocumentsScreen({
+  dealBrief,
   onLogoClick,
   onOpenProfile,
   onNavDeals,
@@ -108,13 +167,19 @@ export default function DocumentsScreen({
   const [openTemplateKey, setOpenTemplateKey] =
     useState<EmailTemplateKey | null>(null);
 
+  const activeDocs = useMemo(() => activeDocsForDeal(dealBrief), [dealBrief]);
+  const templates = useMemo(() => templatesForDeal(dealBrief), [dealBrief]);
+  const emailDraft = openTemplateKey
+    ? personaEmailDraft(openTemplateKey, dealBrief)
+    : null;
+
   return (
     <WorkspaceShell
       mode={{
         kind: "inDeal",
         active: "documents",
-        dealName: "Nexar Robotics",
-        dealSubLabel: "IP Licensing \u00b7 Stage 1",
+        dealName: dealBrief.display.shellDealName,
+        dealSubLabel: dealBrief.display.shellDealSubLabel,
       }}
       onLogoClick={onLogoClick}
       onOpenProfile={onOpenProfile}
@@ -129,7 +194,7 @@ export default function DocumentsScreen({
       <div className="doc-inner">
         <div className="brief-crumb" style={{ marginBottom: 20 }}>
           <span onClick={onNavDealBrief} style={{ cursor: "pointer" }}>
-            Nexar Robotics
+            {dealBrief.display.shellDealName}
           </span>
           <span className="brief-crumb-sep">{"\u203a"}</span>
           <span style={{ color: "var(--text-dark)" }}>My Documents</span>
@@ -154,7 +219,7 @@ export default function DocumentsScreen({
               lineHeight: 1.55,
             }}
           >
-            {"Stage 1 \u2014 Compliance & Disclosure \u00b7 Nexar Robotics deal"}
+            {dealBrief.display.inDealScreenSubtitle}
           </p>
         </div>
 
@@ -166,7 +231,7 @@ export default function DocumentsScreen({
             </span>
           </div>
           <div className="doc-list">
-            {ACTIVE_DOCS.map((d) => (
+            {activeDocs.map((d) => (
               <div className="doc-row" key={d.name}>
                 <div className={`doc-ic ${d.status}`}>
                   <span
@@ -200,12 +265,12 @@ export default function DocumentsScreen({
             <span className="doc-sec-label">Templates</span>
             <span style={{ fontSize: 12.5, color: "var(--text-light)" }}>
               {
-                "Stage 1 available \u00b7 Stages 2\u20136 unlock as you progress"
+                `Stage ${dealBrief.display.stageNumber} available \u00b7 Stages 2\u20136 unlock as you progress`
               }
             </span>
           </div>
           <div className="doc-list">
-            {TEMPLATES.map((t) =>
+            {templates.map((t) =>
               t.locked ? (
                 <div
                   className="doc-row"
@@ -261,16 +326,16 @@ export default function DocumentsScreen({
           </div>
         </div>
       </div>
-      {openTemplateKey && (
+      {openTemplateKey && emailDraft && (
         <EmailDraftModal
           open
           onClose={() => setOpenTemplateKey(null)}
-          title={EMAIL_TEMPLATES[openTemplateKey].title}
-          initialTo={EMAIL_TEMPLATES[openTemplateKey].to}
-          initialSubject={EMAIL_TEMPLATES[openTemplateKey].subject}
-          initialBody={EMAIL_TEMPLATES[openTemplateKey].body}
-          primaryLabel={EMAIL_TEMPLATES[openTemplateKey].primaryLabel}
-          footerNote={EMAIL_TEMPLATES[openTemplateKey].footerNote}
+          title={emailDraft.title}
+          initialTo={emailDraft.to}
+          initialSubject={emailDraft.subject}
+          initialBody={emailDraft.body}
+          primaryLabel={emailDraft.primaryLabel}
+          footerNote={emailDraft.footerNote}
           onPrimary={() => setOpenTemplateKey(null)}
         />
       )}

@@ -1,6 +1,11 @@
 "use client";
 
-import { useState, type Dispatch, type SetStateAction } from "react";
+import {
+  useState,
+  useEffect,
+  type Dispatch,
+  type SetStateAction,
+} from "react";
 import WorkspaceShell from "../layout/WorkspaceShell";
 import type {
   DealBrief,
@@ -23,11 +28,6 @@ type Props = {
   userName?: string;
   userInstitution?: string;
 };
-
-const DEAL_NAME_LINES = [
-  "Nexar Robotics \u2014",
-  "Cobot Algorithm License",
-];
 
 function statusBadgeStyle(
   status: PartyAccessStatus
@@ -84,6 +84,12 @@ export default function DealBriefScreen({
   const [editingGoals, setEditingGoals] = useState(false);
   const [draftGoals, setDraftGoals] = useState<GoalsBlock>(dealBrief.goals);
 
+  useEffect(() => {
+    setDraftWho(dealBrief.who);
+    setDraftWhat(dealBrief.what);
+    setDraftGoals(dealBrief.goals);
+  }, [dealBrief]);
+
   const startEditWho = () => {
     setDraftWho(dealBrief.who);
     setEditingWho(true);
@@ -122,8 +128,8 @@ export default function DealBriefScreen({
       mode={{
         kind: "inDeal",
         active: "deal-brief",
-        dealName: "Nexar Robotics",
-        dealSubLabel: "IP Licensing \u00b7 Stage 1",
+        dealName: dealBrief.display.shellDealName,
+        dealSubLabel: dealBrief.display.shellDealSubLabel,
       }}
       onLogoClick={onLogoClick}
       onOpenProfile={onOpenProfile}
@@ -139,20 +145,24 @@ export default function DealBriefScreen({
         <div className="brief-crumb">
           <span onClick={onBackToDealsList}>My Deals</span>
           <span className="brief-crumb-sep">&rsaquo;</span>
-          <span style={{ color: "var(--text-dark)" }}>Nexar Robotics</span>
+          <span style={{ color: "var(--text-dark)" }}>
+            {dealBrief.display.shellDealName}
+          </span>
         </div>
 
         <div className="brief-title-row">
           <h1 className="brief-title">
-            {DEAL_NAME_LINES[0]}
+            {dealBrief.display.titleLine1}
             <br />
-            {DEAL_NAME_LINES[1]}
+            {dealBrief.display.titleLine2}
           </h1>
         </div>
         <div className="brief-badges">
-          <span className="brief-badge type">IP Licensing &middot; Exclusive</span>
+          <span className="brief-badge type">
+            {dealBrief.display.badgeDealType}
+          </span>
           <span className="brief-badge stage">
-            Stage 1 &middot; Compliance &amp; Disclosure
+            {dealBrief.display.badgeStageLine}
           </span>
           <span className="brief-badge status">&bull; Active</span>
         </div>

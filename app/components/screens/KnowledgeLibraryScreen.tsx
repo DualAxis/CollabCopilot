@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import WorkspaceShell from "../layout/WorkspaceShell";
+import type { DealBrief } from "../../lib/dealBrief";
 
 type Mode = "global" | "deal";
 
@@ -67,6 +68,8 @@ const KL_RESOURCES: Resource[] = [
 
 type Props = {
   mode: Mode;
+  /** When `mode` is `"deal"`, pass the active deal so shell labels match the assessment. */
+  dealBrief?: DealBrief;
   onLogoClick: () => void;
   onOpenProfile: () => void;
   onNavDeals: () => void;
@@ -80,6 +83,7 @@ type Props = {
 
 export default function KnowledgeLibraryScreen({
   mode,
+  dealBrief,
   onLogoClick,
   onOpenProfile,
   onNavDeals,
@@ -92,19 +96,24 @@ export default function KnowledgeLibraryScreen({
 }: Props) {
   const [view, setView] = useState<"grid" | "list">("grid");
   const isDeal = mode === "deal";
+  const display = dealBrief?.display;
 
   const shellMode = isDeal
     ? ({
         kind: "inDeal",
         active: "knowledge",
-        dealName: "Nexar Robotics",
-        dealSubLabel: "IP Licensing \u00b7 Stage 1",
+        dealName: display?.shellDealName ?? "Deal",
+        dealSubLabel: display?.shellDealSubLabel ?? "",
       } as const)
     : ({ kind: "overview", active: "knowledge" } as const);
 
   const subLine = isDeal
-    ? "6 resources matched to this deal \u00b7 IP Licensing \u00b7 Stage 1 \u00b7 Warsaw University of Technology"
-    : "6 resources matched to your deal \u00b7 IP Licensing \u00b7 Stage 1 \u00b7 WUT";
+    ? `6 resources matched to this deal \u00b7 ${
+        display?.shellDealSubLabel ?? ""
+      } \u00b7 ${userInstitution ?? "Your institution"}`
+    : `6 resources matched to your interests \u00b7 ${
+        userInstitution ?? "Your institution"
+      }`;
 
   const gridBtnStyle: React.CSSProperties =
     view === "grid"
@@ -204,7 +213,7 @@ export default function KnowledgeLibraryScreen({
                 transition: "color .15s",
               }}
             >
-              Nexar Robotics
+              {display?.shellDealName ?? "Deal"}
             </span>
             <span style={{ color: "var(--border)" }}>{"\u203a"}</span>
             <span style={{ color: "var(--text-dark)", fontWeight: 500 }}>
@@ -234,7 +243,7 @@ export default function KnowledgeLibraryScreen({
                   marginBottom: 6,
                 }}
               >
-                {"Resources \u00b7 Nexar Robotics"}
+                {`Resources \u00b7 ${display?.shellDealName ?? "Deal"}`}
               </div>
             )}
             <h1
