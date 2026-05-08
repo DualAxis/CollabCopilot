@@ -159,7 +159,7 @@ All open-source libraries comply with their respective licenses. Key dependencie
 | Name | Role |
 |---|---|
 | Jingjing Yao | Product, Strategy, Design, Storytelling |
-| Anna Szpak | Technical Implementation, AI Integration, Analysis & QA |
+| Anna Szpak | Technical Implementation, AI Integration, QA |
 
 **Event:** IDEASHACK 2026 · Submitted May 8, 2026
 **Contact:** dualaxisteam@gmail.com
