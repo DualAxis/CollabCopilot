@@ -268,15 +268,15 @@ export default function ChecklistsScreen({
 
             {/* 3. Upcoming -> becomes active when step 2 is done */}
             <div
-              className={`cl-item ${
-                step3Done ? "done" : step3Unlocked ? "active" : "upcoming"
-              }`}
+              className={`cl-item ${step3Done ? "done" : "upcoming"}`}
               style={{
                 display: "flex",
                 alignItems: "flex-start",
                 gap: 12,
                 padding: "14px 18px",
-                background: "var(--white)",
+                background: step3Unlocked && !step3Done
+                  ? "var(--teal-faint)"
+                  : "var(--white)",
                 borderBottom: "1px solid var(--off-white)",
               }}
             >
@@ -289,6 +289,8 @@ export default function ChecklistsScreen({
                       : ""
                 }`}
                 onClick={step3Unlocked ? toggleStep3 : undefined}
+                role={step3Unlocked ? "button" : undefined}
+                tabIndex={step3Unlocked ? 0 : undefined}
                 title={step3Unlocked ? "Toggle status" : undefined}
                 style={{
                   marginTop: 1,
@@ -302,17 +304,22 @@ export default function ChecklistsScreen({
                 <div className={`cl-txt${step3Done ? " done-t" : ""}`}>
                   Disclose paper-under-review status to TTO
                 </div>
+                {step3Unlocked && !step3Done && (
+                  <div className="cl-badge" style={{ marginTop: 4 }}>
+                    {"\u2192 Next action"}
+                  </div>
+                )}
                 <div
                   style={{
                     fontSize: 12,
                     color: "var(--text-light)",
-                    marginTop: 2,
+                    marginTop: 4,
                   }}
                 >
                   {step3Done
                     ? "Completed \u00b7 Status disclosed to TTO"
                     : step3Unlocked
-                      ? "Active \u00b7 Mark complete once disclosed"
+                      ? "Active \u00b7 Click the box to mark complete"
                       : "Available once previous action is complete"}
                 </div>
               </div>
