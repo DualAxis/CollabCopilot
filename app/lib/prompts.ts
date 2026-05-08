@@ -47,7 +47,7 @@ Default mapping from the q0 process-stage answer:
 currentStage is derived from q0 only. q4 (TTO involvement) MUST NOT change currentStage \u2014 a not-yet-briefed TTO surfaces in complianceAlerts, but it does not move the user to an earlier stage on the roadmap.
 
 Hard override (apply BEFORE returning currentStage):
-- If q3 (publication) is "Under journal review" AND no CDA is mentioned in context, cap currentStage at 2.
+- If q3 (publication) is "Under journal review", cap currentStage at 2. Sharing technical material with a partner during peer review without a CDA is a hard policy line, so the deal cannot be past Stage 2.
 
 # Output shape (rigid)
 
