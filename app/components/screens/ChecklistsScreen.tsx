@@ -57,6 +57,7 @@ export default function ChecklistsScreen({
   userInstitution,
 }: Props) {
   const [activeStatus, setActiveStatus] = useState<"active" | "done">("active");
+  const [step3Done, setStep3Done] = useState<boolean>(false);
   const [reviewOpen, setReviewOpen] = useState(false);
   const forwardingDraft = useMemo(
     () => buildForwardingDraft(dealBrief),
@@ -64,6 +65,16 @@ export default function ChecklistsScreen({
   );
   const isDone = activeStatus === "done";
   const toggleActive = () => setActiveStatus("done");
+  const step3Unlocked = isDone;
+  const toggleStep3 = () => {
+    if (!step3Unlocked) return;
+    setStep3Done((prev) => !prev);
+  };
+
+  const doneCount = 1 + (isDone ? 1 : 0) + (step3Done ? 1 : 0);
+  const activeCount =
+    (isDone ? 0 : 1) + (step3Unlocked && !step3Done ? 1 : 0);
+  const upcomingCount = 5 - doneCount - activeCount;
 
   const statusPillStyle: React.CSSProperties = isDone
     ? {
@@ -143,7 +154,7 @@ export default function ChecklistsScreen({
               {`${dealBrief.display.badgeStageLine} \u00B7 Get your TTO in the loop`}
             </span>
             <span style={{ fontSize: 12.5, color: "var(--text-light)" }}>
-              {"1 done \u00b7 1 active \u00b7 3 upcoming"}
+              {`${doneCount} done \u00b7 ${activeCount} active \u00b7 ${upcomingCount} upcoming`}
             </span>
           </div>
 
@@ -255,9 +266,11 @@ export default function ChecklistsScreen({
               </div>
             </div>
 
-            {/* 3. Upcoming */}
+            {/* 3. Upcoming -> becomes active when step 2 is done */}
             <div
-              className="cl-item upcoming"
+              className={`cl-item ${
+                step3Done ? "done" : step3Unlocked ? "active" : "upcoming"
+              }`}
               style={{
                 display: "flex",
                 alignItems: "flex-start",
@@ -268,11 +281,25 @@ export default function ChecklistsScreen({
               }}
             >
               <div
-                className="cl-checkbox"
-                style={{ marginTop: 1, flexShrink: 0 }}
-              ></div>
+                className={`cl-checkbox${
+                  step3Done
+                    ? " done-c"
+                    : step3Unlocked
+                      ? " active-c"
+                      : ""
+                }`}
+                onClick={step3Unlocked ? toggleStep3 : undefined}
+                title={step3Unlocked ? "Toggle status" : undefined}
+                style={{
+                  marginTop: 1,
+                  flexShrink: 0,
+                  cursor: step3Unlocked ? "pointer" : "default",
+                }}
+              >
+                {step3Done ? "\u2713" : ""}
+              </div>
               <div style={{ flex: 1 }}>
-                <div className="cl-txt">
+                <div className={`cl-txt${step3Done ? " done-t" : ""}`}>
                   Disclose paper-under-review status to TTO
                 </div>
                 <div
@@ -282,7 +309,11 @@ export default function ChecklistsScreen({
                     marginTop: 2,
                   }}
                 >
-                  Available once previous action is complete
+                  {step3Done
+                    ? "Completed \u00b7 Status disclosed to TTO"
+                    : step3Unlocked
+                      ? "Active \u00b7 Mark complete once disclosed"
+                      : "Available once previous action is complete"}
                 </div>
               </div>
             </div>
