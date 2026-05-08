@@ -22,7 +22,7 @@ CollabPilot is an AI-guided deal navigation platform for academic researchers en
 
 ## Demo
 
-🎬 **Video demo:** [_insert YouTube link_]
+🎬 **Video demo:** https://youtu.be/zDBKblb1KW4
 🖥 **Live app:** https://collab-copilot-7fxd.vercel.app/
 
 ---
