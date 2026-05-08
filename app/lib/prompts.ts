@@ -44,9 +44,9 @@ Default mapping from the q0 process-stage answer:
 - "Already signed" \u2192 6
 - "Something else" \u2192 infer from the free-text context, defaulting to 1 if unclear.
 
-Hard overrides (apply BEFORE returning currentStage):
-- If q4 (TTO involvement) is "Not yet involved in this deal", currentStage MUST be 1, regardless of q0. A deal cannot progress past compliance without TTO ownership.
-- If q4 is "Aware, but not yet formally engaged", cap currentStage at 2.
+currentStage is derived from q0 only. q4 (TTO involvement) MUST NOT change currentStage \u2014 a not-yet-briefed TTO surfaces in complianceAlerts, but it does not move the user to an earlier stage on the roadmap.
+
+Hard override (apply BEFORE returning currentStage):
 - If q3 (publication) is "Under journal review" AND no CDA is mentioned in context, cap currentStage at 2.
 
 # Output shape (rigid)
