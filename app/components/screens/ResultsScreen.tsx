@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { AssessmentState } from "../../lib/assessment";
 import type { AssessmentResults } from "../../lib/results";
+import AILabel from "../ui/AILabel";
 
 type Props = {
   state: AssessmentState;
@@ -246,12 +247,7 @@ export default function ResultsScreen({
             ))}
 
             <div className="gantt-summary">
-              <div className="gantt-summary-lbl">
-                <span className="ms" style={{ fontSize: "12px" }}>
-                  auto_awesome
-                </span>
-                Deal summary
-              </div>
+              <AILabel context="Deal summary" className="gantt-summary-lbl" />
               <ul className="gantt-summary-list">
                 {dealSummaryBullets(state).map((b, i) => (
                   <li key={i}>{b}</li>
