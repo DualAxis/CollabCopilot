@@ -77,13 +77,12 @@ const STAGE_DESCRIPTORS: Record<number, string> = {
 
 function unlockNote(stage: number): string {
   const s = Math.min(6, Math.max(1, Math.round(stage)));
-  if (s >= 6) return "Stages 1\u20136 unlocked";
-  const left = s === 1 ? "Stage 1 unlocked" : `Stages 1\u2013${s} unlocked`;
+  if (s >= 6) return "Stage 6 unlocked";
   const right =
     s + 1 === 6
       ? "Stage 6 requires an account"
       : `Stages ${s + 1}\u20136 require an account`;
-  return `${left} \u00b7 ${right}`;
+  return `Stage ${s} unlocked \u00b7 ${right}`;
 }
 
 function dealSummaryBullets(
@@ -149,14 +148,15 @@ export default function ResultsScreen({
   const publicationChip = (() => {
     switch (state.q3) {
       case "Published":
-        return "Paper published in IEEE Transactions on Robotics";
+        return "Paper published";
       case "Not yet submitted":
         return "Paper not yet submitted";
       case "Conference presentation only":
         return "Conference presentation only";
       case "Under journal review":
+        return "Paper under journal review";
       default:
-        return "Paper under review at IEEE Transactions on Robotics";
+        return "Publication status not specified";
     }
   })();
 
