@@ -1,6 +1,8 @@
 import {
   type AssessmentState,
   deriveCurrentStageFromState,
+  goalTimelineForStage,
+  remainingTimelineForStage,
 } from "./assessment";
 import type { AssessmentResults } from "./results";
 
@@ -180,7 +182,7 @@ export function buildInitialDealBrief(
       ? `Publication timing may limit what you can share before agreements are in place \u00B7 coordinate with ${instDisplay} TTO and ${partner}`
       : `Track IP disclosure and publication obligations as discussions with ${partner} move forward`;
 
-  const aiTimeline = `Current roadmap position: Stage ${stage} (${stageTitle}) \u00B7 adjust timeline with your TTO and ${partner}`;
+  const aiTimeline = `Current roadmap position: Stage ${stage} (${stageTitle}) \u00B7 indicative ${remainingTimelineForStage(stage)} \u00B7 confirm dates with your TTO and ${partner}`;
 
   const emailVerified = email ? `${email} verified` : "Researcher email on file";
 
@@ -204,7 +206,7 @@ export function buildInitialDealBrief(
     goals: {
       researcher: goalsResearcher,
       business: goalsBusiness,
-      timeline: "Signed agreement within 4\u20136 months (indicative)",
+      timeline: goalTimelineForStage(stage),
     },
     signoffs: {
       researcher: "Confirmed",

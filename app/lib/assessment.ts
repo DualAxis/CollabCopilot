@@ -130,6 +130,40 @@ export function roadmapStageTitle(stage: number): string {
   return ROADMAP_STAGE_TITLE[s] ?? ROADMAP_STAGE_TITLE[1];
 }
 
+/**
+ * Indicative remaining time from `stage` to a signed agreement (Stage 5 done)
+ * or, for Stage 6, to the next milestone. Used in summary bullets and Deal
+ * Brief goals so the "Estimated timeline" copy reflects how far along the deal
+ * already is — not a static "4–6 months" everywhere.
+ */
+const STAGE_REMAINING_TIMELINE: Record<number, string> = {
+  1: "4\u20136 months to signed agreement",
+  2: "3\u20135 months to signed agreement",
+  3: "2\u20134 months to signed agreement",
+  4: "6\u201310 weeks to signed agreement",
+  5: "2\u20136 weeks to signed agreement",
+  6: "Agreement signed \u00B7 ongoing milestones & reporting",
+};
+
+const STAGE_GOAL_TIMELINE: Record<number, string> = {
+  1: "Signed agreement within 4\u20136 months (indicative)",
+  2: "Signed agreement within 3\u20135 months (indicative)",
+  3: "Signed agreement within 2\u20134 months (indicative)",
+  4: "Signed agreement within 6\u201310 weeks (indicative)",
+  5: "Signed agreement within 2\u20136 weeks (indicative)",
+  6: "Agreement signed \u2014 milestones & reporting ongoing",
+};
+
+export function remainingTimelineForStage(stage: number): string {
+  const s = Math.min(6, Math.max(1, Math.round(stage)));
+  return STAGE_REMAINING_TIMELINE[s] ?? STAGE_REMAINING_TIMELINE[1];
+}
+
+export function goalTimelineForStage(stage: number): string {
+  const s = Math.min(6, Math.max(1, Math.round(stage)));
+  return STAGE_GOAL_TIMELINE[s] ?? STAGE_GOAL_TIMELINE[1];
+}
+
 export const AREA_OPTIONS: string[] = [
   "Robotics & Automation",
   "Life Sciences",

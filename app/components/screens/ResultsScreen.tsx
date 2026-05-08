@@ -2,7 +2,10 @@
 
 import { useState } from "react";
 import type { AssessmentState } from "../../lib/assessment";
-import { deriveCurrentStageFromState } from "../../lib/assessment";
+import {
+  deriveCurrentStageFromState,
+  remainingTimelineForStage,
+} from "../../lib/assessment";
 import type { AssessmentResults } from "../../lib/results";
 import AILabel from "../ui/AILabel";
 
@@ -101,7 +104,7 @@ function dealSummaryBullets(
       : "TTO must be briefed before any further communication";
   return [
     `${dealType} \u00b7 ${partner}`,
-    "Estimated timeline: 4\u20136 months to signed agreement",
+    `Estimated timeline: ${remainingTimelineForStage(stage)}`,
     stageBullet,
     ttoBullet,
   ];
