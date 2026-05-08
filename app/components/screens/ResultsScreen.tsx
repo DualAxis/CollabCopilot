@@ -146,19 +146,16 @@ export default function ResultsScreen({
           <div>
             <div className="res-hdr">
               <div className="res-hdr-left">
-                <div className="res-status-row">
+                <div className="res-status-row" style={{ marginBottom: "6px" }}>
                   <div className="res-status-dot"></div>
                   <span className="res-status-txt">Assessment complete</span>
                 </div>
-                <div className="res-hdr-title-row">
+                <div
+                  className="res-hdr-title-row"
+                  style={{ flexDirection: "column", alignItems: "flex-start", gap: "2px" }}
+                >
                   <span className="res-hdr-name">Assessment Result</span>
-                  <span className="res-hdr-dot">·</span>
-                  <span
-                    className="res-hdr-name"
-                    style={{ color: "var(--teal)", fontStyle: "italic" }}
-                  >
-                    {displayName}
-                  </span>
+                  <span className="res-hdr-subname">{displayName}</span>
                 </div>
                 <div className="res-hdr-meta">
                   <span className="res-meta-txt">{dealTypeChip}</span>
