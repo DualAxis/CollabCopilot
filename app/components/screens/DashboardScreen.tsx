@@ -2,7 +2,18 @@
 
 import WorkspaceShell from "../layout/WorkspaceShell";
 
+export type DashboardDealCard = {
+  partner: string;
+  dealType: string;
+  currentStage: number;
+  alertCount: number;
+  dateLabel: string;
+  researcher: string;
+  institution: string;
+};
+
 type Props = {
+  deal: DashboardDealCard;
   onNewDeal: () => void;
   onOpenDeal: () => void;
   onLogoClick: () => void;
@@ -13,16 +24,21 @@ type Props = {
   userInstitution?: string;
 };
 
-const DEMO_DEAL = {
-  id: "nexar-robotics",
-  partner: "Nexar Robotics \u2014 Cobot Algorithm License",
-  meta: "IP Licensing \u2022 Exclusive   \u00B7   Stage 1 \u2014 Compliance & Disclosure",
-  status: "Active",
-  body: "Assessment complete \u2014 2 compliance flags to address before responding to Nexar Robotics",
-  footer: "May 7, 2026 \u00B7 Dr. Paulina Chen \u00B7 WUT",
+const STAGE_TITLES: Record<number, string> = {
+  1: "Compliance & Disclosure",
+  2: "NDA & CDA",
+  3: "Term Sheet",
+  4: "Due Diligence",
+  5: "License Agreement",
+  6: "Execution",
 };
 
+function plural(n: number, singular: string, pluralForm: string): string {
+  return `${n} ${n === 1 ? singular : pluralForm}`;
+}
+
 export default function DashboardScreen({
+  deal,
   onNewDeal,
   onOpenDeal,
   onLogoClick,
@@ -32,6 +48,22 @@ export default function DashboardScreen({
   userName,
   userInstitution,
 }: Props) {
+  const stage = Math.min(6, Math.max(1, Math.round(deal.currentStage)));
+  const stageTitle = STAGE_TITLES[stage] ?? STAGE_TITLES[1];
+
+  const meta = `${deal.dealType} \u00B7 Stage ${stage} \u2014 ${stageTitle}`;
+  const cardTitle = deal.partner;
+  const footer = `${deal.dateLabel} \u00B7 ${deal.researcher} \u00B7 ${deal.institution}`;
+
+  const body =
+    deal.alertCount > 0
+      ? `Assessment complete \u2014 ${plural(
+          deal.alertCount,
+          "compliance flag",
+          "compliance flags"
+        )} to address before responding to ${deal.partner}`
+      : `Assessment complete \u2014 open the deal to see your Stage ${stage} checklist and full roadmap`;
+
   return (
     <WorkspaceShell
       mode={{ kind: "overview", active: "deals" }}
@@ -57,18 +89,24 @@ export default function DashboardScreen({
       </div>
 
       <div className="deals-wrap">
-        <div className="block-alert">
-          <span className="ba-ic">
-            <span className="ms" style={{ fontSize: 16, color: "var(--terra)" }}>
-              warning
+        {deal.alertCount > 0 && (
+          <div className="block-alert">
+            <span className="ba-ic">
+              <span
+                className="ms"
+                style={{ fontSize: 16, color: "var(--terra)" }}
+              >
+                warning
+              </span>
             </span>
-          </span>
-          <div className="ba-txt">
-            <strong>Action needed &mdash; Nexar Robotics.</strong> 2 compliance
-            risks identified in your assessment. Open the deal to see your Stage
-            1 checklist and full roadmap.
+            <div className="ba-txt">
+              <strong>Action needed &mdash; {deal.partner}.</strong>{" "}
+              {plural(deal.alertCount, "compliance risk", "compliance risks")}{" "}
+              identified in your assessment. Open the deal to see your Stage{" "}
+              {stage} checklist and full roadmap.
+            </div>
           </div>
-        </div>
+        )}
         <div>
           <div className="ds-lbl">Your first deal</div>
           <div
@@ -90,12 +128,12 @@ export default function DashboardScreen({
           >
             <div className="dc-head">
               <div>
-                <div className="dc-co">{DEMO_DEAL.partner}</div>
+                <div className="dc-co">{cardTitle}</div>
                 <div className="dc-type" style={{ marginTop: 5 }}>
-                  {DEMO_DEAL.meta}
+                  {meta}
                 </div>
               </div>
-              <span className="badge b-live">&bull; {DEMO_DEAL.status}</span>
+              <span className="badge b-live">&bull; Active</span>
             </div>
             <div
               style={{
@@ -105,7 +143,7 @@ export default function DashboardScreen({
                 marginBottom: 14,
               }}
             >
-              {DEMO_DEAL.body}
+              {body}
             </div>
             <div
               className="dc-foot"
@@ -115,7 +153,7 @@ export default function DashboardScreen({
               }}
             >
               <div style={{ fontSize: 12.5, color: "var(--text-light)" }}>
-                {DEMO_DEAL.footer}
+                {footer}
               </div>
               <button
                 type="button"

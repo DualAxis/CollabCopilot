@@ -6,6 +6,7 @@ import {
   type AssessmentState,
   INITIAL_ASSESSMENT,
   RADIO_QUESTIONS,
+  deriveCurrentStageFromState,
 } from "./lib/assessment";
 import { type AssessmentResults, MOCK_RESULTS } from "./lib/results";
 import { type DealBrief, buildInitialDealBrief } from "./lib/dealBrief";
@@ -159,6 +160,19 @@ export default function Home() {
       )}
       {screen === "s-dashboard" && (
         <DashboardScreen
+          deal={{
+            partner: assessment.profile.partner.trim() || "Nexar Robotics",
+            dealType: assessment.q1 || "IP Licensing",
+            currentStage: deriveCurrentStageFromState(assessment),
+            alertCount: results?.complianceAlerts.length ?? 0,
+            dateLabel: new Date().toLocaleDateString("en-US", {
+              month: "long",
+              day: "numeric",
+              year: "numeric",
+            }),
+            researcher: assessment.profile.name.trim() || "Dr. Paulina Chen",
+            institution: userInstitution,
+          }}
           onNewDeal={goToNewDeal}
           onOpenDeal={() => setScreen("s-deal-brief")}
           onLogoClick={goHome}
