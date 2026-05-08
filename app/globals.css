@@ -833,6 +833,14 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--navy);co
 .res-meta-txt{font-size:12.5px;color:var(--text-light);line-height:1.6}
 .res-meta-sep{font-size:12px;color:var(--border);margin:0 7px}
 
+/* Partial-report download bar (CP-DL-01) */
+.res-download-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;background:var(--off-white);border:1px solid var(--border);border-radius:12px;padding:14px 18px;margin-bottom:4px}
+.res-dl-left{display:flex;align-items:flex-start;gap:9px}
+.res-dl-txt{font-size:13px;color:var(--text-mid);line-height:1.5}
+.res-dl-note{font-size:12px;color:var(--terra);margin-top:3px;font-style:italic}
+.res-dl-btn{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--text-dark);background:var(--white);border:1.5px solid var(--border);border-radius:100px;padding:9px 16px;cursor:pointer;font-family:inherit;transition:border-color .2s;white-space:nowrap;flex-shrink:0}
+.res-dl-btn:hover{border-color:var(--text-mid)}
+
 /* Gantt card */
 .gantt-card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:28px 28px 24px}
 .gantt-card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}

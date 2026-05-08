@@ -77,6 +77,13 @@ export default function ResultsScreen({
       return next;
     });
 
+  const [downloaded, setDownloaded] = useState(false);
+
+  const handleDownload = () => {
+    setDownloaded(true);
+    setTimeout(() => setDownloaded(false), 2800);
+  };
+
   const displayName = state.profile.name || "Dr. Paulina Chen";
   const displayInstitution =
     state.profile.institution || "Warsaw University of Technology";
@@ -175,6 +182,40 @@ export default function ResultsScreen({
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* ── Download partial report (CP-DL-01) ── */}
+          <div className="res-download-bar">
+            <div className="res-dl-left">
+              <span
+                className="ms"
+                style={{ fontSize: "18px", color: "var(--text-light)" }}
+              >
+                download
+              </span>
+              <div>
+                <div className="res-dl-txt">
+                  Download your Stage 1 assessment report
+                </div>
+                <div className="res-dl-note">
+                  ⚠ This report will not be available after you leave this page
+                </div>
+              </div>
+            </div>
+            <button
+              className="res-dl-btn"
+              onClick={handleDownload}
+              style={
+                downloaded
+                  ? { color: "var(--sage)", borderColor: "var(--sage)" }
+                  : undefined
+              }
+            >
+              <span className="ms" style={{ fontSize: "15px" }}>
+                {downloaded ? "check_circle" : "download"}
+              </span>
+              {downloaded ? "Downloaded" : "Download PDF"}
+            </button>
           </div>
 
           {/* ── Gantt card ── */}
