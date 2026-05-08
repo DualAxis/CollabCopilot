@@ -181,8 +181,10 @@ export default function Home() {
           onLogoClick={goHome}
           onNavDeals={goToDealsList}
           onOpenProfile={goToProfile}
-          userName={assessment.profile.name || "Demo user"}
+          userName={assessment.profile.name || "Dr. Paulina Chen"}
           userInstitution={userInstitution}
+          userEmail={assessment.profile.email || "p.chen@pw.edu.pl"}
+          userArea={assessment.profile.area[0] || "Robotics & Automation"}
         />
       )}
     </>

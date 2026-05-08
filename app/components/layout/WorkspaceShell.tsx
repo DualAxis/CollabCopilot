@@ -17,7 +17,8 @@ export type ShellMode =
       active: InDealActive;
       dealName: string;
       dealSubLabel: string;
-    };
+    }
+  | { kind: "profile" };
 
 type Props = {
   children: ReactNode;
@@ -122,7 +123,7 @@ export default function WorkspaceShell({
             </div>
           </div>
           <nav className="sidebar-nav">
-            {mode.kind === "overview" ? (
+            {mode.kind === "overview" && (
               <>
                 <div className="nav-sec">Workspace</div>
                 <NavItem
@@ -142,7 +143,8 @@ export default function WorkspaceShell({
                 />
                 <div className="nav-divider"></div>
               </>
-            ) : (
+            )}
+            {mode.kind === "inDeal" && (
               <>
                 <div className="nav-sec">Workspace</div>
                 <NavItem
@@ -198,9 +200,22 @@ export default function WorkspaceShell({
                 <div className="nav-divider"></div>
               </>
             )}
+            {mode.kind === "profile" && (
+              <>
+                <div className="nav-sec">Workspace</div>
+                <NavItem
+                  className="nav-back-link"
+                  icon="arrow_back"
+                  label="My Deals"
+                  onClick={onNavDeals}
+                />
+              </>
+            )}
           </nav>
           <div
-            className="sidebar-footer"
+            className={`sidebar-footer${
+              mode.kind === "profile" ? " active" : ""
+            }`}
             onClick={onOpenProfile}
             style={onOpenProfile ? undefined : { cursor: "default" }}
           >
@@ -209,7 +224,16 @@ export default function WorkspaceShell({
               <div className="avatar-name">{userName}</div>
               <div className="avatar-role">{userInstitution}</div>
             </div>
-            <span className="ms footer-chevron">chevron_right</span>
+            <span
+              className="ms footer-chevron"
+              style={
+                mode.kind === "profile"
+                  ? { color: "var(--teal)" }
+                  : undefined
+              }
+            >
+              chevron_right
+            </span>
           </div>
         </aside>
         <main className="main-area">
