@@ -238,7 +238,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--navy);co
 .ctx-bullets li:hover{border-color:var(--teal);background:var(--teal-faint);color:var(--text-dark)}
 .ctx-bullets li:hover .ctx-bullet-dot{background:var(--teal);border-color:var(--teal);color:#fff}
 /* min-width:0 + align-self:stretch so this flex child can use full row width; avoids
-   clipped or collapsed progress (a-prog) on long screens like step 8 / s-context */
+   clipped or collapsed progress (a-prog) on long assessment screens */
 .assess-body{
   flex:1;display:flex;flex-direction:column;align-items:stretch;
   max-width:660px;width:100%;min-width:0;align-self:stretch;

@@ -78,7 +78,7 @@ This example is for register and structure only. Do not echo any of its names, U
 `;
 
 export function buildUserPrompt(state: AssessmentState): string {
-  const { profile, q0, q1, q2, q3, q4, q5, context } = state;
+  const { profile, q0, q1, q2, q3, q4, context } = state;
 
   const lines: string[] = [];
   lines.push(
@@ -100,7 +100,6 @@ export function buildUserPrompt(state: AssessmentState): string {
   lines.push(`- IP status: ${q2 || "(no answer)"}`);
   lines.push(`- Publication status: ${q3 || "(no answer)"}`);
   lines.push(`- TTO involvement: ${q4 || "(no answer)"}`);
-  lines.push(`- Commercial requests from the partner: ${q5 || "(no answer)"}`);
   lines.push("");
   lines.push("# Free-text context");
   lines.push(

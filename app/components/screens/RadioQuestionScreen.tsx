@@ -14,7 +14,7 @@ type Props = {
   onBack: () => void;
 };
 
-const TOTAL_STEPS = 7;
+const TOTAL_STEPS = 6;
 
 function resolveInitialIdx(
   config: RadioQuestionConfig,
@@ -131,7 +131,7 @@ export default function RadioQuestionScreen({
             className={`btn-primary a-continue-btn${shaking ? " shake" : ""}`}
             onClick={handleContinue}
           >
-            Continue →
+            {config.primaryLabel ?? "Continue →"}
           </button>
         </div>
 
