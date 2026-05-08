@@ -6,6 +6,7 @@ type Props = {
   onStartDeal: () => void;
   onSignOut: () => void;
   onNavDeals?: () => void;
+  onNavRoadmap?: () => void;
   userName?: string;
   userRole?: string;
 };
@@ -14,6 +15,7 @@ export default function EmptyDashboardScreen({
   onStartDeal,
   onSignOut,
   onNavDeals,
+  onNavRoadmap,
   userName,
   userRole,
 }: Props) {
@@ -22,6 +24,7 @@ export default function EmptyDashboardScreen({
       active="deals"
       onSignOut={onSignOut}
       onNavDeals={onNavDeals}
+      onNavRoadmap={onNavRoadmap}
       userName={userName}
       userRole={userRole}
     >

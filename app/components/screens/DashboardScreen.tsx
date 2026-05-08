@@ -7,6 +7,7 @@ type Props = {
   onOpenDeal: () => void;
   onSignOut: () => void;
   onNavDeals?: () => void;
+  onNavRoadmap?: () => void;
   userName?: string;
   userRole?: string;
 };
@@ -25,6 +26,7 @@ export default function DashboardScreen({
   onOpenDeal,
   onSignOut,
   onNavDeals,
+  onNavRoadmap,
   userName,
   userRole,
 }: Props) {
@@ -33,6 +35,7 @@ export default function DashboardScreen({
       active="deals"
       onSignOut={onSignOut}
       onNavDeals={onNavDeals}
+      onNavRoadmap={onNavRoadmap}
       userName={userName}
       userRole={userRole}
     >

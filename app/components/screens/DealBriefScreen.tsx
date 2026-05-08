@@ -16,6 +16,7 @@ type Props = {
   onBackToDealsList: () => void;
   onSignOut: () => void;
   onNavDeals?: () => void;
+  onNavRoadmap?: () => void;
   userName?: string;
   userRole?: string;
 };
@@ -64,6 +65,7 @@ export default function DealBriefScreen({
   onBackToDealsList,
   onSignOut,
   onNavDeals,
+  onNavRoadmap,
   userName,
   userRole,
 }: Props) {
@@ -114,6 +116,7 @@ export default function DealBriefScreen({
       active="deals"
       onSignOut={onSignOut}
       onNavDeals={onNavDeals}
+      onNavRoadmap={onNavRoadmap}
       userName={userName}
       userRole={userRole}
     >

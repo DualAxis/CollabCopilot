@@ -8,6 +8,7 @@ export type PartyAccessStatus =
 
 export type WhoBlock = {
   researcher: string;
+  researcherStatus: PartyAccessStatus;
   institution: string;
   businessPartner: string;
   businessStatus: PartyAccessStatus;
@@ -28,6 +29,14 @@ export type GoalsBlock = {
   timeline: string;
 };
 
+export type SignoffStatus = "Confirmed" | "Pending" | "Invitation pending";
+
+export type SignoffsBlock = {
+  researcher: SignoffStatus;
+  tto: SignoffStatus;
+  business: SignoffStatus;
+};
+
 export type AISummaryItem = { category: string; text: string };
 
 export type DealLogEntry = {
@@ -40,6 +49,7 @@ export type DealBrief = {
   who: WhoBlock;
   what: WhatBlock;
   goals: GoalsBlock;
+  signoffs: SignoffsBlock;
   aiSummary: AISummaryItem[];
   log: DealLogEntry[];
 };
@@ -66,6 +76,7 @@ export function buildInitialDealBrief(state: AssessmentState): DealBrief {
   return {
     who: {
       researcher: name || "Dr. Paulina Chen",
+      researcherStatus: "Owner",
       institution: institution || "Warsaw University of Technology",
       businessPartner: "Nexar Robotics \u00B7 Marek Nowak, BD Lead",
       businessStatus: "Not yet invited",
@@ -84,6 +95,11 @@ export function buildInitialDealBrief(state: AssessmentState): DealBrief {
       business:
         "Secure exclusive licence to integrate the algorithm into their cobot product line",
       timeline: "Signed agreement within 4\u20136 months",
+    },
+    signoffs: {
+      researcher: "Confirmed",
+      tto: "Pending",
+      business: "Invitation pending",
     },
     aiSummary: [
       {

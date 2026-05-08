@@ -11,6 +11,7 @@ type Props = {
   userRole?: string;
   onSignOut: () => void;
   onNavDeals?: () => void;
+  onNavRoadmap?: () => void;
 };
 
 function initials(name: string): string {
@@ -30,6 +31,7 @@ export default function WorkspaceShell({
   userRole = "Researcher",
   onSignOut,
   onNavDeals,
+  onNavRoadmap,
 }: Props) {
   return (
     <div className="screen workspace active">
@@ -59,14 +61,24 @@ export default function WorkspaceShell({
               </span>
               My Deals
             </button>
-            <div
+            <button
+              type="button"
               className={`nav-item${active === "roadmap" ? " active" : ""}`}
+              onClick={onNavRoadmap}
+              style={{
+                border: "none",
+                background: "transparent",
+                width: "auto",
+                textAlign: "left",
+                font: "inherit",
+                cursor: onNavRoadmap ? "pointer" : "default",
+              }}
             >
               <span className="nav-icon">
                 <span className="ms">timeline</span>
               </span>
               My Roadmap
-            </div>
+            </button>
             <div
               className={`nav-item${active === "documents" ? " active" : ""}`}
             >

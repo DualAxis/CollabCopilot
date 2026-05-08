@@ -19,6 +19,7 @@ import AccountCreatedScreen from "./components/screens/AccountCreatedScreen";
 import EmptyDashboardScreen from "./components/screens/EmptyDashboardScreen";
 import DashboardScreen from "./components/screens/DashboardScreen";
 import DealBriefScreen from "./components/screens/DealBriefScreen";
+import RoadmapScreen from "./components/screens/RoadmapScreen";
 
 type LoginMode = "create" | "signin";
 
@@ -64,6 +65,7 @@ export default function Home() {
   // TODO(production): query deals.count -> 0/1/2+ -> s-empty-dashboard / s-deal-brief / s-dashboard.
   const goToDeals = () => setScreen("s-deal-brief");
   const goToDealsList = () => setScreen("s-dashboard");
+  const goToRoadmap = () => setScreen("s-roadmap");
 
   return (
     <>
@@ -128,6 +130,7 @@ export default function Home() {
           onStartDeal={() => setScreen("s-profile")}
           onSignOut={() => setScreen("s-landing")}
           onNavDeals={goToDeals}
+          onNavRoadmap={goToRoadmap}
           userName={assessment.profile.name || "Demo user"}
         />
       )}
@@ -137,6 +140,7 @@ export default function Home() {
           onOpenDeal={() => setScreen("s-deal-brief")}
           onSignOut={() => setScreen("s-landing")}
           onNavDeals={goToDeals}
+          onNavRoadmap={goToRoadmap}
           userName={assessment.profile.name || "Demo user"}
         />
       )}
@@ -147,6 +151,17 @@ export default function Home() {
           onBackToDealsList={goToDealsList}
           onSignOut={() => setScreen("s-landing")}
           onNavDeals={goToDeals}
+          onNavRoadmap={goToRoadmap}
+          userName={assessment.profile.name || "Demo user"}
+        />
+      )}
+      {screen === "s-roadmap" && (
+        <RoadmapScreen
+          dealBrief={dealBrief}
+          onBackToDealsList={goToDealsList}
+          onSignOut={() => setScreen("s-landing")}
+          onNavDeals={goToDeals}
+          onNavRoadmap={goToRoadmap}
           userName={assessment.profile.name || "Demo user"}
         />
       )}
