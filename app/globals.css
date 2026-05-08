@@ -895,3 +895,51 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--navy);co
 .sb-pricing-desc{font-size:12.5px;color:var(--text-mid);line-height:1.55;margin-bottom:12px}
 .sb-pricing-btn{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:500;color:var(--navy);background:none;border:1.5px solid var(--border);border-radius:100px;padding:6px 14px;cursor:pointer;font-family:inherit;transition:border-color .2s}
 .sb-pricing-btn:hover{border-color:var(--navy)}
+
+/* Deal Brief screen (Design Brief v4 §3, §7) */
+.brief-crumb{font-size:12.5px;color:var(--text-light);margin-bottom:20px;display:flex;align-items:center;gap:6px}
+.brief-crumb span{cursor:pointer;transition:color .15s}
+.brief-crumb span:hover{color:var(--teal)}
+.brief-crumb-sep{color:var(--border)}
+.brief-title-row{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:10px}
+.brief-title{font-family:'DM Serif Display',serif;font-size:32px;font-weight:400;color:var(--navy);line-height:1.15}
+.brief-badges{display:flex;align-items:center;gap:7px;margin-bottom:28px;flex-wrap:wrap}
+.brief-badge{font-size:12px;font-weight:500;padding:4px 11px;border-radius:100px}
+.brief-badge.type{background:var(--teal-faint);color:var(--teal);border:1px solid rgba(14,107,115,.2)}
+.brief-badge.stage{background:var(--amber-faint);color:var(--amber-text);border:1px solid rgba(196,131,42,.2)}
+.brief-badge.status{background:var(--sage-faint);color:var(--sage);border:1px solid var(--sage-border)}
+.brief-edit{font-size:12.5px;font-weight:500;color:var(--teal);background:none;border:none;cursor:pointer;font-family:inherit;padding:0;transition:color .15s;white-space:nowrap;margin-top:6px}
+.brief-edit:hover{color:var(--teal-light)}
+.brief-section{margin-bottom:32px}
+.brief-section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding-bottom:9px;border-bottom:1px solid var(--border)}
+.brief-sec-label{font-family:'DM Mono',monospace;font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--teal)}
+.brief-grid{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.brief-field{padding:12px 0;border-bottom:1px solid var(--off-white)}
+.brief-field:nth-last-child(-n+2){border-bottom:none}
+.brief-field-label{font-size:12px;color:var(--text-light);margin-bottom:3px}
+.brief-field-value{font-size:14.5px;font-weight:500;color:var(--text-dark);line-height:1.4}
+.brief-field-value.muted{color:var(--text-light);font-style:italic;font-weight:400}
+.brief-field-value.alert{color:var(--terra)}
+.brief-goal-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+.brief-goal-item{padding:14px 16px;background:var(--off-white);border-radius:10px}
+.brief-goal-who{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-light);margin-bottom:6px}
+.brief-goal-txt{font-size:13.5px;color:var(--text-dark);line-height:1.55}
+.brief-doc{border-top:1px solid var(--border);padding-top:32px;margin-top:4px}
+.brief-doc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.brief-doc-title{font-family:'DM Serif Display',serif;font-size:20px;color:var(--navy);font-weight:400}
+.brief-doc-sub{font-size:13px;color:var(--text-light);margin-top:2px}
+.brief-ai-block{border-left:3px solid var(--teal);padding:16px 20px;background:var(--teal-faint);border-radius:0 10px 10px 0;margin-bottom:28px}
+.brief-ai-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.brief-ai-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
+.brief-ai-list li{font-size:13.5px;color:var(--text-dark);line-height:1.55;display:flex;gap:10px}
+.brief-ai-cat{font-family:'DM Mono',monospace;font-size:11px;color:var(--teal);font-weight:500;width:110px;flex-shrink:0;padding-top:1px}
+.brief-log{display:flex;flex-direction:column;gap:0}
+.brief-log-entry{display:flex;gap:16px;position:relative;padding-bottom:20px}
+.brief-log-entry:last-child{padding-bottom:0}
+.brief-log-spine{display:flex;flex-direction:column;align-items:center;flex-shrink:0;width:18px}
+.brief-log-dot{width:9px;height:9px;border-radius:50%;background:var(--teal);border:2px solid var(--white);box-shadow:0 0 0 1.5px var(--teal);flex-shrink:0;margin-top:4px}
+.brief-log-line{width:1.5px;background:var(--border);flex:1;margin-top:4px}
+.brief-log-entry:last-child .brief-log-line{display:none}
+.brief-log-body{flex:1;padding-bottom:4px}
+.brief-log-event{font-size:14px;font-weight:600;color:var(--text-dark);margin-bottom:3px}
+.brief-log-meta{font-size:12.5px;color:var(--text-light);line-height:1.5}

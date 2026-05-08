@@ -8,6 +8,7 @@ import {
   RADIO_QUESTIONS,
 } from "./lib/assessment";
 import { type AssessmentResults, MOCK_RESULTS } from "./lib/results";
+import { type DealBrief, buildInitialDealBrief } from "./lib/dealBrief";
 import LandingScreen from "./components/screens/LandingScreen";
 import ProfileScreen from "./components/screens/ProfileScreen";
 import RadioQuestionScreen from "./components/screens/RadioQuestionScreen";
@@ -17,6 +18,7 @@ import LoginScreen from "./components/screens/LoginScreen";
 import AccountCreatedScreen from "./components/screens/AccountCreatedScreen";
 import EmptyDashboardScreen from "./components/screens/EmptyDashboardScreen";
 import DashboardScreen from "./components/screens/DashboardScreen";
+import DealBriefScreen from "./components/screens/DealBriefScreen";
 
 type LoginMode = "create" | "signin";
 
@@ -26,17 +28,25 @@ export default function Home() {
   const [results, setResults] = useState<AssessmentResults | null>(null);
   const [loginMode, setLoginMode] = useState<LoginMode>("create");
   const [cameFromAssessment, setCameFromAssessment] = useState<boolean>(false);
+  const [dealBrief, setDealBrief] = useState<DealBrief>(() =>
+    buildInitialDealBrief(INITIAL_ASSESSMENT)
+  );
 
   const radioConfig = RADIO_QUESTIONS.find((q) => q.id === screen);
 
-  const handleAnalysisComplete = useCallback((r: AssessmentResults) => {
-    setResults(r);
-    setScreen("s-results");
-  }, []);
+  const handleAnalysisComplete = useCallback(
+    (r: AssessmentResults) => {
+      setResults(r);
+      setDealBrief(buildInitialDealBrief(assessment));
+      setScreen("s-results");
+    },
+    [assessment]
+  );
 
   const handleRestart = () => {
     setAssessment(INITIAL_ASSESSMENT);
     setResults(null);
+    setDealBrief(buildInitialDealBrief(INITIAL_ASSESSMENT));
     setScreen("s-landing");
   };
 
@@ -50,10 +60,10 @@ export default function Home() {
     setScreen(cameFromAssessment ? "s-dashboard" : "s-empty-dashboard");
   };
 
-  // Demo: always 1 deal exists -> s-dashboard.
-  // TODO(production): const { count } = await supabase.from('deals').select('id',{count:'exact',head:true}).eq('owner_id', userId);
-  // if (count === 0) -> s-empty-dashboard; if (count === 1) -> s-deal-brief; if (count > 1) -> s-dashboard.
-  const goToDeals = () => setScreen("s-dashboard");
+  // Demo: 1-deal flow always lands on the deal brief. Tech Notes v2 §1.3.
+  // TODO(production): query deals.count -> 0/1/2+ -> s-empty-dashboard / s-deal-brief / s-dashboard.
+  const goToDeals = () => setScreen("s-deal-brief");
+  const goToDealsList = () => setScreen("s-dashboard");
 
   return (
     <>
@@ -124,6 +134,17 @@ export default function Home() {
       {screen === "s-dashboard" && (
         <DashboardScreen
           onNewDeal={() => setScreen("s-profile")}
+          onOpenDeal={() => setScreen("s-deal-brief")}
+          onSignOut={() => setScreen("s-landing")}
+          onNavDeals={goToDeals}
+          userName={assessment.profile.name || "Demo user"}
+        />
+      )}
+      {screen === "s-deal-brief" && (
+        <DealBriefScreen
+          dealBrief={dealBrief}
+          setDealBrief={setDealBrief}
+          onBackToDealsList={goToDealsList}
           onSignOut={() => setScreen("s-landing")}
           onNavDeals={goToDeals}
           userName={assessment.profile.name || "Demo user"}

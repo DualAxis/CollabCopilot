@@ -4,6 +4,7 @@ import WorkspaceShell from "../layout/WorkspaceShell";
 
 type Props = {
   onNewDeal: () => void;
+  onOpenDeal: () => void;
   onSignOut: () => void;
   onNavDeals?: () => void;
   userName?: string;
@@ -21,6 +22,7 @@ const DEMO_DEAL = {
 
 export default function DashboardScreen({
   onNewDeal,
+  onOpenDeal,
   onSignOut,
   onNavDeals,
   userName,
@@ -63,13 +65,21 @@ export default function DashboardScreen({
         </div>
         <div>
           <div className="ds-lbl">Your first deal</div>
-          {/* TODO(M12): wire deal-card click + Open deal brief -> CTA to s-deal-brief */}
           <div
             className="deal-card dc-prog"
+            role="button"
+            tabIndex={0}
+            onClick={onOpenDeal}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onOpenDeal();
+              }
+            }}
             style={{
               border: "1px solid rgba(14,107,115,.25)",
               background: "var(--white)",
-              cursor: "default",
+              cursor: "pointer",
             }}
           >
             <div className="dc-head">
@@ -101,7 +111,17 @@ export default function DashboardScreen({
               <div style={{ fontSize: 12.5, color: "var(--text-light)" }}>
                 {DEMO_DEAL.footer}
               </div>
-              {/* Open deal brief -> CTA reinstated in M12 */}
+              <button
+                type="button"
+                className="btn-secondary"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onOpenDeal();
+                }}
+                style={{ fontSize: 12.5, padding: "6px 14px" }}
+              >
+                Open deal brief &rarr;
+              </button>
             </div>
           </div>
         </div>
