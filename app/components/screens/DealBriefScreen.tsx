@@ -17,6 +17,8 @@ type Props = {
   onLogoClick: () => void;
   onOpenProfile: () => void;
   onNavRoadmap?: () => void;
+  onNavChecklists?: () => void;
+  onNavDocuments?: () => void;
   onNavKnowledge?: () => void;
   userName?: string;
   userInstitution?: string;
@@ -67,6 +69,8 @@ export default function DealBriefScreen({
   onLogoClick,
   onOpenProfile,
   onNavRoadmap,
+  onNavChecklists,
+  onNavDocuments,
   onNavKnowledge,
   userName,
   userInstitution,
@@ -125,6 +129,8 @@ export default function DealBriefScreen({
       onOpenProfile={onOpenProfile}
       onNavDeals={onBackToDealsList}
       onNavRoadmap={onNavRoadmap}
+      onNavChecklists={onNavChecklists}
+      onNavDocuments={onNavDocuments}
       onNavKnowledge={onNavKnowledge}
       userName={userName}
       userInstitution={userInstitution}

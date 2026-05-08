@@ -16,6 +16,8 @@ export type ScreenId =
   | "s-dashboard"
   | "s-deal-brief"
   | "s-roadmap"
+  | "s-checklists"
+  | "s-documents"
   | "s-knowledge-library"
   | "s-knowledge-library-deal"
   | "s-profile-user";

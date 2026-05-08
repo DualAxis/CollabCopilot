@@ -1,0 +1,324 @@
+"use client";
+
+import { useState } from "react";
+import WorkspaceShell from "../layout/WorkspaceShell";
+
+type Props = {
+  onLogoClick: () => void;
+  onOpenProfile: () => void;
+  onNavDeals: () => void;
+  onNavDealBrief?: () => void;
+  onNavRoadmap?: () => void;
+  onNavDocuments?: () => void;
+  onNavKnowledge?: () => void;
+  userName?: string;
+  userInstitution?: string;
+};
+
+export default function ChecklistsScreen({
+  onLogoClick,
+  onOpenProfile,
+  onNavDeals,
+  onNavDealBrief,
+  onNavRoadmap,
+  onNavDocuments,
+  onNavKnowledge,
+  userName,
+  userInstitution,
+}: Props) {
+  const [activeStatus, setActiveStatus] = useState<"active" | "done">("active");
+  const isDone = activeStatus === "done";
+  const noop = (e: React.MouseEvent<HTMLButtonElement>) => e.preventDefault();
+  const toggleActive = () => setActiveStatus("done");
+
+  const statusPillStyle: React.CSSProperties = isDone
+    ? {
+        fontSize: 12,
+        fontWeight: 500,
+        display: "inline-flex",
+        padding: "3px 10px",
+        borderRadius: 100,
+        background: "var(--sage-faint)",
+        color: "var(--sage)",
+        marginTop: 8,
+      }
+    : {
+        fontSize: 12,
+        fontWeight: 500,
+        display: "inline-flex",
+        padding: "3px 10px",
+        borderRadius: 100,
+        background: "rgba(14,107,115,.12)",
+        color: "var(--teal)",
+        marginTop: 8,
+      };
+
+  return (
+    <WorkspaceShell
+      mode={{
+        kind: "inDeal",
+        active: "checklists",
+        dealName: "Nexar Robotics",
+        dealSubLabel: "IP Licensing \u00b7 Stage 1",
+      }}
+      onLogoClick={onLogoClick}
+      onOpenProfile={onOpenProfile}
+      onNavDeals={onNavDeals}
+      onNavDealBrief={onNavDealBrief}
+      onNavRoadmap={onNavRoadmap}
+      onNavDocuments={onNavDocuments}
+      onNavKnowledge={onNavKnowledge}
+      userName={userName}
+      userInstitution={userInstitution}
+    >
+      <div className="doc-inner">
+        <div className="brief-crumb" style={{ marginBottom: 20 }}>
+          <span onClick={onNavDealBrief} style={{ cursor: "pointer" }}>
+            Nexar Robotics
+          </span>
+          <span className="brief-crumb-sep">{"\u203a"}</span>
+          <span style={{ color: "var(--text-dark)" }}>Checklists</span>
+        </div>
+
+        <div style={{ marginBottom: 32 }}>
+          <h1
+            style={{
+              fontFamily: "'DM Serif Display',serif",
+              fontSize: 28,
+              fontWeight: 400,
+              color: "var(--navy)",
+              marginBottom: 6,
+            }}
+          >
+            Checklists
+          </h1>
+          <p
+            style={{
+              fontSize: 13.5,
+              color: "var(--text-light)",
+              lineHeight: 1.55,
+            }}
+          >
+            {"Stage 1 \u2014 Compliance & Disclosure \u00b7 Nexar Robotics deal"}
+          </p>
+        </div>
+
+        <div className="doc-section">
+          <div className="doc-section-head">
+            <span className="doc-sec-label">
+              {"Stage 1 \u00b7 Get your TTO in the loop"}
+            </span>
+            <span style={{ fontSize: 12.5, color: "var(--text-light)" }}>
+              {"1 done \u00b7 1 active \u00b7 3 upcoming"}
+            </span>
+          </div>
+
+          <div
+            style={{
+              border: "1px solid var(--border)",
+              borderRadius: 12,
+              overflow: "hidden",
+            }}
+          >
+            {/* 1. Done */}
+            <div
+              className="cl-item done"
+              style={{
+                display: "flex",
+                alignItems: "flex-start",
+                gap: 12,
+                padding: "14px 18px",
+                background: "var(--white)",
+                borderBottom: "1px solid var(--off-white)",
+              }}
+            >
+              <div
+                className="cl-checkbox done-c"
+                style={{ marginTop: 1, flexShrink: 0 }}
+              >
+                {"\u2713"}
+              </div>
+              <div style={{ flex: 1 }}>
+                <div className="cl-txt done-t">
+                  Hold the technical-data reply (CDA pending)
+                </div>
+                <div
+                  style={{
+                    fontSize: 12,
+                    color: "var(--text-light)",
+                    marginTop: 2,
+                  }}
+                >
+                  {"Completed \u00b7 No confidential data shared"}
+                </div>
+              </div>
+            </div>
+
+            {/* 2. Active (two-column grid) */}
+            <div
+              className="cl-item active"
+              style={{
+                borderTop: "1px solid var(--off-white)",
+                borderBottom: "1px solid var(--off-white)",
+              }}
+            >
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: 0,
+                  width: "100%",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: 12,
+                    padding: "16px 18px",
+                    borderRight: "1px solid rgba(14,107,115,.15)",
+                  }}
+                >
+                  <div
+                    className={`cl-checkbox active-c${isDone ? " done-c" : ""}`}
+                    onClick={toggleActive}
+                    title="Toggle status"
+                    style={{ marginTop: 2, flexShrink: 0 }}
+                  >
+                    {isDone ? "\u2713" : ""}
+                  </div>
+                  <div>
+                    <div className={`cl-txt${isDone ? " done-t" : ""}`}>
+                      Forward Nexar Robotics email to your TTO
+                    </div>
+                    <div className="cl-badge" style={{ marginTop: 4 }}>
+                      {"\u2192 Next action"}
+                    </div>
+                    <div style={statusPillStyle}>
+                      {isDone ? "Done" : "Active"}
+                    </div>
+                  </div>
+                </div>
+                <div style={{ padding: "16px 18px" }}>
+                  <div className="cl-ai-label">
+                    <span className="ms" style={{ fontSize: 12 }}>
+                      auto_awesome
+                    </span>
+                    CollabPilot suggestion
+                  </div>
+                  <div className="cl-ai-body">
+                    {
+                      "A forwarding email to Katarzyna W. (WUT TTO) has been drafted \u2014 includes your deal context and the 2 compliance flags."
+                    }
+                  </div>
+                  <button
+                    className="btn-secondary"
+                    onClick={noop}
+                    style={{ fontSize: 13, padding: "8px 18px" }}
+                  >
+                    Review draft
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* 3. Upcoming */}
+            <div
+              className="cl-item upcoming"
+              style={{
+                display: "flex",
+                alignItems: "flex-start",
+                gap: 12,
+                padding: "14px 18px",
+                background: "var(--white)",
+                borderBottom: "1px solid var(--off-white)",
+              }}
+            >
+              <div
+                className="cl-checkbox"
+                style={{ marginTop: 1, flexShrink: 0 }}
+              ></div>
+              <div style={{ flex: 1 }}>
+                <div className="cl-txt">
+                  Disclose paper-under-review status to TTO
+                </div>
+                <div
+                  style={{
+                    fontSize: 12,
+                    color: "var(--text-light)",
+                    marginTop: 2,
+                  }}
+                >
+                  Available once previous action is complete
+                </div>
+              </div>
+            </div>
+
+            {/* 4. Locked */}
+            <div
+              className="cl-item locked"
+              style={{
+                display: "flex",
+                alignItems: "flex-start",
+                gap: 12,
+                padding: "14px 18px",
+                background: "var(--white)",
+                borderBottom: "1px solid var(--off-white)",
+                pointerEvents: "none",
+              }}
+            >
+              <span className="ms cl-locked-ic" style={{ flexShrink: 0 }}>
+                lock
+              </span>
+              <div style={{ flex: 1 }}>
+                <div className="cl-txt locked-t">
+                  Schedule TTO + co-inventor alignment call
+                </div>
+                <div
+                  style={{
+                    fontSize: 12,
+                    color: "var(--text-light)",
+                    marginTop: 2,
+                  }}
+                >
+                  Unlocks after TTO is briefed
+                </div>
+              </div>
+            </div>
+
+            {/* 5. Locked (last) */}
+            <div
+              className="cl-item locked"
+              style={{
+                display: "flex",
+                alignItems: "flex-start",
+                gap: 12,
+                padding: "14px 18px",
+                background: "var(--white)",
+                pointerEvents: "none",
+              }}
+            >
+              <span className="ms cl-locked-ic" style={{ flexShrink: 0 }}>
+                lock
+              </span>
+              <div style={{ flex: 1 }}>
+                <div className="cl-txt locked-t">
+                  Initiate CDA with Nexar Robotics via TTO
+                </div>
+                <div
+                  style={{
+                    fontSize: 12,
+                    color: "var(--text-light)",
+                    marginTop: 2,
+                  }}
+                >
+                  Unlocks after TTO briefing is confirmed
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </WorkspaceShell>
+  );
+}

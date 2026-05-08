@@ -22,6 +22,8 @@ import DealBriefScreen from "./components/screens/DealBriefScreen";
 import RoadmapScreen from "./components/screens/RoadmapScreen";
 import ProfileUserScreen from "./components/screens/ProfileUserScreen";
 import KnowledgeLibraryScreen from "./components/screens/KnowledgeLibraryScreen";
+import DocumentsScreen from "./components/screens/DocumentsScreen";
+import ChecklistsScreen from "./components/screens/ChecklistsScreen";
 
 type LoginMode = "create" | "signin";
 
@@ -72,6 +74,8 @@ export default function Home() {
   const goToProfile = () => setScreen("s-profile-user");
   const goToKnowledge = () => setScreen("s-knowledge-library");
   const goToKnowledgeDeal = () => setScreen("s-knowledge-library-deal");
+  const goToDocuments = () => setScreen("s-documents");
+  const goToChecklists = () => setScreen("s-checklists");
   const onSignOut = () => setScreen("s-landing");
   const userInstitution =
     assessment.profile.institution || "Warsaw University of Technology";
@@ -166,6 +170,8 @@ export default function Home() {
           onLogoClick={goHome}
           onOpenProfile={goToProfile}
           onNavRoadmap={goToRoadmap}
+          onNavChecklists={goToChecklists}
+          onNavDocuments={goToDocuments}
           onNavKnowledge={goToKnowledgeDeal}
           userName={assessment.profile.name || "Demo user"}
           userInstitution={userInstitution}
@@ -178,6 +184,8 @@ export default function Home() {
           onLogoClick={goHome}
           onOpenProfile={goToProfile}
           onNavDealBrief={goToDeals}
+          onNavChecklists={goToChecklists}
+          onNavDocuments={goToDocuments}
           onNavKnowledge={goToKnowledgeDeal}
           userName={assessment.profile.name || "Demo user"}
           userInstitution={userInstitution}
@@ -213,6 +221,34 @@ export default function Home() {
           onNavDeals={goToDealsList}
           onNavDealBrief={goToDeals}
           onNavRoadmap={goToRoadmap}
+          onNavChecklists={goToChecklists}
+          onNavDocuments={goToDocuments}
+          userName={assessment.profile.name || "Demo user"}
+          userInstitution={userInstitution}
+        />
+      )}
+      {screen === "s-documents" && (
+        <DocumentsScreen
+          onLogoClick={goHome}
+          onOpenProfile={goToProfile}
+          onNavDeals={goToDealsList}
+          onNavDealBrief={goToDeals}
+          onNavRoadmap={goToRoadmap}
+          onNavChecklists={goToChecklists}
+          onNavKnowledge={goToKnowledgeDeal}
+          userName={assessment.profile.name || "Demo user"}
+          userInstitution={userInstitution}
+        />
+      )}
+      {screen === "s-checklists" && (
+        <ChecklistsScreen
+          onLogoClick={goHome}
+          onOpenProfile={goToProfile}
+          onNavDeals={goToDealsList}
+          onNavDealBrief={goToDeals}
+          onNavRoadmap={goToRoadmap}
+          onNavDocuments={goToDocuments}
+          onNavKnowledge={goToKnowledgeDeal}
           userName={assessment.profile.name || "Demo user"}
           userInstitution={userInstitution}
         />

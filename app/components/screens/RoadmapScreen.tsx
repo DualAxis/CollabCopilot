@@ -13,6 +13,8 @@ type Props = {
   onLogoClick: () => void;
   onOpenProfile: () => void;
   onNavDealBrief?: () => void;
+  onNavChecklists?: () => void;
+  onNavDocuments?: () => void;
   onNavKnowledge?: () => void;
   userName?: string;
   userInstitution?: string;
@@ -117,6 +119,8 @@ export default function RoadmapScreen({
   onLogoClick,
   onOpenProfile,
   onNavDealBrief,
+  onNavChecklists,
+  onNavDocuments,
   onNavKnowledge,
   userName,
   userInstitution,
@@ -137,6 +141,8 @@ export default function RoadmapScreen({
       onOpenProfile={onOpenProfile}
       onNavDeals={onBackToDealsList}
       onNavDealBrief={onNavDealBrief}
+      onNavChecklists={onNavChecklists}
+      onNavDocuments={onNavDocuments}
       onNavKnowledge={onNavKnowledge}
       userName={userName}
       userInstitution={userInstitution}

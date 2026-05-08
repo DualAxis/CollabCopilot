@@ -915,19 +915,23 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--navy);co
 .safe-desc{font-size:13.5px;color:var(--text-mid);line-height:1.6}
 
 /* Checklist items */
-.cl-item{display:flex;align-items:flex-start;gap:11px;margin-bottom:4px;padding:10px 12px;border-radius:9px}
-.cl-item.done{opacity:.5}
-.cl-item.active{background:var(--teal-faint);border:1px solid rgba(14,107,115,.15)}
-.cl-item.locked{opacity:.35}
-.cl-checkbox{width:18px;height:18px;border-radius:4px;border:1.5px solid var(--border);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:10px}
+.cl-item{display:flex;align-items:flex-start;gap:12px;margin-bottom:2px;padding:12px 14px;border-radius:9px;cursor:default}
+.cl-item.done{opacity:.55}
+.cl-item.active{background:var(--teal-faint);flex-direction:column;gap:0;padding:0}
+.cl-item.upcoming:hover .cl-checkbox{border-color:var(--text-light)}
+.cl-item.locked{opacity:.3}
+.cl-item-row{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;width:100%}
+.cl-checkbox{width:19px;height:19px;border-radius:5px;border:1.5px solid var(--border);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:12px;transition:border-color .15s,background .15s;cursor:default}
 .cl-checkbox.done-c{background:var(--teal);border-color:var(--teal);color:#fff}
-.cl-checkbox.active-c{border-color:var(--teal)}
-.cl-checkbox.locked-c{background:var(--warm-grey)}
-.cl-txt{font-size:13.5px;color:var(--text-dark);line-height:1.45}
-.cl-txt.done-t{text-decoration:line-through;color:var(--text-light)}
+.cl-checkbox.active-c{border-color:var(--teal);cursor:pointer}
+.cl-checkbox.active-c:hover{background:rgba(14,107,115,.08)}
+.cl-txt{font-size:14px;color:var(--text-dark);line-height:1.5;flex:1}
+.cl-txt.done-t{color:var(--text-mid)}
 .cl-txt.locked-t{color:var(--text-light)}
-.cl-badge{font-size:10.5px;font-family:'DM Mono',monospace;color:var(--teal);font-weight:500;margin-top:3px}
-.cl-locked-ic{font-size:12px;color:var(--text-light);flex-shrink:0;margin-top:3px}
+.cl-badge{font-size:12px;font-family:'DM Mono',monospace;color:var(--teal);font-weight:500;margin-top:3px;letter-spacing:.02em}
+.cl-locked-ic{color:var(--text-light);flex-shrink:0;margin-top:2px;font-size:14px}
+.cl-ai-label{font-family:'DM Mono',monospace;font-size:12px;color:var(--teal);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.cl-ai-body{font-size:13.5px;color:var(--text-dark);line-height:1.6;margin-bottom:12px}
 .ai-action-card{margin-top:16px;padding:14px 16px;background:var(--teal-faint);border-radius:10px;border:1px solid rgba(14,107,115,.15);display:flex;align-items:center;justify-content:space-between;gap:14px}
 .ai-action-left{display:flex;gap:9px;align-items:flex-start}
 .ai-action-star{color:var(--teal);font-size:15px;flex-shrink:0;margin-top:1px}
