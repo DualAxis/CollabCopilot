@@ -50,6 +50,9 @@ export default function ProfileScreen({
   const setEmail = (email: string) =>
     setState((s) => ({ ...s, profile: { ...s.profile, email } }));
 
+  const setPartner = (partner: string) =>
+    setState((s) => ({ ...s, profile: { ...s.profile, partner } }));
+
   const pickArea = (area: string) =>
     setState((s) => {
       const alreadySelected = s.profile.area.includes(area);
@@ -64,6 +67,7 @@ export default function ProfileScreen({
     profile.name.trim() &&
       profile.institution.trim() &&
       profile.email.trim() &&
+      profile.partner.trim() &&
       profile.role
   );
 
@@ -170,6 +174,24 @@ export default function ProfileScreen({
                   </div>
                 );
               })}
+            </div>
+          </div>
+
+          <div className="prof-field">
+            <label className="prof-label" htmlFor="prof-partner">
+              Business partner or company name{" "}
+              <span className="prof-label-hint">(who contacted you?)</span>
+            </label>
+            <input
+              id="prof-partner"
+              className="prof-input"
+              type="text"
+              placeholder="e.g. Nexar Robotics"
+              value={profile.partner}
+              onChange={(e) => setPartner(e.target.value)}
+            />
+            <div className="prof-input-hint">
+              Helps CollabPilot personalise your roadmap and documents.
             </div>
           </div>
 

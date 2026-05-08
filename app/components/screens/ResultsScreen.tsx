@@ -48,7 +48,7 @@ function dealSummaryBullets(state: AssessmentState): string[] {
       ? "TTO is leading this deal"
       : "TTO must be briefed before any further communication";
   return [
-    `${dealType} — Nexar Robotics interested in commercial use`,
+    `${dealType} \u00b7 Nexar Robotics requesting 3-year exclusivity`,
     "Estimated timeline: 4–6 months to signed agreement",
     "Currently at Stage 1 — 2 compliance actions required before responding",
     ttoBullet,
@@ -305,8 +305,24 @@ export default function ResultsScreen({
                 </div>
                 <div>
                   <div className="module-title">Compliance alerts</div>
-                  <div className="module-summary">
-                    Act on these before responding to Nexar
+                  <div
+                    className="module-summary"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 4,
+                      marginTop: 2,
+                    }}
+                  >
+                    <span
+                      className="ms"
+                      style={{ fontSize: 12, color: "var(--teal)" }}
+                    >
+                      auto_awesome
+                    </span>
+                    <span style={{ fontSize: 12, color: "var(--teal)" }}>
+                      CollabPilot analysis
+                    </span>
                   </div>
                 </div>
               </div>
@@ -378,8 +394,24 @@ export default function ResultsScreen({
                 </div>
                 <div>
                   <div className="module-title">Safe actions today</div>
-                  <div className="module-summary">
-                    What you can do right now without compliance risk
+                  <div
+                    className="module-summary"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 4,
+                      marginTop: 2,
+                    }}
+                  >
+                    <span
+                      className="ms"
+                      style={{ fontSize: 12, color: "var(--teal)" }}
+                    >
+                      auto_awesome
+                    </span>
+                    <span style={{ fontSize: 12, color: "var(--teal)" }}>
+                      CollabPilot suggestion
+                    </span>
                   </div>
                 </div>
               </div>
@@ -434,8 +466,8 @@ export default function ResultsScreen({
                 reply to Nexar
               </div>
               <div className="sb-unlock-item">
-                <span className="sb-unlock-check">✓</span>My Deal Brief — AI
-                deal summary
+                <span className="sb-unlock-check">✓</span>My Deal Brief — your
+                assessment saved as a deal
               </div>
             </div>
             <button className="sb-unlock-btn" onClick={onCreateAccount}>

@@ -14,7 +14,7 @@ type Props = {
   onBack: () => void;
 };
 
-const TOTAL_STEPS = 6;
+const TOTAL_STEPS = 7;
 
 function resolveInitialIdx(
   config: RadioQuestionConfig,
@@ -36,9 +36,21 @@ export default function RadioQuestionScreen({
   const [selectedIdx, setSelectedIdx] = useState<number | null>(() =>
     resolveInitialIdx(config, state)
   );
+  const [showHint, setShowHint] = useState(false);
+  const [shaking, setShaking] = useState(false);
+
+  const pickOption = (i: number) => {
+    setSelectedIdx(i);
+    setShowHint(false);
+  };
 
   const handleContinue = () => {
-    if (selectedIdx === null) return;
+    if (selectedIdx === null) {
+      setShowHint(true);
+      setShaking(true);
+      setTimeout(() => setShaking(false), 400);
+      return;
+    }
     const chosen = config.options[selectedIdx];
     setState((s) => ({ ...s, [config.field]: chosen.label }));
     onContinue();
@@ -58,7 +70,7 @@ export default function RadioQuestionScreen({
         <div className="nav-actions">
           <span
             className="mono"
-            style={{ fontSize: "11px", color: "var(--text-light)" }}
+            style={{ fontSize: "12px", color: "var(--text-light)" }}
           >
             Step {config.step} of {TOTAL_STEPS}
           </span>
@@ -80,6 +92,7 @@ export default function RadioQuestionScreen({
         <div className="a-eye">{config.eyebrow}</div>
         <h2 className="a-h">{config.title}</h2>
         <p className="a-sub">{config.sub}</p>
+        <p className="q-required">* Select one option to continue</p>
 
         <div className="opts">
           {config.options.map((opt, i) => {
@@ -94,11 +107,7 @@ export default function RadioQuestionScreen({
                 ? { borderColor: "var(--teal)", background: "var(--teal)" }
                 : undefined;
             return (
-              <div
-                key={i}
-                className={cls}
-                onClick={() => setSelectedIdx(i)}
-              >
+              <div key={i} className={cls} onClick={() => pickOption(i)}>
                 <div className="radio" style={radioStyle}>
                   {isSel && <div className="radio-dot"></div>}
                 </div>
@@ -119,17 +128,21 @@ export default function RadioQuestionScreen({
             ← Back
           </button>
           <button
-            className="btn-primary"
+            className={`btn-primary a-continue-btn${shaking ? " shake" : ""}`}
             onClick={handleContinue}
-            disabled={selectedIdx === null}
-            style={
-              selectedIdx === null
-                ? { opacity: 0.5, cursor: "not-allowed" }
-                : undefined
-            }
           >
             Continue →
           </button>
+        </div>
+
+        <div className={`a-required-hint${showHint ? " show" : ""}`}>
+          <span className="ms">error</span>
+          <div className="a-required-hint-inner">
+            <div className="a-required-hint-title">Selection required</div>
+            <div className="a-required-hint-desc">
+              Please select one option above to continue.
+            </div>
+          </div>
         </div>
       </div>
     </div>

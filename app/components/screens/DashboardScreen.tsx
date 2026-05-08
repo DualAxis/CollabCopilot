@@ -119,7 +119,7 @@ export default function DashboardScreen({
               </div>
               <button
                 type="button"
-                className="btn-secondary"
+                className="btn-primary"
                 onClick={(e) => {
                   e.stopPropagation();
                   onOpenDeal();

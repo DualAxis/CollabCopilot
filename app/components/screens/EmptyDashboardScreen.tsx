@@ -103,7 +103,22 @@ export default function EmptyDashboardScreen({
         >
           Take the Assessment to start your first deal &rarr;
         </button>
-        {/* TODO(M14): replace with "Create it manually -> s-new-deal" link */}
+        <p
+          style={{
+            fontSize: 13,
+            color: "var(--text-light)",
+            marginTop: 16,
+          }}
+        >
+          Already have a deal in progress?{" "}
+          <span
+            style={{ color: "var(--teal)", cursor: "pointer" }}
+            onClick={(e) => e.preventDefault()}
+          >
+            {/* s-new-deal flow deferred to M24 */}
+            Create it manually &rarr;
+          </span>
+        </p>
       </div>
     </WorkspaceShell>
   );

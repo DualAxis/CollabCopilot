@@ -1073,3 +1073,23 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--navy);co
 .invite-actions{display:flex;gap:10px;align-items:center}
 .invite-cancel{font-size:13px;font-weight:500;color:var(--text-mid);background:none;border:none;cursor:pointer;font-family:inherit;padding:0;transition:color .15s}
 .invite-cancel:hover{color:var(--text-dark)}
+
+/* Questionnaire validation (CP-VALIDATE-01: required-field hint + shake) */
+.q-required{font-size:13px;font-weight:600;color:var(--terra);margin-bottom:14px;display:flex;align-items:center;gap:5px}
+.q-required .ms{font-size:15px}
+@keyframes shakeX{0%,100%{transform:translateX(0)}15%{transform:translateX(-6px)}30%{transform:translateX(6px)}45%{transform:translateX(-4px)}60%{transform:translateX(4px)}75%{transform:translateX(-2px)}90%{transform:translateX(2px)}}
+.shake{animation:shakeX .4s ease}
+.a-required-hint{
+  display:flex;align-items:flex-start;gap:10px;
+  border-left:3px solid var(--terra);background:var(--terra-faint);
+  border-radius:0 8px 8px 0;padding:10px 14px;margin-top:10px;
+  opacity:0;transform:translateY(4px);
+  transition:opacity .25s,transform .25s;pointer-events:none;
+}
+.a-required-hint .ms{font-size:16px;color:var(--terra);flex-shrink:0;margin-top:1px}
+.a-required-hint-inner{}
+.a-required-hint-title{font-size:13px;font-weight:600;color:var(--terra);margin-bottom:1px}
+.a-required-hint-desc{font-size:12px;color:var(--text-mid);line-height:1.5}
+.a-required-hint.show{opacity:1;transform:translateY(0)}
+.opts.highlight-required .opt:not(.sel):not(.warn-sel){border-color:rgba(181,84,42,.22)}
+.opts.highlight-required{animation:shakeX .4s ease}

@@ -76,7 +76,7 @@ export default function ContextScreen({
               className={`a-step ${i < TOTAL_STEPS - 1 ? "done" : "cur"}`}
             ></div>
           ))}
-          <span className="a-lbl">Step 8 of {TOTAL_STEPS}</span>
+          <span className="a-lbl">Step 8 of {TOTAL_STEPS} (removed)</span>
         </div>
 
         <div className="a-eye">Assessment · Optional</div>
@@ -130,7 +130,7 @@ export default function ContextScreen({
           <span
             style={{
               fontFamily: "'DM Mono', monospace",
-              fontSize: "10px",
+              fontSize: "12px",
               color: "var(--teal)",
               letterSpacing: "0.06em",
             }}
