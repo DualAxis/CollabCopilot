@@ -5,11 +5,11 @@ import WorkspaceShell from "../layout/WorkspaceShell";
 type Props = {
   onNewDeal: () => void;
   onOpenDeal: () => void;
-  onSignOut: () => void;
+  onLogoClick: () => void;
+  onOpenProfile: () => void;
   onNavDeals?: () => void;
-  onNavRoadmap?: () => void;
   userName?: string;
-  userRole?: string;
+  userInstitution?: string;
 };
 
 const DEMO_DEAL = {
@@ -24,20 +24,20 @@ const DEMO_DEAL = {
 export default function DashboardScreen({
   onNewDeal,
   onOpenDeal,
-  onSignOut,
+  onLogoClick,
+  onOpenProfile,
   onNavDeals,
-  onNavRoadmap,
   userName,
-  userRole,
+  userInstitution,
 }: Props) {
   return (
     <WorkspaceShell
-      active="deals"
-      onSignOut={onSignOut}
+      mode={{ kind: "overview", active: "deals" }}
+      onLogoClick={onLogoClick}
+      onOpenProfile={onOpenProfile}
       onNavDeals={onNavDeals}
-      onNavRoadmap={onNavRoadmap}
       userName={userName}
-      userRole={userRole}
+      userInstitution={userInstitution}
     >
       <div className="dash-head" style={{ padding: 0, border: "none" }}>
         <div className="dash-row">

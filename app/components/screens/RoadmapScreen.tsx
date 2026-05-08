@@ -10,11 +10,11 @@ import type {
 type Props = {
   dealBrief: DealBrief;
   onBackToDealsList: () => void;
-  onSignOut: () => void;
-  onNavDeals?: () => void;
-  onNavRoadmap?: () => void;
+  onLogoClick: () => void;
+  onOpenProfile: () => void;
+  onNavDealBrief?: () => void;
   userName?: string;
-  userRole?: string;
+  userInstitution?: string;
 };
 
 type Stage = {
@@ -113,11 +113,11 @@ function splitTtoOfficer(value: string): { name: string; suffix: string } {
 export default function RoadmapScreen({
   dealBrief,
   onBackToDealsList,
-  onSignOut,
-  onNavDeals,
-  onNavRoadmap,
+  onLogoClick,
+  onOpenProfile,
+  onNavDealBrief,
   userName,
-  userRole,
+  userInstitution,
 }: Props) {
   const { who, signoffs } = dealBrief;
   const business = splitBusinessPartner(who.businessPartner);
@@ -125,12 +125,18 @@ export default function RoadmapScreen({
 
   return (
     <WorkspaceShell
-      active="roadmap"
-      onSignOut={onSignOut}
-      onNavDeals={onNavDeals}
-      onNavRoadmap={onNavRoadmap}
+      mode={{
+        kind: "inDeal",
+        active: "roadmap",
+        dealName: "Nexar Robotics",
+        dealSubLabel: "IP Licensing \u00b7 Stage 1",
+      }}
+      onLogoClick={onLogoClick}
+      onOpenProfile={onOpenProfile}
+      onNavDeals={onBackToDealsList}
+      onNavDealBrief={onNavDealBrief}
       userName={userName}
-      userRole={userRole}
+      userInstitution={userInstitution}
     >
       <div className="rm-page" style={{ padding: 0 }}>
         {/* Breadcrumb */}

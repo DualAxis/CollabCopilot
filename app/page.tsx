@@ -20,6 +20,7 @@ import EmptyDashboardScreen from "./components/screens/EmptyDashboardScreen";
 import DashboardScreen from "./components/screens/DashboardScreen";
 import DealBriefScreen from "./components/screens/DealBriefScreen";
 import RoadmapScreen from "./components/screens/RoadmapScreen";
+import ProfileUserScreen from "./components/screens/ProfileUserScreen";
 
 type LoginMode = "create" | "signin";
 
@@ -66,6 +67,11 @@ export default function Home() {
   const goToDeals = () => setScreen("s-deal-brief");
   const goToDealsList = () => setScreen("s-dashboard");
   const goToRoadmap = () => setScreen("s-roadmap");
+  const goHome = () => setScreen("s-landing");
+  const goToProfile = () => setScreen("s-profile-user");
+  const onSignOut = () => setScreen("s-landing");
+  const userInstitution =
+    assessment.profile.institution || "Warsaw University of Technology";
 
   return (
     <>
@@ -128,20 +134,22 @@ export default function Home() {
       {screen === "s-empty-dashboard" && (
         <EmptyDashboardScreen
           onStartDeal={() => setScreen("s-profile")}
-          onSignOut={() => setScreen("s-landing")}
-          onNavDeals={goToDeals}
-          onNavRoadmap={goToRoadmap}
+          onLogoClick={goHome}
+          onOpenProfile={goToProfile}
+          onNavDeals={goToDealsList}
           userName={assessment.profile.name || "Demo user"}
+          userInstitution={userInstitution}
         />
       )}
       {screen === "s-dashboard" && (
         <DashboardScreen
           onNewDeal={() => setScreen("s-profile")}
           onOpenDeal={() => setScreen("s-deal-brief")}
-          onSignOut={() => setScreen("s-landing")}
-          onNavDeals={goToDeals}
-          onNavRoadmap={goToRoadmap}
+          onLogoClick={goHome}
+          onOpenProfile={goToProfile}
+          onNavDeals={goToDealsList}
           userName={assessment.profile.name || "Demo user"}
+          userInstitution={userInstitution}
         />
       )}
       {screen === "s-deal-brief" && (
@@ -149,20 +157,32 @@ export default function Home() {
           dealBrief={dealBrief}
           setDealBrief={setDealBrief}
           onBackToDealsList={goToDealsList}
-          onSignOut={() => setScreen("s-landing")}
-          onNavDeals={goToDeals}
+          onLogoClick={goHome}
+          onOpenProfile={goToProfile}
           onNavRoadmap={goToRoadmap}
           userName={assessment.profile.name || "Demo user"}
+          userInstitution={userInstitution}
         />
       )}
       {screen === "s-roadmap" && (
         <RoadmapScreen
           dealBrief={dealBrief}
           onBackToDealsList={goToDealsList}
-          onSignOut={() => setScreen("s-landing")}
-          onNavDeals={goToDeals}
-          onNavRoadmap={goToRoadmap}
+          onLogoClick={goHome}
+          onOpenProfile={goToProfile}
+          onNavDealBrief={goToDeals}
           userName={assessment.profile.name || "Demo user"}
+          userInstitution={userInstitution}
+        />
+      )}
+      {screen === "s-profile-user" && (
+        <ProfileUserScreen
+          onSignOut={onSignOut}
+          onLogoClick={goHome}
+          onNavDeals={goToDealsList}
+          onOpenProfile={goToProfile}
+          userName={assessment.profile.name || "Demo user"}
+          userInstitution={userInstitution}
         />
       )}
     </>

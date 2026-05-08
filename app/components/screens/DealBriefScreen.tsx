@@ -14,11 +14,11 @@ type Props = {
   dealBrief: DealBrief;
   setDealBrief: Dispatch<SetStateAction<DealBrief>>;
   onBackToDealsList: () => void;
-  onSignOut: () => void;
-  onNavDeals?: () => void;
+  onLogoClick: () => void;
+  onOpenProfile: () => void;
   onNavRoadmap?: () => void;
   userName?: string;
-  userRole?: string;
+  userInstitution?: string;
 };
 
 const DEAL_NAME_LINES = [
@@ -63,11 +63,11 @@ export default function DealBriefScreen({
   dealBrief,
   setDealBrief,
   onBackToDealsList,
-  onSignOut,
-  onNavDeals,
+  onLogoClick,
+  onOpenProfile,
   onNavRoadmap,
   userName,
-  userRole,
+  userInstitution,
 }: Props) {
   const [editingWho, setEditingWho] = useState(false);
   const [draftWho, setDraftWho] = useState<WhoBlock>(dealBrief.who);
@@ -113,12 +113,18 @@ export default function DealBriefScreen({
 
   return (
     <WorkspaceShell
-      active="deals"
-      onSignOut={onSignOut}
-      onNavDeals={onNavDeals}
+      mode={{
+        kind: "inDeal",
+        active: "deal-brief",
+        dealName: "Nexar Robotics",
+        dealSubLabel: "IP Licensing \u00b7 Stage 1",
+      }}
+      onLogoClick={onLogoClick}
+      onOpenProfile={onOpenProfile}
+      onNavDeals={onBackToDealsList}
       onNavRoadmap={onNavRoadmap}
       userName={userName}
-      userRole={userRole}
+      userInstitution={userInstitution}
     >
       <div style={{ marginTop: 4 }}>
         <div className="brief-crumb">
