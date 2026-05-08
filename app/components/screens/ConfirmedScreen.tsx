@@ -1,16 +1,35 @@
 "use client";
 
+import type { DealBrief } from "../../lib/dealBrief";
+
 type Props = {
   onBack: () => void;
   onLogoClick: () => void;
   onOpenRoadmap: () => void;
+  dealBrief: DealBrief;
+  userName?: string;
+  userInstitution?: string;
 };
 
 export default function ConfirmedScreen({
   onBack,
   onLogoClick,
   onOpenRoadmap,
+  dealBrief,
+  userName,
+  userInstitution,
 }: Props) {
+  const researcherLabel =
+    (userName && userName.trim()) ||
+    (dealBrief.who.researcher.trim() !== "Researcher"
+      ? dealBrief.who.researcher
+      : "You");
+  const institutionLabel =
+    (userInstitution && userInstitution.trim()) ||
+    dealBrief.who.institution ||
+    "Your institution";
+  const partner = dealBrief.who.businessPartner;
+
   return (
     <div className="screen active" style={{ background: "var(--white)" }}>
       <nav className="top-nav">
@@ -38,10 +57,10 @@ export default function ConfirmedScreen({
             celebration
           </span>
         </div>
-        <h2 className="conf-h">Katarzyna W. joined your deal</h2>
+        <h2 className="conf-h">Your Technology Transfer Officer joined</h2>
         <p className="conf-sub">
-          Your Technology Transfer Officer has accepted the invitation. All
-          three parties are now connected to the shared roadmap.
+          The TTO at {institutionLabel} has accepted the invitation. All three
+          parties are now connected to the shared roadmap.
         </p>
         <div className="conf-parties">
           <div className="cp">
@@ -53,7 +72,7 @@ export default function ConfirmedScreen({
                 person
               </span>
             </div>
-            <div className="cp-name">Dr. Paulina Chen</div>
+            <div className="cp-name">{researcherLabel}</div>
             <div className="cp-st ok">{"\u2713"} Joined</div>
           </div>
           <div className="cp">
@@ -65,7 +84,9 @@ export default function ConfirmedScreen({
                 account_balance
               </span>
             </div>
-            <div className="cp-name">Katarzyna W.</div>
+            <div className="cp-name">
+              Technology Transfer Office {"\u2014"} {institutionLabel}
+            </div>
             <div className="cp-st ok">{"\u2713"} Just joined</div>
           </div>
           <div className="cp">
@@ -77,7 +98,9 @@ export default function ConfirmedScreen({
                 business
               </span>
             </div>
-            <div className="cp-name">Nexar Robotics {"\u2014"} Marek Nowak</div>
+            <div className="cp-name">
+              {partner} {"\u2014"} BD Team
+            </div>
             <div className="cp-st pend">Invited</div>
           </div>
         </div>

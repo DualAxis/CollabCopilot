@@ -325,6 +325,9 @@ export default function Home() {
           onLogoClick={goHome}
           onBack={goToInvite}
           onOpenRoadmap={goToRoadmap}
+          dealBrief={dealBrief}
+          userName={assessment.profile.name || "Demo user"}
+          userInstitution={userInstitution}
         />
       )}
     </>
