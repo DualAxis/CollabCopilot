@@ -143,6 +143,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--navy);co
 .b-progress{background:var(--amber-faint);color:var(--amber-text);border:1px solid rgba(196,131,42,.2)}
 .b-complete{background:var(--sage-faint);color:var(--sage);border:1px solid var(--sage-border)}
 .b-pending{background:rgba(122,117,112,.07);color:var(--text-light);border:1px solid rgba(122,117,112,.14)}
+.b-done{background:var(--sage-faint);color:var(--sage);border:1px solid var(--sage-border)}
 .b-live{background:rgba(14,107,115,.1);color:var(--teal);border:1px solid rgba(14,107,115,.2)}
 
 /* ── SCROLLBAR ── */
@@ -509,6 +510,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--navy);co
 .si{background:var(--white);border:1px solid var(--border);border-radius:11px;overflow:hidden;transition:box-shadow .2s}
 .si.active{border-color:var(--teal);box-shadow:0 0 0 2px rgba(14,107,115,.09)}
 .si.locked{opacity:.52}
+.si.done{opacity:1;border-color:rgba(74,124,95,.38);background:rgba(74,124,95,.06)}
 .si-head{display:flex;align-items:center;gap:14px;padding:16px 18px}
 .si-num{width:26px;height:26px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:12.5px;font-weight:500}
 .si-num.n-done{background:var(--teal);color:#fff}

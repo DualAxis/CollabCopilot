@@ -128,6 +128,12 @@ export default function RoadmapScreen({
   const { who, signoffs, display } = dealBrief;
   const business = splitBusinessPartner(who.businessPartner);
   const tto = splitTtoOfficer(who.ttoOfficer);
+  const currentStage = Math.min(
+    6,
+    Math.max(1, Math.round(display.stageNumber))
+  );
+
+  const stage1Active = currentStage === 1;
 
   return (
     <WorkspaceShell
@@ -418,27 +424,42 @@ export default function RoadmapScreen({
           </div>
         </div>
 
-        {/* Stages */}
+        {/* Stages — stage 1 + rows 2–6; badge reflects dealBrief.display.stageNumber */}
         <div className="stage-list">
-          {/* Stage 1 - Active */}
-          <div className="si active">
+          <div className={stage1Active ? "si active" : "si done"}>
             <div className="si-head">
-              <div className="si-num n-act">01</div>
+              <div
+                className={stage1Active ? "si-num n-act" : "si-num n-done"}
+              >
+                01
+              </div>
               <div className="si-info">
                 <div className="si-name" style={{ fontSize: 16 }}>
                   Compliance &amp; Disclosure
                 </div>
                 <div className="si-dur">
-                  Estimated 2&ndash;4 weeks &middot; Now in progress
+                  {stage1Active
+                    ? "Estimated 2\u20134 weeks \u00b7 Now in progress"
+                    : "Estimated 2\u20134 weeks \u00b7 Complete"}
                 </div>
               </div>
               <div className="si-right">
-                <span className="badge b-progress">&bull; In Progress</span>
-                <span className="si-owner" style={{ color: "var(--teal)" }}>
+                {stage1Active ? (
+                  <span className="badge b-progress">&bull; In Progress</span>
+                ) : (
+                  <span className="badge b-done">Done</span>
+                )}
+                <span
+                  className="si-owner"
+                  style={{
+                    color: stage1Active ? "var(--teal)" : "var(--sage)",
+                  }}
+                >
                   RESEARCHER
                 </span>
               </div>
             </div>
+            {stage1Active && (
             <div className="si-body">
               <div className="si-steps">
                 <div className="si-step">
@@ -511,24 +532,41 @@ export default function RoadmapScreen({
                 </span>
               </div>
             </div>
+            )}
           </div>
 
-          {/* Stages 2-6 - Locked */}
-          {LOCKED_STAGES.map((stage) => (
-            <div key={stage.num} className="si locked">
+          {LOCKED_STAGES.map((stage, i) => {
+            const sn = i + 2;
+            const done = currentStage > sn;
+            const active = currentStage === sn;
+            const siClass = active ? "si active" : done ? "si done" : "si locked";
+            const numClass = active
+              ? "si-num n-act"
+              : done
+                ? "si-num n-done"
+                : "si-num n-lock";
+            return (
+            <div key={stage.num} className={siClass}>
               <div className="si-head">
-                <div className="si-num n-lock">{stage.num}</div>
+                <div className={numClass}>{stage.num}</div>
                 <div className="si-info">
                   <div className="si-name">{stage.name}</div>
                   <div className="si-dur">{stage.dur}</div>
                 </div>
                 <div className="si-right">
-                  <span className="badge b-pending">Upcoming</span>
+                  {done ? (
+                    <span className="badge b-done">Done</span>
+                  ) : active ? (
+                    <span className="badge b-progress">&bull; In Progress</span>
+                  ) : (
+                    <span className="badge b-pending">Upcoming</span>
+                  )}
                   <span className="si-owner">{stage.ownerLabel}</span>
                 </div>
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Roadmap sign-off */}
