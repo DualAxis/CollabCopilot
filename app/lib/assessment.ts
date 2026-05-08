@@ -14,6 +14,9 @@ export type ScreenId =
   | "s-account-created"
   | "s-dashboard-placeholder";
 
+// Role ids follow collabpilot_demo4.html. Tech Notes v2 §2.2 uses "industry"
+// where demo4 uses "business"; the rest map 1:1 (researcher -> researcher,
+// tto -> tto). Keep demo4 ids here to avoid a project-wide rename.
 export type Role = "researcher" | "business" | "tto";
 
 export type AssessmentState = {
@@ -39,7 +42,7 @@ export const INITIAL_ASSESSMENT: AssessmentState = {
     institution: "",
     email: "",
     area: [],
-    role: "researcher",
+    role: null,
   },
   q0: "",
   q1: "",
@@ -92,7 +95,6 @@ export const RADIO_QUESTIONS: RadioQuestionConfig[] = [
       {
         label: "First contact received",
         desc: "A company or partner has just reached out — no formal discussions have started yet",
-        preselected: true,
       },
       {
         label: "In discussion",
@@ -125,7 +127,6 @@ export const RADIO_QUESTIONS: RadioQuestionConfig[] = [
       {
         label: "IP Licensing",
         desc: "A company wants to use or commercialise your technology under a license agreement",
-        preselected: true,
       },
       {
         label: "Sponsored Research Agreement",
@@ -158,7 +159,6 @@ export const RADIO_QUESTIONS: RadioQuestionConfig[] = [
       {
         label: "Patent application filed",
         desc: "A patent application has been submitted and is under examination — protection is pending",
-        preselected: true,
       },
       {
         label: "Provisional patent filed",
@@ -192,7 +192,6 @@ export const RADIO_QUESTIONS: RadioQuestionConfig[] = [
         label: "Under journal review",
         desc: "Paper submitted and currently being peer-reviewed — not yet publicly available",
         warning: "⚠ Compliance implications — CollabPilot will explain",
-        preselected: true,
       },
       {
         label: "Published",
@@ -222,7 +221,6 @@ export const RADIO_QUESTIONS: RadioQuestionConfig[] = [
         label: "Not yet involved in this deal",
         desc: "I haven't opened a case with my Technology Transfer Office for this deal yet — this would be my first step",
         warning: "⚠ Action required before you can proceed",
-        preselected: true,
       },
       {
         label: "Aware, but not yet formally engaged",

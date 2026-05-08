@@ -16,14 +16,14 @@ type Props = {
 
 const TOTAL_STEPS = 6;
 
-function findInitialIdx(config: RadioQuestionConfig, state: AssessmentState): number {
+function resolveInitialIdx(
+  config: RadioQuestionConfig,
+  state: AssessmentState
+): number | null {
   const stored = state[config.field];
-  if (stored) {
-    const idx = config.options.findIndex((o) => o.label === stored);
-    if (idx >= 0) return idx;
-  }
-  const presel = config.options.findIndex((o) => o.preselected);
-  return presel >= 0 ? presel : 0;
+  if (!stored) return null;
+  const idx = config.options.findIndex((o) => o.label === stored);
+  return idx >= 0 ? idx : null;
 }
 
 export default function RadioQuestionScreen({
@@ -33,11 +33,12 @@ export default function RadioQuestionScreen({
   onContinue,
   onBack,
 }: Props) {
-  const [selectedIdx, setSelectedIdx] = useState<number>(() =>
-    findInitialIdx(config, state)
+  const [selectedIdx, setSelectedIdx] = useState<number | null>(() =>
+    resolveInitialIdx(config, state)
   );
 
   const handleContinue = () => {
+    if (selectedIdx === null) return;
     const chosen = config.options[selectedIdx];
     setState((s) => ({ ...s, [config.field]: chosen.label }));
     onContinue();
@@ -117,7 +118,16 @@ export default function RadioQuestionScreen({
           <button className="a-back" onClick={onBack}>
             ← Back
           </button>
-          <button className="btn-primary" onClick={handleContinue}>
+          <button
+            className="btn-primary"
+            onClick={handleContinue}
+            disabled={selectedIdx === null}
+            style={
+              selectedIdx === null
+                ? { opacity: 0.5, cursor: "not-allowed" }
+                : undefined
+            }
+          >
             Continue →
           </button>
         </div>

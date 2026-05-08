@@ -15,19 +15,19 @@ const TOTAL_STEPS = 6;
 const ROLES: { id: Role; ic: string; name: string; desc: string }[] = [
   {
     id: "researcher",
-    ic: "🎓",
+    ic: "school",
     name: "Researcher / Academic",
     desc: "University PI, postdoc, or department lead commercialising research",
   },
   {
     id: "business",
-    ic: "🏭",
+    ic: "factory",
     name: "Business Partner",
     desc: "Company or investor entering a deal with a research institution",
   },
   {
     id: "tto",
-    ic: "🏛️",
+    ic: "account_balance",
     name: "TTO / Intermediary",
     desc: "Technology transfer officer managing the process",
   },
@@ -59,6 +59,13 @@ export default function ProfileScreen({
 
   const pickRole = (role: Role) =>
     setState((s) => ({ ...s, profile: { ...s.profile, role } }));
+
+  const canContinue = Boolean(
+    profile.name.trim() &&
+      profile.institution.trim() &&
+      profile.email.trim() &&
+      profile.role
+  );
 
   return (
     <div id="s-profile" className="screen screen-assess active">
@@ -177,7 +184,14 @@ export default function ProfileScreen({
                     className={`role-card${sel ? " sel" : ""}`}
                     onClick={() => pickRole(role.id)}
                   >
-                    <div className="role-ic">{role.ic}</div>
+                    <div className="role-ic">
+                      <span
+                        className="ms"
+                        style={{ fontSize: "24px", color: "var(--teal)" }}
+                      >
+                        {role.ic}
+                      </span>
+                    </div>
                     <div>
                       <div className="role-name">{role.name}</div>
                       <div className="role-desc">{role.desc}</div>
@@ -192,7 +206,16 @@ export default function ProfileScreen({
             <button className="a-back" onClick={onBack}>
               ← Back
             </button>
-            <button className="btn-primary" onClick={onContinue}>
+            <button
+              className="btn-primary"
+              onClick={onContinue}
+              disabled={!canContinue}
+              style={
+                !canContinue
+                  ? { opacity: 0.5, cursor: "not-allowed" }
+                  : undefined
+              }
+            >
               Continue →
             </button>
           </div>
