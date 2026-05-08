@@ -2,6 +2,15 @@
 
 import { useState } from "react";
 import WorkspaceShell from "../layout/WorkspaceShell";
+import EmailDraftModal from "../modals/EmailDraftModal";
+
+const FORWARDING_EMAIL = {
+  title: "Forwarding email to TTO \u2014 draft",
+  to: "katarzyna.w@pw.edu.pl",
+  subject:
+    "FWD: Nexar Robotics inquiry \u2014 IP licensing of cobot algorithm",
+  body: "Hi Katarzyna,\n\nI wanted to bring this to your attention. I've received an inquiry from Nexar Robotics (Marek Nowak, BD Lead) regarding licensing of my adaptive cobot collision-avoidance algorithm.\n\nForwarding the original email for your review. Two compliance flags have been identified:\n\n1. My paper is currently under review at IEEE Transactions on Robotics \u2014 a CDA must be in place before any technical data is shared.\n2. The IP belongs to WUT and requires your involvement before any further discussion.\n\nCould we schedule a briefing call this week?\n\nBest regards,\nDr. Paulina Chen\nFaculty of Power and Aeronautical Engineering, WUT",
+};
 
 type Props = {
   onLogoClick: () => void;
@@ -27,8 +36,8 @@ export default function ChecklistsScreen({
   userInstitution,
 }: Props) {
   const [activeStatus, setActiveStatus] = useState<"active" | "done">("active");
+  const [reviewOpen, setReviewOpen] = useState(false);
   const isDone = activeStatus === "done";
-  const noop = (e: React.MouseEvent<HTMLButtonElement>) => e.preventDefault();
   const toggleActive = () => setActiveStatus("done");
 
   const statusPillStyle: React.CSSProperties = isDone
@@ -213,7 +222,7 @@ export default function ChecklistsScreen({
                   </div>
                   <button
                     className="btn-secondary"
-                    onClick={noop}
+                    onClick={() => setReviewOpen(true)}
                     style={{ fontSize: 13, padding: "8px 18px" }}
                   >
                     Review draft
@@ -319,6 +328,20 @@ export default function ChecklistsScreen({
           </div>
         </div>
       </div>
+      <EmailDraftModal
+        open={reviewOpen}
+        onClose={() => setReviewOpen(false)}
+        title={FORWARDING_EMAIL.title}
+        initialTo={FORWARDING_EMAIL.to}
+        initialSubject={FORWARDING_EMAIL.subject}
+        initialBody={FORWARDING_EMAIL.body}
+        primaryLabel={"Send \u2192"}
+        footerNote="CollabPilot suggestion \u00b7 Editable"
+        onPrimary={() => {
+          setReviewOpen(false);
+          setActiveStatus("done");
+        }}
+      />
     </WorkspaceShell>
   );
 }

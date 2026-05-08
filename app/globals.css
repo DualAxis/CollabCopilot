@@ -1052,3 +1052,24 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--navy);co
 .kl-title{font-size:14px;font-weight:600;color:var(--navy);line-height:1.35;flex:1;transition:text-decoration .15s}
 .kl-desc{font-size:12.5px;color:var(--text-mid);line-height:1.55}
 .kl-tag{font-size:12px;color:var(--terra);font-style:italic;margin-top:6px}
+
+/* Modal chrome (CP-MODAL-01: shared overlay used by email draft modals) */
+.invite-overlay{position:fixed;inset:0;background:rgba(15,31,61,.35);backdrop-filter:blur(3px);z-index:200;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
+.invite-overlay.open{opacity:1;pointer-events:all}
+.invite-modal{background:var(--white);border-radius:16px;width:100%;max-width:520px;box-shadow:0 24px 64px rgba(0,0,0,.18);display:flex;flex-direction:column;overflow:hidden;transform:translateY(8px);transition:transform .2s}
+.invite-overlay.open .invite-modal{transform:translateY(0)}
+.invite-modal-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 16px;border-bottom:1px solid var(--border)}
+.invite-modal-title{font-size:15px;font-weight:600;color:var(--navy)}
+.invite-close{width:28px;height:28px;border-radius:50%;background:var(--off-white);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-mid);font-size:16px;transition:background .15s}
+.invite-close:hover{background:var(--warm-grey)}
+.invite-field{display:flex;align-items:center;gap:0;padding:12px 20px;border-bottom:1px solid var(--off-white)}
+.invite-field-label{font-size:13px;font-weight:500;color:var(--text-light);width:64px;flex-shrink:0}
+.invite-field-value{font-size:13.5px;color:var(--text-dark);flex:1}
+.invite-field-value.editable{border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:13.5px;color:var(--text-dark);background:transparent;width:100%}
+.invite-body{padding:16px 20px;min-height:200px}
+.invite-body textarea{width:100%;min-height:180px;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:13.5px;color:var(--text-dark);line-height:1.65;resize:none;background:transparent}
+.invite-modal-foot{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-top:1px solid var(--border)}
+.invite-expiry{font-size:12px;color:var(--text-light);display:flex;align-items:center;gap:5px}
+.invite-actions{display:flex;gap:10px;align-items:center}
+.invite-cancel{font-size:13px;font-weight:500;color:var(--text-mid);background:none;border:none;cursor:pointer;font-family:inherit;padding:0;transition:color .15s}
+.invite-cancel:hover{color:var(--text-dark)}

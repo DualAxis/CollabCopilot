@@ -1,6 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import WorkspaceShell from "../layout/WorkspaceShell";
+import EmailDraftModal from "../modals/EmailDraftModal";
+import {
+  EMAIL_TEMPLATES,
+  type EmailTemplateKey,
+} from "../../lib/emailTemplates";
 
 type ActiveDoc = {
   status: "done" | "inprog";
@@ -17,6 +23,7 @@ type Template = {
   stage?: string;
   name: string;
   meta: string;
+  templateKey?: EmailTemplateKey;
 };
 
 const ACTIVE_DOCS: ActiveDoc[] = [
@@ -45,16 +52,19 @@ const TEMPLATES: Template[] = [
     locked: false,
     name: "TTO Briefing Template",
     meta: "Stage 1 \u00b7 Pre-filled with your deal context \u00b7 Ready to send",
+    templateKey: "tto-briefing",
   },
   {
     locked: false,
     name: "Non-Confidential Research Summary",
     meta: "Stage 1 \u00b7 Safe to share before CDA \u00b7 AI-drafted from your profile",
+    /* Document-template branch deferred to M22 */
   },
   {
     locked: false,
     name: "Holding Reply to Nexar Robotics",
     meta: "Stage 1 \u00b7 AI-drafted \u00b7 Polite, no technical data, buys 5 days",
+    templateKey: "holding-reply",
   },
   { locked: true, stage: "Stage 2", name: "NDA Template", meta: "Stage 2" },
   {
@@ -95,6 +105,8 @@ export default function DocumentsScreen({
   userInstitution,
 }: Props) {
   const noop = (e: React.MouseEvent<HTMLButtonElement>) => e.preventDefault();
+  const [openTemplateKey, setOpenTemplateKey] =
+    useState<EmailTemplateKey | null>(null);
 
   return (
     <WorkspaceShell
@@ -233,7 +245,11 @@ export default function DocumentsScreen({
                   <div className="doc-right">
                     <button
                       className="btn-secondary"
-                      onClick={noop}
+                      onClick={
+                        t.templateKey
+                          ? () => setOpenTemplateKey(t.templateKey!)
+                          : noop /* Document-template branch deferred to M22 */
+                      }
                       style={{ fontSize: 13, padding: "7px 16px" }}
                     >
                       Use template
@@ -245,6 +261,19 @@ export default function DocumentsScreen({
           </div>
         </div>
       </div>
+      {openTemplateKey && (
+        <EmailDraftModal
+          open
+          onClose={() => setOpenTemplateKey(null)}
+          title={EMAIL_TEMPLATES[openTemplateKey].title}
+          initialTo={EMAIL_TEMPLATES[openTemplateKey].to}
+          initialSubject={EMAIL_TEMPLATES[openTemplateKey].subject}
+          initialBody={EMAIL_TEMPLATES[openTemplateKey].body}
+          primaryLabel={EMAIL_TEMPLATES[openTemplateKey].primaryLabel}
+          footerNote={EMAIL_TEMPLATES[openTemplateKey].footerNote}
+          onPrimary={() => setOpenTemplateKey(null)}
+        />
+      )}
     </WorkspaceShell>
   );
 }
