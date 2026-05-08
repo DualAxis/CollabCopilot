@@ -1,46 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { getBrowserClient } from "../../lib/supabase-browser";
-
 type Props = {
   onSignOut: () => void;
 };
 
 export default function DashboardPlaceholderScreen({ onSignOut }: Props) {
-  const [email, setEmail] = useState<string>("");
-  const [busy, setBusy] = useState<boolean>(false);
-
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const supabase = getBrowserClient();
-        const { data } = await supabase.auth.getUser();
-        if (cancelled) return;
-        setEmail(data.user?.email ?? "");
-      } catch {
-        // ignore — placeholder is purely informational
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  const handleSignOut = async () => {
-    setBusy(true);
-    try {
-      const supabase = getBrowserClient();
-      await supabase.auth.signOut();
-    } catch {
-      // best-effort sign-out; UI returns to landing regardless
-    } finally {
-      setBusy(false);
-      onSignOut();
-    }
-  };
-
   return (
     <div
       id="s-dashboard-placeholder"
@@ -53,11 +17,7 @@ export default function DashboardPlaceholderScreen({ onSignOut }: Props) {
           <span className="logo-text">CollabPilot</span>
         </div>
         <div className="nav-actions">
-          <button
-            className="nav-link"
-            onClick={handleSignOut}
-            disabled={busy}
-          >
+          <button className="nav-link" onClick={onSignOut}>
             ← Sign out
           </button>
         </div>
@@ -114,23 +74,16 @@ export default function DashboardPlaceholderScreen({ onSignOut }: Props) {
               marginBottom: "20px",
             }}
           >
-            You&rsquo;re signed in
-            {email ? (
-              <>
-                {" "}
-                as <strong>{email}</strong>
-              </>
-            ) : null}
-            . The deals dashboard, deal brief, roadmap, documents and
-            knowledge library land in upcoming milestones.
+            You&rsquo;re in demo mode &mdash; no account required. The deals
+            dashboard, deal brief, roadmap, documents and knowledge library
+            land in upcoming milestones.
           </p>
           <button
             className="btn-secondary"
-            onClick={handleSignOut}
-            disabled={busy}
+            onClick={onSignOut}
             style={{ fontSize: "13px", padding: "9px 18px" }}
           >
-            {busy ? "Signing out…" : "Sign out"}
+            Sign out
           </button>
         </div>
       </div>

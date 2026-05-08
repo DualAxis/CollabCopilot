@@ -1,14 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { getBrowserClient } from "../../lib/supabase-browser";
 import type { AssessmentState } from "../../lib/assessment";
 
 type Props = {
   state: AssessmentState;
   onBack: () => void;
+  onContinue: (mode: "create" | "signin") => void;
   initialMode?: "create" | "signin";
-  initialError?: string | null;
 };
 
 type Mode = "create" | "signin";
@@ -16,81 +15,18 @@ type Mode = "create" | "signin";
 export default function LoginScreen({
   state,
   onBack,
+  onContinue,
   initialMode = "create",
-  initialError = null,
 }: Props) {
   const [mode, setMode] = useState<Mode>(initialMode);
   const [name, setName] = useState<string>(state.profile.name);
   const [email, setEmail] = useState<string>(state.profile.email);
-  const [submitting, setSubmitting] = useState<boolean>(false);
-  const [infoMsg, setInfoMsg] = useState<string>("");
-  const [errorMsg, setErrorMsg] = useState<string>(initialError || "");
 
   const isCreate = mode === "create";
-
-  const handleGoogle = async () => {
-    setErrorMsg("");
-    setInfoMsg("");
-    setSubmitting(true);
-    try {
-      const supabase = getBrowserClient();
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-        },
-      });
-      if (error) throw error;
-      // Browser is being redirected by Supabase — keep submitting=true so the
-      // button stays in its loading state until the page navigates away.
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : "Google sign-in failed.";
-      setErrorMsg(msg);
-      setSubmitting(false);
-    }
-  };
-
-  const handleMagicLink = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrorMsg("");
-    setInfoMsg("");
-    if (!email) {
-      setErrorMsg("Please enter your institutional email.");
-      return;
-    }
-    setSubmitting(true);
-    try {
-      const supabase = getBrowserClient();
-      const { error } = await supabase.auth.signInWithOtp({
-        email,
-        options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
-          // In create mode allow Supabase to create a new user; in sign-in
-          // mode require an existing user (Supabase returns an error if the
-          // email isn't registered).
-          shouldCreateUser: isCreate,
-          data: isCreate && name ? { full_name: name } : undefined,
-        },
-      });
-      if (error) throw error;
-      setInfoMsg(
-        isCreate
-          ? "Check your email for the sign-up link."
-          : "Check your email for the sign-in link."
-      );
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : "Could not send the link.";
-      setErrorMsg(msg);
-    } finally {
-      setSubmitting(false);
-    }
-  };
 
   const switchMode = (next: Mode) => {
     if (next === mode) return;
     setMode(next);
-    setErrorMsg("");
-    setInfoMsg("");
   };
 
   return (
@@ -116,7 +52,13 @@ export default function LoginScreen({
       </nav>
 
       <div className="login-wrap">
-        <form className="login-card" onSubmit={handleMagicLink}>
+        <form
+          className="login-card"
+          onSubmit={(e) => {
+            e.preventDefault();
+            onContinue(mode);
+          }}
+        >
           <div
             style={{
               display: "flex",
@@ -174,8 +116,7 @@ export default function LoginScreen({
           <button
             type="button"
             className="g-btn"
-            onClick={handleGoogle}
-            disabled={submitting}
+            onClick={() => onContinue(mode)}
           >
             <svg className="g-ic" viewBox="0 0 18 18">
               <path
@@ -228,58 +169,24 @@ export default function LoginScreen({
             required
           />
 
-          {errorMsg && (
-            <div
-              style={{
-                fontSize: "12.5px",
-                color: "var(--terra)",
-                marginTop: "6px",
-                marginBottom: "4px",
-                lineHeight: 1.5,
-              }}
-            >
-              {errorMsg}
-            </div>
-          )}
-          {infoMsg && (
-            <div
-              style={{
-                fontSize: "12.5px",
-                color: "var(--teal)",
-                marginTop: "6px",
-                marginBottom: "4px",
-                lineHeight: 1.5,
-              }}
-            >
-              {infoMsg}
-            </div>
-          )}
-
           <button
             type="submit"
             className="btn-primary"
-            disabled={submitting}
             style={{
               width: "100%",
               justifyContent: "center",
               marginTop: "4px",
             }}
           >
-            {submitting
-              ? "Sending…"
-              : isCreate
-              ? "Create account to unlock →"
-              : "Send sign-in link →"}
+            {isCreate ? "Create account to unlock →" : "Send sign-in link →"}
           </button>
 
           <div className="inst-note">
             Using CollabPilot through your institution?{" "}
-            {/* TODO: institutional SSO flow (post-M7) */}
             <a
               href="#"
               onClick={(e) => {
                 e.preventDefault();
-                setInfoMsg("Institutional access ships in a later milestone.");
               }}
             >
               Activate institutional access →

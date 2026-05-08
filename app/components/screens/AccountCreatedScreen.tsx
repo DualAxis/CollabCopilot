@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { getBrowserClient } from "../../lib/supabase-browser";
 import type { AssessmentState } from "../../lib/assessment";
 
 type Props = {
@@ -10,31 +8,7 @@ type Props = {
 };
 
 export default function AccountCreatedScreen({ state, onGoToDashboard }: Props) {
-  const [displayName, setDisplayName] = useState<string>(
-    state.profile.name || "there"
-  );
-
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const supabase = getBrowserClient();
-        const { data } = await supabase.auth.getUser();
-        if (cancelled) return;
-        const meta = (data.user?.user_metadata ?? {}) as {
-          full_name?: string;
-          name?: string;
-        };
-        const name = meta.full_name || meta.name || state.profile.name;
-        if (name) setDisplayName(name);
-      } catch {
-        // Fall back to whatever's already in state.
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [state.profile.name]);
+  const displayName = state.profile.name || "there";
 
   return (
     <div
