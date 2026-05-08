@@ -11,10 +11,35 @@ type Props = {
 
 type Status = "loading" | "error";
 
+const REASONING_STEPS = [
+  "Mapping your answers to compliance rules",
+  "Checking publication and IP conflicts",
+  "Drafting your 6-stage roadmap",
+  "Surfacing safe actions you can take today",
+  "Finalising your roadmap",
+];
+
+const STEP_INTERVAL_MS = 650;
+
 export default function ProcessingScreen({ state, onComplete }: Props) {
   const [status, setStatus] = useState<Status>("loading");
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [attempt, setAttempt] = useState<number>(0);
+  const [stepIdx, setStepIdx] = useState<number>(0);
+
+  useEffect(() => {
+    if (status !== "loading") return;
+    setStepIdx(0);
+    let cancelled = false;
+    const interval = setInterval(() => {
+      if (cancelled) return;
+      setStepIdx((i) => (i < REASONING_STEPS.length - 1 ? i + 1 : i));
+    }, STEP_INTERVAL_MS);
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
+  }, [status, attempt]);
 
   useEffect(() => {
     let cancelled = false;
@@ -71,6 +96,18 @@ export default function ProcessingScreen({ state, onComplete }: Props) {
           <>
             <div className="proc-spinner"></div>
             <div className="proc-lbl">Working on it</div>
+            <ul className="proc-steps">
+              {REASONING_STEPS.map((step, i) => {
+                const cls =
+                  i < stepIdx ? "done" : i === stepIdx ? "cur" : "";
+                return (
+                  <li key={i} className={`proc-step ${cls}`.trim()}>
+                    <span className="dot"></span>
+                    <span>{step}</span>
+                  </li>
+                );
+              })}
+            </ul>
             <h2
               style={{
                 fontFamily: "'DM Serif Display', serif",

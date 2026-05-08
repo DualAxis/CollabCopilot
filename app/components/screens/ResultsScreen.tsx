@@ -283,6 +283,9 @@ export default function ResultsScreen({
               </div>
             </div>
             <div className="module-body" style={{ display: "block" }}>
+              <div style={{ marginBottom: "14px" }}>
+                <AILabel context="Compliance analysis" />
+              </div>
               {results.complianceAlerts.map((alert, i) => {
                 const isOpen = openWhy.has(i);
                 return (
@@ -297,11 +300,14 @@ export default function ResultsScreen({
                       <span className="ms" style={{ fontSize: "13px" }}>
                         {isOpen ? "expand_more" : "chevron_right"}
                       </span>{" "}
-                      Why did AI flag this?
+                      Why did CollabPilot flag this?
                     </button>
                     <div
                       className={`alert-why-body${isOpen ? " open" : ""}`}
                     >
+                      <div style={{ marginBottom: "8px" }}>
+                        <AILabel context="Reasoning" />
+                      </div>
                       <div className="alert-why-rule">{alert.ruleFired}</div>
                       <div className="alert-why-src">
                         <span className="ms" style={{ fontSize: "12px" }}>
@@ -350,6 +356,9 @@ export default function ResultsScreen({
               </div>
             </div>
             <div className="module-body" style={{ display: "block" }}>
+              <div style={{ marginBottom: "14px" }}>
+                <AILabel context="Suggested actions" />
+              </div>
               {results.safeActions.map((action, i) => (
                 <div key={i} className="safe-item">
                   <div className="safe-dot">✓</div>
