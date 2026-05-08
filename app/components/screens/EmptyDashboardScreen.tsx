@@ -8,6 +8,7 @@ type Props = {
   onOpenProfile: () => void;
   onNavDeals?: () => void;
   onNavKnowledge?: () => void;
+  onCreateDealManual?: () => void;
   userName?: string;
   userInstitution?: string;
 };
@@ -18,6 +19,7 @@ export default function EmptyDashboardScreen({
   onOpenProfile,
   onNavDeals,
   onNavKnowledge,
+  onCreateDealManual,
   userName,
   userInstitution,
 }: Props) {
@@ -113,9 +115,8 @@ export default function EmptyDashboardScreen({
           Already have a deal in progress?{" "}
           <span
             style={{ color: "var(--teal)", cursor: "pointer" }}
-            onClick={(e) => e.preventDefault()}
+            onClick={onCreateDealManual}
           >
-            {/* s-new-deal flow deferred to M24 */}
             Create it manually &rarr;
           </span>
         </p>

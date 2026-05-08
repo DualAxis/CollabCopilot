@@ -24,6 +24,9 @@ import ProfileUserScreen from "./components/screens/ProfileUserScreen";
 import KnowledgeLibraryScreen from "./components/screens/KnowledgeLibraryScreen";
 import DocumentsScreen from "./components/screens/DocumentsScreen";
 import ChecklistsScreen from "./components/screens/ChecklistsScreen";
+import NewDealScreen from "./components/screens/NewDealScreen";
+import InviteScreen from "./components/screens/InviteScreen";
+import ConfirmedScreen from "./components/screens/ConfirmedScreen";
 
 type LoginMode = "create" | "signin";
 
@@ -76,6 +79,9 @@ export default function Home() {
   const goToKnowledgeDeal = () => setScreen("s-knowledge-library-deal");
   const goToDocuments = () => setScreen("s-documents");
   const goToChecklists = () => setScreen("s-checklists");
+  const goToNewDeal = () => setScreen("s-new-deal");
+  const goToInvite = () => setScreen("s-invite");
+  const goToConfirmed = () => setScreen("s-confirmed");
   const onSignOut = () => setScreen("s-landing");
   const userInstitution =
     assessment.profile.institution || "Warsaw University of Technology";
@@ -146,13 +152,14 @@ export default function Home() {
           onOpenProfile={goToProfile}
           onNavDeals={goToDealsList}
           onNavKnowledge={goToKnowledge}
+          onCreateDealManual={goToNewDeal}
           userName={assessment.profile.name || "Demo user"}
           userInstitution={userInstitution}
         />
       )}
       {screen === "s-dashboard" && (
         <DashboardScreen
-          onNewDeal={() => setScreen("s-profile")}
+          onNewDeal={goToNewDeal}
           onOpenDeal={() => setScreen("s-deal-brief")}
           onLogoClick={goHome}
           onOpenProfile={goToProfile}
@@ -251,6 +258,43 @@ export default function Home() {
           onNavKnowledge={goToKnowledgeDeal}
           userName={assessment.profile.name || "Demo user"}
           userInstitution={userInstitution}
+        />
+      )}
+      {screen === "s-new-deal" && (
+        <NewDealScreen
+          onLogoClick={goHome}
+          onOpenProfile={goToProfile}
+          onNavDeals={goToDealsList}
+          onNavRoadmap={goToRoadmap}
+          onNavChecklists={goToChecklists}
+          onNavDocuments={goToDocuments}
+          onNavKnowledge={goToKnowledgeDeal}
+          onCancel={goToDealsList}
+          onContinue={goToInvite}
+          userName={assessment.profile.name || "Demo user"}
+          userInstitution={userInstitution}
+        />
+      )}
+      {screen === "s-invite" && (
+        <InviteScreen
+          onLogoClick={goHome}
+          onOpenProfile={goToProfile}
+          onNavDeals={goToDealsList}
+          onNavRoadmap={goToRoadmap}
+          onNavChecklists={goToChecklists}
+          onNavDocuments={goToDocuments}
+          onNavKnowledge={goToKnowledgeDeal}
+          onBack={goToNewDeal}
+          onContinue={goToConfirmed}
+          userName={assessment.profile.name || "Demo user"}
+          userInstitution={userInstitution}
+        />
+      )}
+      {screen === "s-confirmed" && (
+        <ConfirmedScreen
+          onLogoClick={goHome}
+          onBack={goToInvite}
+          onOpenRoadmap={goToRoadmap}
         />
       )}
     </>

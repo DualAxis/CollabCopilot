@@ -20,7 +20,10 @@ export type ScreenId =
   | "s-documents"
   | "s-knowledge-library"
   | "s-knowledge-library-deal"
-  | "s-profile-user";
+  | "s-profile-user"
+  | "s-new-deal"
+  | "s-invite"
+  | "s-confirmed";
 
 // Role ids follow collabpilot_demo4.html. Tech Notes v2 §2.2 uses "industry"
 // where demo4 uses "business"; the rest map 1:1 (researcher -> researcher,
