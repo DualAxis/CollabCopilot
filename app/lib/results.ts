@@ -20,6 +20,8 @@ export type ChecklistItem = {
 
 export type AssessmentResults = {
   summary: string;
+  /** 1..6 — index into the 6-stage deal roadmap. */
+  currentStage: number;
   complianceAlerts: ComplianceAlert[];
   safeActions: SafeAction[];
   nextSteps: ChecklistItem[];
@@ -29,6 +31,7 @@ export type AssessmentResults = {
 export const MOCK_RESULTS: AssessmentResults = {
   summary:
     "You have received a first-contact inquiry from Nexar Robotics about licensing your adaptive cobot collision-avoidance algorithm under an exclusive license. This deal is at <strong>Stage 1 (Compliance &amp; Disclosure)</strong> — the most critical phase, where two compliance risks must be resolved before any further discussion. Estimated total timeline if well-managed: <strong>4–6 months</strong>. Biggest risk right now: your TTO has not been briefed, and Nexar is already forming an opinion of your credibility based on your first response.",
+  currentStage: 1,
   complianceAlerts: [
     {
       flag: "Action required today",

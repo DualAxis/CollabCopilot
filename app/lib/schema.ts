@@ -48,6 +48,14 @@ export const AssessmentResultsSchema = z.object({
     .describe(
       "70-110 word executive summary. May contain inline <strong>...</strong> tags for emphasis on stage name and timeline. No other HTML."
     ),
+  currentStage: z
+    .number()
+    .int()
+    .min(1)
+    .max(6)
+    .describe(
+      "Which of the 6 deal-roadmap stages the user is currently in. 1 = Compliance & Disclosure, 2 = NDA & CDA, 3 = Term Sheet, 4 = Due Diligence, 5 = License Agreement, 6 = Execution. Always 1 if the TTO has not yet been involved (a deal cannot progress past compliance without TTO ownership)."
+    ),
   complianceAlerts: z.array(ComplianceAlertSchema).length(2),
   safeActions: z.array(SafeActionSchema).length(2),
   nextSteps: z

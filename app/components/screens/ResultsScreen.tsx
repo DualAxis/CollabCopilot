@@ -13,44 +13,74 @@ type Props = {
   onSignIn: () => void;
 };
 
+type RoadmapStageBase = {
+  num: string;
+  name: string;
+  /** % offset from the left of the gantt track */
+  left: number;
+  /** % width on the gantt track */
+  width: number;
+};
+
 type RoadmapStage =
-  | {
-      num: string;
-      name: string;
-      active: true;
-      width: number;
+  | (RoadmapStageBase & {
+      status: "active";
       dur: string;
       owner: string;
-    }
-  | {
-      num: string;
-      name: string;
-      active: false;
-      left: number;
-      width: number;
-    };
+    })
+  | (RoadmapStageBase & { status: "done" | "locked" });
 
-const ROADMAP_STAGES: RoadmapStage[] = [
-  { num: "01", name: "Compliance & Disclosure", active: true, width: 15, dur: "2–4 wks", owner: "RESEARCHER" },
-  { num: "02", name: "NDA & CDA", active: false, left: 15, width: 12 },
-  { num: "03", name: "Term Sheet", active: false, left: 27, width: 23 },
-  { num: "04", name: "Due Diligence", active: false, left: 50, width: 15 },
-  { num: "05", name: "License Agreement", active: false, left: 65, width: 12 },
-  { num: "06", name: "Execution", active: false, left: 77, width: 23 },
+const STAGE_DEFS: (RoadmapStageBase & { dur: string; owner: string })[] = [
+  { num: "01", name: "Compliance & Disclosure", left: 0, width: 15, dur: "2\u20134 wks", owner: "RESEARCHER" },
+  { num: "02", name: "NDA & CDA", left: 15, width: 12, dur: "1\u20132 wks", owner: "TTO" },
+  { num: "03", name: "Term Sheet", left: 27, width: 23, dur: "3\u20136 wks", owner: "TTO + PARTNER" },
+  { num: "04", name: "Due Diligence", left: 50, width: 15, dur: "2\u20134 wks", owner: "PARTNER" },
+  { num: "05", name: "License Agreement", left: 65, width: 12, dur: "2\u20134 wks", owner: "TTO + LEGAL" },
+  { num: "06", name: "Execution", left: 77, width: 23, dur: "ongoing", owner: "ALL PARTIES" },
 ];
+
+function buildRoadmapStages(currentStage: number): RoadmapStage[] {
+  const stage = Math.min(6, Math.max(1, Math.round(currentStage)));
+  return STAGE_DEFS.map((def, i) => {
+    const idx = i + 1;
+    if (idx < stage) return { ...def, status: "done" } as RoadmapStage;
+    if (idx === stage)
+      return { ...def, status: "active" } as RoadmapStage;
+    return { ...def, status: "locked" } as RoadmapStage;
+  });
+}
 
 const AXIS_TICKS = ["Wk 1", "Wk 4", "Wk 7", "Wk 13", "Wk 17", "Wk 20", "Wk 26+"];
 
-function dealSummaryBullets(state: AssessmentState): string[] {
+const STAGE_NAMES: Record<number, string> = {
+  1: "Stage 1 (Compliance & Disclosure)",
+  2: "Stage 2 (NDA & CDA)",
+  3: "Stage 3 (Term Sheet)",
+  4: "Stage 4 (Due Diligence)",
+  5: "Stage 5 (License Agreement)",
+  6: "Stage 6 (Execution)",
+};
+
+function dealSummaryBullets(
+  state: AssessmentState,
+  currentStage: number
+): string[] {
   const dealType = state.q1 || "IP Licensing";
+  const partner = state.profile.partner.trim() || "the partner";
+  const stage = Math.min(6, Math.max(1, Math.round(currentStage)));
+  const stageLabel = STAGE_NAMES[stage] ?? STAGE_NAMES[1];
+  const stageBullet =
+    stage === 1
+      ? `Currently at ${stageLabel} \u2014 2 compliance actions required before responding`
+      : `Currently at ${stageLabel}`;
   const ttoBullet =
     state.q4 === "Actively involved"
       ? "TTO is leading this deal"
       : "TTO must be briefed before any further communication";
   return [
-    `${dealType} \u00b7 Nexar Robotics requesting 3-year exclusivity`,
-    "Estimated timeline: 4–6 months to signed agreement",
-    "Currently at Stage 1 — 2 compliance actions required before responding",
+    `${dealType} \u00b7 ${partner}`,
+    "Estimated timeline: 4\u20136 months to signed agreement",
+    stageBullet,
     ttoBullet,
   ];
 }
@@ -243,35 +273,48 @@ export default function ResultsScreen({
               ))}
             </div>
 
-            {ROADMAP_STAGES.map((stage) => (
+            {buildRoadmapStages(results.currentStage).map((stage) => (
               <div key={stage.num} className="gantt-stage-row">
                 <div className="gantt-stage-lbl">
                   <span
                     className="gantt-stage-num"
                     style={
-                      stage.active
-                        ? undefined
-                        : { color: "var(--text-light)" }
+                      stage.status === "locked"
+                        ? { color: "var(--text-light)" }
+                        : undefined
                     }
                   >
                     {stage.num}
                   </span>
                   <span
-                    className={`gantt-stage-nm${stage.active ? "" : " lk"}`}
+                    className={`gantt-stage-nm${stage.status === "locked" ? " lk" : ""}`}
                   >
                     {stage.name}
                   </span>
                 </div>
                 <div className="gantt-track">
-                  {stage.active ? (
+                  {stage.status === "active" && (
                     <div
                       className="gantt-bar-active"
-                      style={{ width: `${stage.width}%` }}
+                      style={{
+                        left: `${stage.left}%`,
+                        width: `${stage.width}%`,
+                      }}
                     >
                       <span className="gantt-bar-dur">{stage.dur}</span>
                       <span className="gantt-bar-owner">{stage.owner}</span>
                     </div>
-                  ) : (
+                  )}
+                  {stage.status === "done" && (
+                    <div
+                      className="gantt-bar-done"
+                      style={{
+                        left: `${stage.left}%`,
+                        width: `${stage.width}%`,
+                      }}
+                    ></div>
+                  )}
+                  {stage.status === "locked" && (
                     <div
                       className="gantt-bar-locked"
                       style={{
@@ -287,7 +330,7 @@ export default function ResultsScreen({
             <div className="gantt-summary">
               <AILabel context="Deal summary" className="gantt-summary-lbl" />
               <ul className="gantt-summary-list">
-                {dealSummaryBullets(state).map((b, i) => (
+                {dealSummaryBullets(state, results.currentStage).map((b, i) => (
                   <li key={i}>{b}</li>
                 ))}
               </ul>
