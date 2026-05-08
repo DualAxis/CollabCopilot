@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import WorkspaceShell from "../layout/WorkspaceShell";
+import type { DealBrief } from "../../lib/dealBrief";
 
 const DEAL_TYPES = [
   {
@@ -48,9 +49,14 @@ type Props = {
   onNavKnowledge?: () => void;
   onCancel: () => void;
   onContinue: () => void;
+  dealBrief: DealBrief;
   userName?: string;
   userInstitution?: string;
 };
+
+const NAME_PLACEHOLDER = "e.g. Nexar Robotics \u2014 Cobot Algorithm License";
+const CONTEXT_PLACEHOLDER =
+  "e.g. Nexar Robotics contacted me about licensing my adaptive cobot collision-avoidance algorithm. Provisional patent filed. Paper currently under review at IEEE Transactions on Robotics. Technology Transfer Office not yet briefed.";
 
 export default function NewDealScreen({
   onLogoClick,
@@ -62,24 +68,21 @@ export default function NewDealScreen({
   onNavKnowledge,
   onCancel,
   onContinue,
+  dealBrief,
   userName,
   userInstitution,
 }: Props) {
-  const [dealName, setDealName] = useState(
-    "Nexar Robotics \u2014 Cobot Algorithm License"
-  );
+  const [dealName, setDealName] = useState("");
   const [dealType, setDealType] = useState<DealTypeId>("ip-licensing");
-  const [context, setContext] = useState(
-    "Nexar Robotics contacted me about licensing my adaptive cobot collision-avoidance algorithm. Provisional patent filed. Paper currently under review at IEEE Transactions on Robotics. Technology Transfer Office not yet briefed."
-  );
+  const [context, setContext] = useState("");
 
   return (
     <WorkspaceShell
       mode={{
         kind: "inDeal",
         active: "deal-brief",
-        dealName: "Nexar Robotics",
-        dealSubLabel: "IP Licensing \u00b7 Stage 1",
+        dealName: dealBrief.display.shellDealName,
+        dealSubLabel: dealBrief.display.shellDealSubLabel,
       }}
       onLogoClick={onLogoClick}
       onOpenProfile={onOpenProfile}
@@ -131,6 +134,7 @@ export default function NewDealScreen({
             type="text"
             value={dealName}
             onChange={(e) => setDealName(e.target.value)}
+            placeholder={NAME_PLACEHOLDER}
             style={{ width: "100%", marginBottom: 0 }}
           />
         </div>
@@ -166,19 +170,12 @@ export default function NewDealScreen({
         </div>
 
         <div className="fsec">
-          <div
-            className="fsec-lbl"
-            style={{ display: "flex", alignItems: "center", gap: 5 }}
-          >
-            <span className="ms" style={{ fontSize: 12 }}>
-              auto_awesome
-            </span>
-            Context {"\u2014"} CollabPilot pre-filled from your assessment
-          </div>
+          <div className="fsec-lbl">Context</div>
           <textarea
             className="a-textarea"
             value={context}
             onChange={(e) => setContext(e.target.value)}
+            placeholder={CONTEXT_PLACEHOLDER}
             style={{ minHeight: 72, marginBottom: 0 }}
           />
         </div>

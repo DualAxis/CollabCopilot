@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import WorkspaceShell from "../layout/WorkspaceShell";
+import type { DealBrief } from "../../lib/dealBrief";
 
 type Props = {
   onLogoClick: () => void;
@@ -13,6 +14,7 @@ type Props = {
   onNavKnowledge?: () => void;
   onBack: () => void;
   onContinue: () => void;
+  dealBrief: DealBrief;
   userName?: string;
   userInstitution?: string;
 };
@@ -27,19 +29,25 @@ export default function InviteScreen({
   onNavKnowledge,
   onBack,
   onContinue,
+  dealBrief,
   userName,
   userInstitution,
 }: Props) {
-  const [bizEmail, setBizEmail] = useState("marek.nowak@nexarrobotics.com");
+  const [bizEmail, setBizEmail] = useState("");
   const [bizSent, setBizSent] = useState(false);
+
+  const partner = dealBrief.who.businessPartner;
+  const institutionLabel =
+    userInstitution || dealBrief.who.institution || "Your institution";
+  const researcherLabel = userName || dealBrief.who.researcher || "You";
 
   return (
     <WorkspaceShell
       mode={{
         kind: "inDeal",
         active: "deal-brief",
-        dealName: "Nexar Robotics",
-        dealSubLabel: "IP Licensing \u00b7 Stage 1",
+        dealName: dealBrief.display.shellDealName,
+        dealSubLabel: dealBrief.display.shellDealSubLabel,
       }}
       onLogoClick={onLogoClick}
       onOpenProfile={onOpenProfile}
@@ -91,9 +99,11 @@ export default function InviteScreen({
               </span>
             </div>
             <div>
-              <div className="inv-pname">You {"\u2014"} Dr. Paulina Chen</div>
+              <div className="inv-pname">
+                You {"\u2014"} {researcherLabel}
+              </div>
               <div className="inv-prole">
-                Researcher {"\u00b7"} WUT Robotics Department
+                Researcher {"\u00b7"} {institutionLabel}
               </div>
             </div>
             <span className="badge b-complete" style={{ marginLeft: "auto" }}>
@@ -115,16 +125,10 @@ export default function InviteScreen({
             <div>
               <div className="inv-pname">Technology Transfer Office</div>
               <div className="inv-prole">
-                Institutional {"\u2014"} WUT / Politechnika Warszawska
+                Institutional {"\u2014"} {institutionLabel}
               </div>
             </div>
             <span className="inv-tag">Pending</span>
-          </div>
-          <div className="inv-sent" style={{ marginBottom: 8 }}>
-            <span className="inv-sent-ic">{"\u2713"}</span>
-            <span className="inv-sent-txt">
-              Invitation sent to katarzyna.w@pw.edu.pl
-            </span>
           </div>
           <div style={{ fontSize: 12.5, color: "var(--text-light)" }}>
             Your Technology Transfer Officer will receive an email with
@@ -145,7 +149,9 @@ export default function InviteScreen({
             </div>
             <div>
               <div className="inv-pname">Business Partner</div>
-              <div className="inv-prole">Nexar Robotics {"\u2014"} BD Team</div>
+              <div className="inv-prole">
+                {partner} {"\u2014"} BD Team
+              </div>
             </div>
             <span className="inv-tag">{bizSent ? "Sent" : "Pending"}</span>
           </div>
@@ -166,13 +172,14 @@ export default function InviteScreen({
                 value={bizEmail}
                 onChange={(e) => setBizEmail(e.target.value)}
                 disabled={bizSent}
+                placeholder="e.g. partner.contact@company.com"
               />
             </div>
             <button
               className="btn-primary"
               style={{ flexShrink: 0, marginTop: 18 }}
               onClick={() => setBizSent(true)}
-              disabled={bizSent}
+              disabled={bizSent || !bizEmail.trim()}
             >
               {bizSent ? "Sent" : "Send invite"}
             </button>

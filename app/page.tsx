@@ -299,6 +299,7 @@ export default function Home() {
           onNavKnowledge={goToKnowledgeDeal}
           onCancel={goToDealsList}
           onContinue={goToInvite}
+          dealBrief={dealBrief}
           userName={assessment.profile.name || "Demo user"}
           userInstitution={userInstitution}
         />
@@ -314,6 +315,7 @@ export default function Home() {
           onNavKnowledge={goToKnowledgeDeal}
           onBack={goToNewDeal}
           onContinue={goToConfirmed}
+          dealBrief={dealBrief}
           userName={assessment.profile.name || "Demo user"}
           userInstitution={userInstitution}
         />
