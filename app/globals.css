@@ -284,17 +284,23 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--navy);co
 /* ════════════════════════════════════════
    SCREEN 7 — PROCESSING
 ════════════════════════════════════════ */
-#s-processing{background:var(--navy)}
+#s-processing.screen,
+#s-processing.screen.active{
+  background:var(--navy);
+  height:100%;
+  max-height:100dvh;
+  min-height:0;
+  overflow:hidden;
+  overscroll-behavior:none;
+  color-scheme:dark;
+}
 .proc-bg{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(14,107,115,.12) 0%,transparent 70%)}
-/* Processing: no visible scrollbar; min-height:0 avoids flex phantom overflow */
+/* Processing: no scroll container — avoids any light/white browser scrollbar */
 .proc-inner{
   position:relative;z-index:1;flex:1;min-height:0;display:flex;flex-direction:column;
-  align-items:center;justify-content:safe center;padding:24px;max-width:540px;margin:0 auto;width:100%;
-  overflow-y:auto;overflow-x:hidden;
-  scrollbar-width:none;
-  -ms-overflow-style:none;
+  align-items:center;justify-content:safe center;padding:16px 20px;max-width:540px;margin:0 auto;width:100%;
+  overflow:hidden;
 }
-.proc-inner::-webkit-scrollbar{display:none;width:0;height:0}
 .proc-lbl{font-family:'DM Mono',monospace;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:26px}
 .ps{display:flex;align-items:flex-start;gap:11px;opacity:0}
 .ps.vis{animation:fadeUp .45s forwards}
@@ -699,7 +705,9 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--navy);co
 .proc-card{
   background:rgba(255,255,255,.06);backdrop-filter:blur(12px);
   border:1px solid rgba(255,255,255,.1);border-radius:20px;
-  padding:36px 40px;width:100%;max-width:580px;
+  padding:24px 28px;width:100%;max-width:580px;
+  max-height:min(calc(100dvh - 48px), 680px);
+  overflow:hidden;
 }
 .proc-icon-wrap{
   width:64px;height:64px;border-radius:50%;background:var(--teal);

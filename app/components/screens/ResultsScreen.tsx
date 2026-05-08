@@ -143,6 +143,8 @@ export default function ResultsScreen({
   const displayName = state.profile.name || "Dr. Paulina Chen";
   const displayInstitution =
     state.profile.institution || "Warsaw University of Technology";
+  const partnerDisplay =
+    state.profile.partner.trim() || "your commercial partner";
 
   const dealTypeChip = state.q1 || "IP Licensing";
   const ipStatusChip = state.q2 || "Patent application filed";
@@ -573,7 +575,8 @@ export default function ResultsScreen({
             <div className="sb-unlock-h">Your roadmap is ready</div>
             <div className="sb-unlock-sub">
               Create your account to unlock your Stage {currentStage}{" "}
-              checklist, full roadmap, and AI-drafted reply. 14-day trial
+              checklist, full roadmap, and AI-drafted reply to {partnerDisplay}.
+              14-day trial
               {"\u2014"} no credit card.
             </div>
             <div className="sb-unlock-list">
@@ -587,8 +590,8 @@ export default function ResultsScreen({
                 with durations
               </div>
               <div className="sb-unlock-item">
-                <span className="sb-unlock-check">✓</span>AI-drafted holding
-                reply to Nexar
+                <span className="sb-unlock-check">✓</span>
+                {`AI-drafted holding reply to ${partnerDisplay}`}
               </div>
               <div className="sb-unlock-item">
                 <span className="sb-unlock-check">✓</span>My Deal Brief — your
