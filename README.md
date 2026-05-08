@@ -2,7 +2,7 @@
 
 **Your co-pilot through every research-to-market deal.**
 
-> Built for IDEASHACK 2026 · Jingjing Yao & Anna · May 2026
+> Built for IDEASHACK 2026 · Jingjing Yao & Anna Szpak · May 2026
 
 ---
 
@@ -23,7 +23,7 @@ CollabPilot is an AI-guided deal navigation platform for academic researchers en
 ## Demo
 
 🎬 **Video demo:** [_insert YouTube link_]
-🖥 **Live app:** [_insert Vercel URL_]
+🖥 **Live app:** https://collab-copilot-7fxd.vercel.app/
 
 ---
 
@@ -114,7 +114,7 @@ The AI layer translates a researcher's 6 answers into actionable deal guidance.
 ## How to Run
 
 **Live — no setup required:**
-[_insert Vercel URL_]
+https://collab-copilot-7fxd.vercel.app/
 
 **Local:**
 
@@ -159,10 +159,10 @@ All open-source libraries comply with their respective licenses. Key dependencie
 | Name | Role |
 |---|---|
 | Jingjing Yao | Product, Strategy, Design, Storytelling |
-| Anna | Technical Implementation, AI Integration |
+| Anna Szpak | Technical Implementation, AI Integration |
 
 **Event:** IDEASHACK 2026 · Submitted May 8, 2026
-**Contact:** [_insert_]
+**Contact:** dualaxisteam@gmail.com
 
 ---
 
